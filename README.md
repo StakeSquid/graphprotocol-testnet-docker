@@ -1,14 +1,15 @@
+
 Graph Protocol Testnet Docker Compose
 ========
 
 A monitoring solution for hosting a graph node on a single Docker host with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
 [NodeExporter](https://github.com/prometheus/node_exporter) and alerting with [AlertManager](https://github.com/prometheus/alertmanager).
 
-The monitoring configuration adapted the template by the graph team in the [mission control repository](https://github.com/graphprotocol/mission-control-indexer) during the testnet, and later adapted for the new release of the testnet using [this configuration](https://github.com/graphprotocol/indexer/blob/main/docs/networks.md#testnet-httpstestnetthegraphcom-rinkeby).
+The monitoring configuration adapted the K8S template by the graph team in the [mission control repository](https://github.com/graphprotocol/mission-control-indexer) during the testnet, and later adapted for the new testnet release using [this configuration](https://github.com/graphprotocol/indexer/blob/main/docs/networks.md#testnet-httpstestnetthegraphcom-rinkeby).
 
-The advantage of using Docker, as opposed to systemd bare-metal setups, is that Docker is easy to manipulate around and scale up if needed. I personally ran the whole testnet infrastructure on the same machine, including a TurboGeth Archive Node (not included in this docker build). 
+The advantage of using Docker, as opposed to systemd bare-metal setups, is that Docker is easy to manipulate around and scale up if needed. We personally ran the whole testnet infrastructure on the same machine, including a TurboGeth Archive Node (not included in this docker build). 
 
-For those that consider running their infras like I did, here are my observations regarding the necessary hardware specs:
+For those that consider running their infras like we did, here are our observations regarding the necessary hardware specs:
 
 > From my experience during the testnet, the heaviest load was put onto
 > Postgres at all times, whilst the other infrastructure parts had
@@ -21,9 +22,65 @@ For those that consider running their infras like I did, here are my observation
 
 The good thing about Docker, is that the data is stored in named volumes on the docker host and can be exported / copied over to a bigger machine once more performance is needed.
 
-The minimum configuration I would assume to be the CPX51 VPS at Hetzner. Feel free to sign up using my [referral link](https://hetzner.cloud/?ref=x2opTk2fg2fM) -- you can save 20€ and we get 10€ bonus for setting up some testnet nodes to support the network growth. :)
+																																																																				
 
 Note that you **need** access to an **Ethereum Archive Node that supports EIP-1898**. The setup for the archive node is **not included** in this docker setup.
+
+The minimum configuration should to be the CPX51 VPS at Hetzner. Feel free to sign up using our [referral link](https://hetzner.cloud/?ref=x2opTk2fg2fM) -- you can save 20€ and we get 10€ bonus for setting up some testnet nodes to support the network growth. :)
+
+## Ethereum Archive Node Specs
+|                       | Minimum Specs    | Recommended Specs | Maxed out Specs   |
+|-----------------------|------------------|-------------------|-------------------|
+| CPUs                  | 16 vcore         | 32 vcore          | 64 vcore          |
+| RAM                   | 32 GB            | 64 GB             | 128 GB            |
+| Storage               | 1.5 TB SATA SSD  | 7 TB NVME         | 7 TB NVME RAID 10 |
+
+*Note: The 1.5 TB requirement for storage is the absolute minimum, it needs to be at least SATA SSD as it doesn't work with spinning disks. Also, only TurboGETH has that little space required. OE, Parity and GETH all take 7 TB at the very minimum, and expanding pretty fast.*
+
+
+### Archive node options
+
+| Self-hosted         | Trace API | Stable | EIP-1898 | Min Disk Size |
+|---------------------|-----------|--------|----------|---------------|
+| OpenEthereum 3.0.x  | yes ✔️    | no ⚠️  | yes ✔️   | 7 TB          |
+| OpenEthereum 3.1    | yes ✔️    | no ⚠️  | no ☠️    | 7 TB          |
+| Parity 2.5.13       | yes ✔️    | yes ✔️ | no ☠️    | 7 TB          |
+| GETH                | no ⚠️     | yes ✔️ | yes ✔️   | 7 TB          |
+| TurboGETH           | no ⚠️     | no ⚠️  | yes ✔️   | 1.5 TB        |
+
+
+| Service Providers (WIP)  |
+|--------------------------|
+| Infura                   |
+| Alchemy                  |
+| ChainStack               |
+| Quiknode                 |
+| Ankr                     |
+
+
+
+## Graph Protocol Infrastructure Specs
+
+|         | Minimum Specs   | Recommended Specs | Maxed out Specs   |
+|---------|-----------------|-------------------|-------------------|
+| CPU     | 16 vcore        | 64 vcore          | 128 vcore         |
+| RAM     | 32 GB           | 128 GB            | 256/512 GB        |
+| Storage | 300 GB SATA SSD | 2 TB NVME         | 4 TB NVME RAID 10 |
+
+*The specs/requirements listed here come from our own experience during the testnet.*
+
+*Your mileage may vary, so take this with a grain of salt and be ready to upgrade.* :)
+
+- The minimum specs will definitely get you running, but not for long, assuming you want to serve data for more than a few heavy-weight subgraphs in the future. 
+
+- The recommended specs are a good setup for those that want to dip more than their feet in the indexing waters. Can serve a decent number of subgraphs, but it's limited by the CPU if too many requests flow through.
+
+- The maxed out specs rule of thumb is basically more is better. More CPUs, more RAM, faster disks. There is never enough. IT...NEEDS....MORE!!!!11
+
+Closing note, regarding the specs mentioned above: ideally, they need to scale up proportional with your stake in the protocol. 
+
+
+
 
 ## Prerequisites
 
@@ -39,19 +96,19 @@ apt install docker.io docker-compose httpie git
 
 ```
 
-## Setting up GitHub with SSH keys
+								  
 
-To use this repository you should add a ssh key to your account that you generate on the server. Follow instruction for this [here](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
+																																																											
 
-Basically what you have to enter on the server is the following and press enter every time to use defaults. The email address can be fake.
+																																		  
 
-```bash
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-cat ~/.ssh/id_rsa.pub
+	   
+													 
+					 
 
-```
+   
 
-The result is your public key and looks like this "ssh-rsa AAAA...KVQ==" and you have to copy this to the [Github settings](https://github.com/settings/ssh/new) to create a new ssh key. Enter any title you like.
+																																																				   
 
 ## Install from scratch
 
@@ -59,7 +116,7 @@ Run the following commands to clone the repository and set everything up:
 
 ```bash
 git clone git@github.com:StakeSquid/graphprotocol-testnet-docker.git
-cd graphprotocol-infrastructure
+cd graphprotocol-testnet-docker
 git submodule init
 git submodule update
 git config user.email "you@example.com"
@@ -67,6 +124,9 @@ git config user.name "Example User"
 git branch --set-upstream-to=origin/master
 
 ```
+
+
+
 
 ## Install or Update the Agora and Qlog modules
 
@@ -87,6 +147,8 @@ To use qlog or agora execute the `runqlog` or `runagora` scripts in the root of 
 
 ```
 
+
+
 This will use the compiled qlog tool and extract queries since yesterday or 5 hours ago and store them to the query-logs folder.
 
 ```bash
@@ -94,6 +156,8 @@ This will use the compiled qlog tool and extract queries since yesterday or 5 ho
 ./extract_queries_since "5 hours ago"
 
 ```
+
+
 
 To make journald logs persistent across restarts you need to create a folder for the logs to store in like this:
 ```
@@ -129,7 +193,7 @@ You need a wallet with a seed phrase that is registered as your operator wallet.
 
 *You need a 12-word, or 15-word mnemonic phrase in order for it to work.*
 
-To make yourself a mnemonic eth wallet you can go to this [website](https://iancoleman.io/bip39/) and just press generate. You get a see phrase in the input field labeled BIP39 Mnemonic. Scroll down a bit and find the select field labeled Coin. Select ETH as network in the dropdown and you find your address, public key and private key in the first row of the table if you scroll down the page in the section with the heading "Derived Addresses". You can import the wallet using the private key into Metamask.
+To make yourself a mnemonic eth wallet you can go to this [website](https://iancoleman.io/bip39/) and just press generate. You get a seed phrase in the input field labeled BIP39 Mnemonic. Scroll down a bit and find the select field labeled Coin. Select ETH as network in the dropdown and you find your address, public key and private key in the first row of the table if you scroll down the page in the section with the heading "Derived Addresses". You can import the wallet using the private key into Metamask.
 
 
 ## Run
