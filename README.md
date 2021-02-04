@@ -214,6 +214,7 @@ DB_PASS=db-password \
 AGENT_DB_NAME=indexer-agent \
 GRAPH_NODE_DB_NAME=graph-node \
 ETHEREUM_RPC="mainnet:<ETH_RPC_URL>" \
+RINKEBY_RPC="<infura url>" \
 OPERATOR_SEED_PHRASE="<12 or 15 word private key seed phrase>" \
 STAKING_WALLET_ADDRESS=<0x...> \
 GEO_COORDINATES="<longitude latitude>" \
@@ -240,6 +241,8 @@ docker-compose up -d --remove-orphans --build $@
 `GRAPH_NODE_DB_NAME` is the name of the database used by the Index/Query nodes.
 
 `ETHEREUM_RPC` should be your Ethereum Archive node endpoint. This will be used both for the index node ingestor, as well as the indexer agent/service.
+
+`RINKEBY_RPC` should be your Rinkeby RPC - can be a full node, can also be an infura account.
 
 `OPERATOR_SEED_PHRASE` should belong to the operator wallet mnemonic phrase.
 
