@@ -568,6 +568,7 @@ journalctl -fu indexer-agent -n 10 -f | pino-pretty -c -t
     Alternatively, you can just manually do `docker exec -it nginx-loadbalancer nginx -s reload` right from the host machine.
     
 -   **Other indexer-agent errors documentation from the logs can be found here:**
+https://github.com/graphprotocol/indexer/blob/main/docs/errors.md
     
 -   **You're getting `Could not find matching rule with non-null allocation`**
     
