@@ -469,6 +469,7 @@ services:
       - VIRTUAL_PORT=3000
       - LETSENCRYPT_HOST=${GRAFANA_HOST}
       - GF_INSTALL_PLUGINS="fifemon-graphql-datasource"
+      - subgraph_endpoint=${SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
     restart: unless-stopped
     expose:
       - 3000
