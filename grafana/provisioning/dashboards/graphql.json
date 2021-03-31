@@ -1,0 +1,232 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1617213497040,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "panels": [],
+      "repeat": "datasource",
+      "scopedVars": {
+        "datasource": {
+          "selected": false,
+          "text": "graphql-mainnet",
+          "value": "graphql-mainnet"
+        }
+      },
+      "title": "$datasource",
+      "type": "row"
+    },
+    {
+      "datasource": "graphql-mainnet",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.6",
+      "scopedVars": {
+        "datasource": {
+          "selected": false,
+          "text": "graphql-mainnet",
+          "value": "graphql-mainnet"
+        }
+      },
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "subgraphs",
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "queryText": "{\n  subgraphs{\n    id\n    displayName\n    nameSignalAmount\n  }\n}",
+          "refId": "A",
+          "timeFormat": null,
+          "timePath": ""
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Avaliable subgraphs",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 5,
+      "panels": [],
+      "repeatIteration": 1617213497040,
+      "repeatPanelId": 4,
+      "scopedVars": {
+        "datasource": {
+          "selected": false,
+          "text": "graphql-testnet",
+          "value": "graphql-testnet"
+        }
+      },
+      "title": "$datasource",
+      "type": "row"
+    },
+    {
+      "datasource": "graphql-mainnet",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.6",
+      "repeatIteration": 1617213497040,
+      "repeatPanelId": 2,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "datasource": {
+          "selected": false,
+          "text": "graphql-testnet",
+          "value": "graphql-testnet"
+        }
+      },
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "subgraphs",
+          "endTimePath": "endTime",
+          "groupBy": "",
+          "queryText": "{\n  subgraphs{\n    id\n    displayName\n    nameSignalAmount\n  }\n}",
+          "refId": "A",
+          "timeFormat": null,
+          "timePath": ""
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Avaliable subgraphs",
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": true,
+        "name": "datasource",
+        "options": [],
+        "query": "fifemon-graphql-datasource",
+        "refresh": 1,
+        "regex": ".*",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "GraphQL",
+  "uid": null,
+  "version": 0
+}

@@ -1,0 +1,11 @@
+---
+apiVersion: 1
+datasources:
+  - access: proxy
+    editable: true
+    name: graphql-testnet
+    orgId: 1
+    type: fifemon-graphql-datasource
+    url: https://gateway.testnet.thegraph.com/network
+    version: 1
+
