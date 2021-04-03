@@ -51,7 +51,7 @@ services:
     depends_on:
       - postgres2
     environment:
-      VECTOR_PROD: true
+      VECTOR_PROD: "true"
       VECTOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
       VECTOR_PG_HOST: postgres2
       VECTOR_PG_PORT: 5432
