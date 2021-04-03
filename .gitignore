@@ -2,5 +2,5 @@
 .vs/
 .vscode/
 .idea/
-#start
-#vector-node-config.json
+start
+vector-node-config.json
