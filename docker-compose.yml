@@ -42,16 +42,37 @@ services:
 
 
 ######################################################################################
+#####################            VECTOR NODE                   #######################
+######################################################################################
+
+  vector-node:
+    image: connextproject/vector_node:0.2.1-beta.20
+    container_name: vector-node
+    depends_on:
+      - postgres2
+    environment:
+      VECTOR_PROD: true
+      VECTOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
+      VECTOR_PG_HOST: postgres2
+      VECTOR_PG_PORT: 5432
+      VECTOR_PG_USERNAME: ${DB_USER:-graph-node}
+      VECTOR_PG_PASSWORD: ${DB_PASS:-db-password}
+      VECTOR_PG_DATABASE: vector
+      VECTOR_CONFIG: $( jq -n --arg at "$ADMIN_TOKEN" --arg rr "$RINKEBY_RPC" --arg osp "$OPERATOR_SEED_PHRASE" '{"adminToken":"$at","chainProviders":{"4":"$rr"},"nodeUrl":"http://vector-node","logLevel":"info","messagingUrl":"https://messaging.connext.network","production":true,"baseGasSubsidyPercentage":0,"allowedSwaps":[],"skipCheckIn":true,"mnemonic":"$osp"}')
+
+
+######################################################################################
 #####################         INDEXER SERVICE CONTAINER        #######################
 ######################################################################################
 
   indexer-service:
-    image: ghcr.io/graphprotocol/indexer-service:v0.10.0
+    image: ghcr.io/graphprotocol/indexer-service:v0.11.0
     container_name: indexer-service
     depends_on:
       - index-node
       - query-node
       - indexer-agent
+      - vector-node
     environment:
       INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE}
       INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
@@ -89,11 +110,12 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ghcr.io/graphprotocol/indexer-agent:v0.10.0
+    image: ghcr.io/graphprotocol/indexer-agent:v0.11.0
     container_name: indexer-agent
     depends_on:
       - index-node
       - query-node
+      - vector-node
     expose:
       - 8000
       - 7300

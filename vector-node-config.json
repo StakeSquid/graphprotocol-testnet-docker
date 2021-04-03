@@ -1,0 +1,14 @@
+{
+  "adminToken": "${ADMIN_TOKEN}",
+  "chainProviders": {
+    "4": "${RINKEBY_RPC}"
+  },
+  "nodeUrl": "http://vector-node",
+  "logLevel": "info",
+  "messagingUrl": "https://messaging.connext.network",
+  "production": true,
+  "baseGasSubsidyPercentage": 0,
+  "allowedSwaps": [],
+  "skipCheckIn": true,
+  "mnemonic": "${OPERATOR_SEED_PHRASE}"
+}

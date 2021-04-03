@@ -1,0 +1,17 @@
+ADMIN_TOKEN="your vector admin token" \
+EMAIL=email@sld.tld \
+INDEX_HOST=index.sld.tld \
+QUERY_HOST=query.sld.tld \
+GRAFANA_HOST=dashboard.sld.tld \
+ADMIN_USER=admin \
+ADMIN_PASSWORD=password \
+DB_USER=user \
+DB_PASS=password \
+AGENT_DB_NAME=indexer-agent \
+GRAPH_NODE_DB_NAME=graph-node \
+ETHEREUM_RPC="mainnet:url:port" \
+RINKEBY_RPC="url:port" \
+OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
+STAKING_WALLET_ADDRESS=0x... \
+GEO_COORDINATES="69.420 69.420" \
+docker-compose up -d --remove-orphans --build $@
