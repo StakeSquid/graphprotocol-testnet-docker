@@ -58,7 +58,7 @@ services:
       VECTOR_PG_USERNAME: ${DB_USER:-graph-node}
       VECTOR_PG_PASSWORD: ${DB_PASS:-db-password}
       VECTOR_PG_DATABASE: vector
-      VECTOR_CONFIG: ${JSON_STRING}
+      VECTOR_CONFIG: $JSON_STRING
     expose:
       - 8001
     networks:
