@@ -576,3 +576,9 @@ https://github.com/graphprotocol/indexer/blob/main/docs/errors.md
     This means that one of your rules has `allocationAmount null` — usually I've seen this being the `global` rule missing a value.
     
     To get rid of it, set `graph indexer rules set global allocationAmount 0.01`
+
+-   **How to see what subgraphs are available for indexing**
+
+    You see all available subgraphs in dashboard graphql.
+
+    To convert subgraph id to ipfs hash you can use script ```subgraph_convert.py```

@@ -15,8 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1617213497046,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -42,7 +41,44 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "string"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "signalledTokens"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "string"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unsignalledTokens"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "string"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 10,
@@ -54,7 +90,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.3.6",
+      "pluginVersion": "7.3.7",
       "scopedVars": {
         "datasource": {
           "selected": true,
@@ -69,10 +105,10 @@
           "annotationText": "",
           "annotationTitle": "",
           "constant": 6.5,
-          "dataPath": "subgraphs",
+          "dataPath": "subgraphDeployments",
           "endTimePath": "endTime",
           "groupBy": "",
-          "queryText": "{\n  subgraphs{\n    id\n    displayName\n    nameSignalAmount\n  }\n}",
+          "queryText": "query MyQuery {\n  subgraphDeployments {\n    id\n    originalName\n    signalledTokens\n    unsignalledTokens\n  }\n}",
           "refId": "A",
           "timeFormat": null,
           "timePath": ""
@@ -81,9 +117,25 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Avaliable subgraphs",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "id": 1,
+              "originalName": 0,
+              "signalledTokens": 2,
+              "unsignalledTokens": 3
+            },
+            "renameByName": {}
+          }
+        }
+      ],
       "type": "table"
     }
   ],
+  "refresh": "5s",
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
