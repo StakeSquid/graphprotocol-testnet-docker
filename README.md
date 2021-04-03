@@ -202,25 +202,23 @@ To make yourself a mnemonic eth wallet you can go to this [website](https://ianc
 In the root of the repo, create a file called `start.sh` and insert the following lines in it:
 
 ```bash
-EMAIL=my@email \
-INDEX_HOST=index.domain.whatever \
-QUERY_HOST=query.domain.whatever \
-GRAFANA_HOST=dashboard.domain.whatever \
+ADMIN_TOKEN="your vector admin token" \
+EMAIL=email@sld.tld \
+INDEX_HOST=index.sld.tld \
+QUERY_HOST=query.sld.tld \
+GRAFANA_HOST=dashboard.sld.tld \
 ADMIN_USER=admin \
-ADMIN_PASSWORD=change_me \
-DB_HOST=postgres \
-AGENT_DB_HOST=postgres2 \
+ADMIN_PASSWORD=password \
 DB_USER=user \
-DB_PASS=db-password \
+DB_PASS=password \
 AGENT_DB_NAME=indexer-agent \
 GRAPH_NODE_DB_NAME=graph-node \
-MAINNET_RPC="mainnet:<ETH_RPC_URL>" \
-RINKEBY_RPC="<RINKEBY_RPC_URL>" \
-OPERATOR_SEED_PHRASE="<12 or 15 word private key seed phrase>" \
-STAKING_WALLET_ADDRESS=<0x...> \
-GEO_COORDINATES="<longitude latitude>" \
+ETHEREUM_RPC="mainnet:url:port" \
+RINKEBY_RPC="url:port" \
+OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
+STAKING_WALLET_ADDRESS=0x... \
+GEO_COORDINATES="69.420 69.420" \
 docker-compose up -d --remove-orphans --build $@
-
 ```
 
 **To start the software, just do `bash start.sh`**
@@ -255,8 +253,8 @@ In case something goes wrong try to add `--force-recreate` at the end of the com
 
 Containers:
 
-* Graph Node (query node) `https://query.mydomain.tk`
-* Graph Node (index node) `https://index.mydomain.tk`
+* Graph Node (query node) `https://query.sld.tld`
+* Graph Node (index node) `https://index.sld.tld`
 * Indexer Agent
 * Indexer Service
 * Indexer CLI
