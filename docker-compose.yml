@@ -61,6 +61,7 @@ services:
       VECTOR_CONFIG: $JSON_STRING
     expose:
       - 8001
+      - 8000
     networks:
       - monitor-net
     restart: unless-stopped
@@ -144,7 +145,7 @@ services:
       INDEXER_AGENT_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
       INDEXER_AGENT_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
       INDEXER_AGENT_DAI_CONTRACT: "0x9e7e607afd22906f7da6f1ec8f432d6f244278be"
-      INDEXER_AGENT_VECTOR_NODE: "http://vector-node:8001/"
+      INDEXER_AGENT_VECTOR_NODE: "http://vector-node:8000/"
       INDEXER_AGENT_VECTOR_EVENT_SERVER: "http://vector-node/"
       INDEXER_AGENT_VECTOR_EVENT_SERVER_PORT: 8001
       INDEXER_AGENT_VECTOR_ROUTER: "vector8BSZxfkr62As6KZX2so4yXuex5XcpPXQ2tYZrBqpub94dAobu7"
