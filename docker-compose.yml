@@ -58,7 +58,7 @@ services:
       VECTOR_PG_USERNAME: ${DB_USER:-graph-node}
       VECTOR_PG_PASSWORD: ${DB_PASS:-db-password}
       VECTOR_PG_DATABASE: vector
-      VECTOR_CONFIG: $( jq -n --arg at "$ADMIN_TOKEN" --arg rr "$RINKEBY_RPC" --arg osp "$OPERATOR_SEED_PHRASE" '{"adminToken":"$at","chainProviders":{"4":"$rr"},"nodeUrl":"http://vector-node","logLevel":"info","messagingUrl":"https://messaging.connext.network","production":true,"baseGasSubsidyPercentage":0,"allowedSwaps":[],"skipCheckIn":true,"mnemonic":"$osp"}')
+      VECTOR_CONFIG: JSON_STRING=$( jq -n --arg at "$ADMIN_TOKEN" --arg rr "$RINKEBY_RPC" --arg osp "$OPERATOR_SEED_PHRASE" '{"adminToken":"$at","chainProviders":{"4":"$rr"},"nodeUrl":"http://vector-node","logLevel":"info","messagingUrl":"https://messaging.connext.network","production":true,"baseGasSubsidyPercentage":0,"allowedSwaps":[],"skipCheckIn":true,"mnemonic":"$osp"}')
     expose:
       - 8001
     networks:
