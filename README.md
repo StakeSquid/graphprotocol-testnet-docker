@@ -579,6 +579,8 @@ https://github.com/graphprotocol/indexer/blob/main/docs/errors.md
 
 -   **How to see what subgraphs are available for indexing**
 
-    You see all available subgraphs in dashboard graphql.
+    All available subgraphs are located in grafana graphql dashboard.
 
     To convert subgraph id to ipfs hash you can use script ```subgraph_convert.py```
+
+    Before running script install python3 module called ```base58```.
