@@ -199,10 +199,10 @@ To make yourself a mnemonic eth wallet you can go to this [website](https://ianc
 
 ## Run
 
-In the root of the repo, create a file called `start.sh` and insert the following lines in it:
+In the root of the repo, create (or edit, it's already there) a file called `start` and insert the following lines in it:
 
 ```bash
-ADMIN_TOKEN="your vector admin token" \
+ADMIN_TOKEN="your-vector-admin-token" \
 EMAIL=email@sld.tld \
 INDEX_HOST=index.sld.tld \
 QUERY_HOST=query.sld.tld \
@@ -218,10 +218,11 @@ RINKEBY_RPC="url:port" \
 OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
 STAKING_WALLET_ADDRESS=0x... \
 GEO_COORDINATES="69.420 69.420" \
+JSON_STRING=$(jq -n --arg at "$ADMIN_TOKEN" --arg rr "$RINKEBY_RPC" --arg osp "$OPERATOR_SEED_PHRASE" '{"adminToken":$at,"chainProviders":{"4":$rr},"logLevel":"info","messagingUrl":"https://messaging.connext.network","production":true,"baseGasSubsidyPercentage":0,"allowedSwaps":[],"skipCheckIn":true,"mnemonic":$osp}') \
 docker-compose up -d --remove-orphans --build $@
 ```
 
-**To start the software, just do `bash start.sh`**
+**To start the software, just do `bash start`**
 
 `EMAIL` is only used as contact to create SSL certificates. Usually it doesn't receive any emails but is required by the certificate issuer.
 
