@@ -126,6 +126,7 @@ services:
       - vector-node
     expose:
       - 8000
+      - 8001
       - 7300
     environment:
       INDEXER_AGENT_MNEMONIC: ${OPERATOR_SEED_PHRASE}
