@@ -46,7 +46,7 @@ services:
 ######################################################################################
 
   vector-node:
-    image: connextproject/vector_node:0.2.1-beta.20
+    image: connextproject/vector_node:0.2.1
     container_name: vector-node
     depends_on:
       - postgres2
@@ -72,7 +72,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ghcr.io/graphprotocol/indexer-service:v0.11.0
+    image: ghcr.io/graphprotocol/indexer-service:v0.12.0
     container_name: indexer-service
     depends_on:
       - index-node
@@ -118,7 +118,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ghcr.io/graphprotocol/indexer-agent:v0.11.0
+    image: ghcr.io/graphprotocol/indexer-agent:v0.12.0
     container_name: indexer-agent
     depends_on:
       - index-node

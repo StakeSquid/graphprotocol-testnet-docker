@@ -3,8 +3,9 @@
   "chainProviders": {
     "4": "${RINKEBY_RPC}"
   },
-  "nodeUrl": "http://vector-node",
   "logLevel": "info",
+  "natsUrl": "nats://nats1.connext.provide.network:4222,nats://nats2.connext.provide.network:4222,nats://nats3.connext.provide.network:4222",
+  "authUrl": "https://messaging.connext.network",
   "messagingUrl": "https://messaging.connext.network",
   "production": true,
   "baseGasSubsidyPercentage": 0,
