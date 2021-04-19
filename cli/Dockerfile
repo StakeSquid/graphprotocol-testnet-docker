@@ -58,7 +58,7 @@ RUN npm install -g yarn
 
 RUN npm install -g nan
 
-RUN npm i -g @graphprotocol/indexer-cli@0.12.0 --registry https://registry.npmjs.org/ --unsafe-perm=true
+RUN npm i -g @graphprotocol/indexer-cli@0.13.0 --registry https://registry.npmjs.org/ --unsafe-perm=true
 
 RUN npm i -g @graphprotocol/graph-cli --registry https://registry.npmjs.org/ --unsafe-perm=true
 
