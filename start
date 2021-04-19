@@ -1,4 +1,4 @@
-ADMIN_TOKEN="your vector admin token" \
+ADMIN_TOKEN=yourAdminToken \
 EMAIL=email@sld.tld \
 INDEX_HOST=index.sld.tld \
 QUERY_HOST=query.sld.tld \
