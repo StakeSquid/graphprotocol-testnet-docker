@@ -46,7 +46,7 @@ services:
 ######################################################################################
 
   vector-node:
-    image: connextproject/vector_node:0.2.1
+    image: connextproject/vector_node:a340c8a4
     container_name: vector-node
     depends_on:
       - postgres2
