@@ -174,7 +174,6 @@ services:
       node_role: index-node
       node_id: index_node_0
       BLOCK_INGESTOR: index_node_0
-      ETHEREUM_START_BLOCK: ${ETHEREUM_START_BLOCK:-7710671}
       RUST_LOG: INFO
       GRAPH_LOG: INFO
       STORE_CONNECTION_POOL_SIZE: 25
@@ -213,7 +212,6 @@ services:
       node_role: index-node
       node_id: index_node_1
       BLOCK_INGESTOR: index_node_0
-      ETHEREUM_START_BLOCK: ${ETHEREUM_START_BLOCK:-7710671}
       RUST_LOG: INFO
       GRAPH_LOG: INFO
       STORE_CONNECTION_POOL_SIZE: 25
