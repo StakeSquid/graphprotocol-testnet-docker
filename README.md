@@ -44,10 +44,10 @@ The minimum configuration should to be the CPX51 VPS at Hetzner. Feel free to si
 |---------------------|-----------|--------|----------|---------------|
 | OpenEthereum 3.0.x  | yes ✔️    | no ⚠️  | yes ✔️   | 7 TB          |
 | OpenEthereum 3.1    | yes ✔️    | no ⚠️  | no ☠️    | 7 TB          |
-| OpenEthereum 3.2    | yes ✔️    | TBD ⚠️ | yes ✔️   | 7 TB          |
+| OpenEthereum 3.2.x  | yes ✔️    | yes ✔️ | yes ✔️   | 7 TB          |
 | Parity 2.5.13       | yes ✔️    | yes ✔️ | no ☠️    | 7 TB          |
 | GETH                | no ⚠️     | yes ✔️ | yes ✔️   | 7 TB          |
-| TurboGETH           | no ⚠️     | no ⚠️  | yes ✔️   | 1.5 TB        |
+| TurboGETH           | yes ✔️    | yes ✔️ | yes ✔️   | 1.5 TB        |
 
 
 | Service Providers (WIP)  |
@@ -183,9 +183,9 @@ Under "Service > My Domains > Manage Domain > Manage Freenom DNS" you can add mo
 
 Create 3 subdomains, named as follows:
 ```
-index.domain.whatever
-query.domain.whatever
-dashboard.domain.whatever
+index.sld.tld
+query.sld.tld
+dashboard.sld.tld
 ```
 
 ## Create a mnemonic
@@ -202,7 +202,6 @@ To make yourself a mnemonic eth wallet you can go to this [website](https://ianc
 In the root of the repo, create (or edit, it's already there) a file called `start` and insert the following lines in it:
 
 ```bash
-ADMIN_TOKEN="your-vector-admin-token" \
 EMAIL=email@sld.tld \
 INDEX_HOST=index.sld.tld \
 QUERY_HOST=query.sld.tld \
@@ -218,7 +217,6 @@ RINKEBY_RPC="url:port" \
 OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
 STAKING_WALLET_ADDRESS=0x... \
 GEO_COORDINATES="69.420 69.420" \
-JSON_STRING=$(jq -n --arg at "$ADMIN_TOKEN" --arg rr "$RINKEBY_RPC" --arg osp "$OPERATOR_SEED_PHRASE" '{"adminToken":$at,"chainProviders":{"4":$rr},"logLevel":"info","natsUrl":"nats://nats1.connext.provide.network:4222,nats://nats2.connext.provide.network:4222,nats://nats3.connext.provide.network:4222","authUrl":"https://messaging.connext.network","messagingUrl":"https://messaging.connext.network","production":true,"baseGasSubsidyPercentage":0,"allowedSwaps":[],"skipCheckIn":true,"mnemonic":$osp}') \
 docker-compose up -d --remove-orphans --build $@
 ```
 
@@ -250,7 +248,7 @@ docker-compose up -d --remove-orphans --build $@
 
 To find out the `GEO_COORDINATES` you can search for an ip location website and check your server exact coordinates.
 
-In case something goes wrong try to add `--force-recreate` at the end of the command, eg.: `bash start.sh --force-recreate`.
+In case something goes wrong try to add `--force-recreate` at the end of the command, eg.: `bash start --force-recreate <container-name>`.
 
 Containers:
 
