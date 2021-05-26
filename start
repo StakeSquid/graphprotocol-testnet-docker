@@ -14,7 +14,3 @@ OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
 STAKING_WALLET_ADDRESS=0x... \
 GEO_COORDINATES="69.420 69.420" \
 docker-compose up -d --remove-orphans --build $@
-
-
-#ADMIN_TOKEN=yourAdminToken
-#JSON_STRING=$(jq -n --arg at "$ADMIN_TOKEN" --arg rr "$RINKEBY_RPC" --arg osp "$OPERATOR_SEED_PHRASE" '{"adminToken":$at,"chainProviders":{"4":$rr},"logLevel":"info","natsUrl":"nats://nats1.connext.provide.network:4222,nats://nats2.connext.provide.network:4222,nats://nats3.connext.provide.network:4222","authUrl":"https://messaging.connext.network","messagingUrl":"https://messaging.connext.network","production":true,"baseGasSubsidyPercentage":0,"allowedSwaps":[],"skipCheckIn":true,"mnemonic":$osp}')
