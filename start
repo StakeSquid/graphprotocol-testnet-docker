@@ -8,9 +8,10 @@ DB_USER=user \
 DB_PASS=password \
 AGENT_DB_NAME=indexer-agent \
 GRAPH_NODE_DB_NAME=graph-node \
-MAINNET_RPC="mainnet:url:port" \
-RINKEBY_RPC="url:port" \
-OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
-STAKING_WALLET_ADDRESS=0x... \
+MAINNET_RPC_0="http://ip:port" \
+MAINNET_RPC_1="http://ip:port" \
+RINKEBY_RPC="http://ip:port" \
+OPERATOR_SEED_PHRASE="12 or 15 word mnemonic" \
+STAKING_WALLET_ADDRESS=0xAdDreSs \
 GEO_COORDINATES="69.420 69.420" \
 docker-compose up -d --remove-orphans --build $@
