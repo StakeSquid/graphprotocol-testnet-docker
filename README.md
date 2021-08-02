@@ -7,14 +7,14 @@ A monitoring solution for hosting a graph node on a single Docker host with [Pro
 
 The monitoring configuration adapted the K8S template by the graph team in the [mission control repository](https://github.com/graphprotocol/mission-control-indexer) during the testnet, and later adapted for the new testnet release using [this configuration](https://github.com/graphprotocol/indexer/blob/main/docs/networks.md#testnet-httpstestnetthegraphcom-rinkeby).
 
-The advantage of using Docker, as opposed to systemd bare-metal setups, is that Docker is easy to manipulate around and scale up if needed. We personally ran the whole testnet infrastructure on the same machine, including a TurboGeth Archive Node (not included in this docker build). 
+The advantage of using Docker, as opposed to systemd bare-metal setups, is that Docker is easy to manipulate around and scale up if needed. We personally ran the whole testnet infrastructure on the same machine, including a TurboGeth Archive Node (not included in this docker build).
 
 For those that consider running their infras like we did, here are our observations regarding the necessary hardware specs:
 
 > From my experience during the testnet, the heaviest load was put onto
 > Postgres at all times, whilst the other infrastructure parts had
 > little to no load on them at times. And Postgres loads the CPU
-> enormously even with all the optimizations in the world. Even my 48 
+> enormously even with all the optimizations in the world. Even my 48
 > core EPYC was struggling to deliver a steady 100-150 queries per
 > second for Uniswap during the testnet. I think I hit 90 system load on
 > it before my ETH node collapsed (it wasn't related to the traffic,
@@ -22,7 +22,7 @@ For those that consider running their infras like we did, here are our observati
 
 The good thing about Docker, is that the data is stored in named volumes on the docker host and can be exported / copied over to a bigger machine once more performance is needed.
 
-																																																																				
+
 
 Note that you **need** access to an **Ethereum Archive Node that supports EIP-1898**. The setup for the archive node is **not included** in this docker setup.
 
@@ -33,7 +33,7 @@ The minimum configuration should to be the CPX51 VPS at Hetzner. Feel free to si
 |-----------------------|------------------|-------------------|-------------------|
 | CPUs                  | 16 vcore         | 32 vcore          | 64 vcore          |
 | RAM                   | 32 GB            | 64 GB             | 128 GB            |
-| Storage               | 1.5 TB SATA SSD  | 7 TB NVME         | 7 TB NVME RAID 10 |
+| Storage               | 2 TB SATA SSD    | 8 TB NVME         | 8 TB NVME RAID 10 |
 
 *Note: The 1.5 TB requirement for storage is the absolute minimum, it needs to be at least SATA SSD as it doesn't work with spinning disks. Also, only TurboGETH has that little space required. OE, Parity and GETH all take 7 TB at the very minimum, and expanding pretty fast.*
 
@@ -42,12 +42,12 @@ The minimum configuration should to be the CPX51 VPS at Hetzner. Feel free to si
 
 | Self-hosted         | Trace API | Stable | EIP-1898 | Min Disk Size |
 |---------------------|-----------|--------|----------|---------------|
-| OpenEthereum 3.0.x  | yes ✔️    | no ⚠️  | yes ✔️   | 7 TB          |
-| OpenEthereum 3.1    | yes ✔️    | no ⚠️  | no ☠️    | 7 TB          |
-| OpenEthereum 3.2.x  | yes ✔️    | yes ✔️ | yes ✔️   | 7 TB          |
-| Parity 2.5.13       | yes ✔️    | yes ✔️ | no ☠️    | 7 TB          |
-| GETH                | no ⚠️     | yes ✔️ | yes ✔️   | 7 TB          |
-| TurboGETH           | yes ✔️    | yes ✔️ | yes ✔️   | 1.5 TB        |
+| OpenEthereum 3.0.x  | yes ✔️    | no ⚠️  | yes ✔️   | 9 TB          |
+| OpenEthereum 3.1    | yes ✔️    | no ⚠️  | no ☠️    | 9 TB          |
+| OpenEthereum 3.2.x  | yes ✔️    | yes ✔️ | yes ✔️   | 9 TB          |
+| Parity 2.5.13       | yes ✔️    | yes ✔️ | no ☠️    | 9 TB          |
+| GETH                | no ⚠️     | yes ✔️ | yes ✔️   | 9 TB          |
+| TurboGETH           | yes ✔️    | yes ✔️ | yes ✔️   | 2 TB          |
 
 
 | Service Providers (WIP)  |
@@ -72,13 +72,13 @@ The minimum configuration should to be the CPX51 VPS at Hetzner. Feel free to si
 
 *Your mileage may vary, so take this with a grain of salt and be ready to upgrade.* :)
 
-- The minimum specs will definitely get you running, but not for long, assuming you want to serve data for more than a few heavy-weight subgraphs in the future. 
+- The minimum specs will definitely get you running, but not for long, assuming you want to serve data for more than a few heavy-weight subgraphs in the future.
 
 - The recommended specs are a good setup for those that want to dip more than their feet in the indexing waters. Can serve a decent number of subgraphs, but it's limited by the CPU if too many requests flow through.
 
 - The maxed out specs rule of thumb is basically more is better. More CPUs, more RAM, faster disks. There is never enough. IT...NEEDS....MORE!!!!11
 
-Closing note, regarding the specs mentioned above: ideally, they need to scale up proportional with your stake in the protocol. 
+Closing note, regarding the specs mentioned above: ideally, they need to scale up proportional with your stake in the protocol.
 
 
 
@@ -97,19 +97,19 @@ apt install docker.io docker-compose httpie git
 
 ```
 
-								  
 
-																																																											
 
-																																		  
 
-	   
-													 
-					 
 
-   
 
-																																																				   
+
+
+
+
+
+
+
+
 
 ## Install from scratch
 
@@ -153,7 +153,7 @@ To use qlog or agora execute the `runqlog` or `runagora` scripts in the root of 
 This will use the compiled qlog tool and extract queries since yesterday or 5 hours ago and store them to the query-logs folder.
 
 ```bash
-./extract_queries_since yesterday 
+./extract_queries_since yesterday
 ./extract_queries_since "5 hours ago"
 
 ```
@@ -169,13 +169,13 @@ That's all.
 
 
 
-## Get a domain 
+## Get a domain
 
 To enable SSL on your host you should get a domain.
 
 You can use any domain and any regsitrar that allowes you to edit DNS records to point subdomains to your IP address.
 
-For a free option go to [myFreenom](https://my.freenom.com/) and find a free domain name. Create a account and complete the registration. 
+For a free option go to [myFreenom](https://my.freenom.com/) and find a free domain name. Create a account and complete the registration.
 
 In the last step choose "use dns" and enter the IP address of your server. You can choose up to 12 months for free.
 
@@ -206,16 +206,17 @@ EMAIL=email@sld.tld \
 INDEX_HOST=index.sld.tld \
 QUERY_HOST=query.sld.tld \
 GRAFANA_HOST=dashboard.sld.tld \
-ADMIN_USER=admin \
-ADMIN_PASSWORD=password \
-DB_USER=user \
-DB_PASS=password \
-AGENT_DB_NAME=indexer-agent \
-GRAPH_NODE_DB_NAME=graph-node \
-MAINNET_RPC="mainnet:url:port" \
-RINKEBY_RPC="url:port" \
+ADMIN_USER=your_user \
+ADMIN_PASSWORD=your_password \
+DB_USER=your_db_user \
+DB_PASS=your_db_password \
+AGENT_DB_NAME=your_agent_db_name \
+GRAPH_NODE_DB_NAME=your_graphnode_db_name \
+MAINNET_RPC_0="http://ip:port" \
+MAINNET_RPC_1="http://ip:port" \
+RINKEBY_RPC="http://ip:port" \
 OPERATOR_SEED_PHRASE="12 or 15 word phrase" \
-STAKING_WALLET_ADDRESS=0x... \
+STAKING_WALLET_ADDRESS=0xAdDreSs \
 GEO_COORDINATES="69.420 69.420" \
 docker-compose up -d --remove-orphans --build $@
 ```
@@ -228,19 +229,15 @@ docker-compose up -d --remove-orphans --build $@
 
 `ADMIN_USER` and `ADMIN_PASSWORD` will be used by Grafana, Prometheus and AlertManager.
 
-`DB_HOST` - do not modify this unless you're running native (non-dockerized) PostgreSQL.
-
-`AGENT_DB_HOST` - do not modify this unless you're running native (non-dockerized) PostgreSQL.
-
 `DB_USER` and `DB_PASS` will be used for initializing the PostgreSQL Databases (both index/query DB and indexer agent/service DB).
 
 `AGENT_DB_NAME` is the name of the database used by the Indexer agent/service nodes.
 
 `GRAPH_NODE_DB_NAME` is the name of the database used by the Index/Query nodes.
 
-`MAINNET_RPC` should be your Mainnet Ethereum Archive node endpoint. This will be used by the index/query node ingestors.
+`MAINNET_RPC_0` and `MAINNET_RPC_1` should be your Mainnet Ethereum Archive node endpoint. `RPC_0` will be used by `index-node-0` and `query-node-0` and `RPC_1` will be used by `index-node-1`
 
-`RINKEBY_RPC` should be your Rinkeby RPC - can be a fast/full node, can also be an infura account.
+`RINKEBY_RPC` should be your Rinkeby RPC - can be a fast/full node, can also be an infura account. If you choose to run your own testnet network subgraph endpoint, this will need to be archive.
 
 `OPERATOR_SEED_PHRASE` should belong to the operator wallet mnemonic phrase.
 
@@ -248,12 +245,14 @@ docker-compose up -d --remove-orphans --build $@
 
 To find out the `GEO_COORDINATES` you can search for an ip location website and check your server exact coordinates.
 
-In case something goes wrong try to add `--force-recreate` at the end of the command, eg.: `bash start --force-recreate <container-name>`.
+***YOU MUST SET ALL THE ENVS ABOVE EVEN IF SOME OF THEM WILL HAVE THE SAME VALUES (eg. RPC_0 RPC_1 and TXN_RPC)***
+
+In case something goes wrong try to add `--force-recreate` at the end of the command, eg.: `bash start --force-recreate <container_name>`.
 
 Containers:
 
-* Graph Node (query node) `https://query.sld.tld`
-* Graph Node (index node) `https://index.sld.tld`
+* Graph Node (query node)
+* Graph Node (index node)
 * Indexer Agent
 * Indexer Service
 * Indexer CLI
@@ -459,7 +458,7 @@ The decision here is totally up to you 🙂
 ```bash
 default => price;
 
-or 
+or
 
 query {...} => price;
 
@@ -542,36 +541,36 @@ journalctl -fu indexer-agent -n 10 -f | pino-pretty -c -t
 
 ```
 
-## Troubleshooting scenarios	
+## Troubleshooting scenarios
 -   **Indexer-agent and Indexer-service containers are loop crashing**
-    
+
     This is an indication that your index-node cannot connect to either the PostgreSQL DB or your Ethereum Archive-node
-    
+
     **I mentioned this in discord, but worth mentioning it here as well:**
-    
+
     If, at any given time while you're starting up your dockerized/k8s'ed infrastructure, your `INDEX-NODE` can't connect to the `ETH-ARCHIVE`, your agent and service nodes will crash in a loop saying that they can't reach the index-node, but in reality, it's your index-node that can't reach the archive-node. There is no mention in the agent/service logs saying that they crash because of that. Only a `connection refused` error. And there is no mention in the index-node either that it can't connect to the archive node, only that it stalls when connecting, with no timeout. I spent 6 hours trying to fix this, I thought it was an UFW issue blocking my docker containers, when it reality it was what I explained above.
-    
+
 -   **You have allocated, but can't see the subgraph indexing in Grafana?**
-    
+
     Check the `indexer-agent` logs immediately, the agent is probably still about to send the allocation transaction, but who knows ¯\\\_(ツ)\_/¯
-    
+
 -   **You have allocated, you can see the subgraph indexing, but its blocks behind number doesnt go down**
-    
+
     Check your `archive-node` logs, and if everything looks good, check your `index-node` logs after
-    
+
 -   **Docker - Nginx load balanced indexer-service nodes are not getting queries or only part of them are**
-    
+
     When you compose-up, some of your containers, even if you set the correct order of container dependencies, will crash at start-up waiting for others to start first. By design, Nginx caches the internal Docker IPs at start-up. In order to mitigate that problem, add a script in the Nginx start sequence that executes the following command: `nginx -s reload`.
-    
+
     Alternatively, you can just manually do `docker exec -it nginx-loadbalancer nginx -s reload` right from the host machine.
-    
+
 -   **Other indexer-agent errors documentation from the logs can be found here:**
 https://github.com/graphprotocol/indexer/blob/main/docs/errors.md
-    
+
 -   **You're getting `Could not find matching rule with non-null allocation`**
-    
+
     This means that one of your rules has `allocationAmount null` — usually I've seen this being the `global` rule missing a value.
-    
+
     To get rid of it, set `graph indexer rules set global allocationAmount 0.01`
 
 -   **How to see what subgraphs are available for indexing**
