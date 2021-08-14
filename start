@@ -2,12 +2,12 @@ EMAIL=email@sld.tld \
 INDEX_HOST=index.sld.tld \
 QUERY_HOST=query.sld.tld \
 GRAFANA_HOST=dashboard.sld.tld \
-ADMIN_USER=admin \
-ADMIN_PASSWORD=password \
-DB_USER=user \
-DB_PASS=password \
-AGENT_DB_NAME=indexer-agent \
-GRAPH_NODE_DB_NAME=graph-node \
+ADMIN_USER=your_user \
+ADMIN_PASSWORD=your_password \
+DB_USER=your_db_user \
+DB_PASS=your_db_password \
+GRAPH_NODE_DB_NAME=your_graphnode_db_name \
+AGENT_DB_NAME=your_agent_db_name \
 MAINNET_RPC_0="http://ip:port" \
 MAINNET_RPC_1="http://ip:port" \
 RINKEBY_RPC="http://ip:port" \
@@ -15,3 +15,18 @@ OPERATOR_SEED_PHRASE="12 or 15 word mnemonic" \
 STAKING_WALLET_ADDRESS=0xAdDreSs \
 GEO_COORDINATES="69.420 69.420" \
 docker-compose up -d --remove-orphans --build $@
+
+#The following ENV vars are optional
+#they need to be added above the last line containing
+#docker-compose...
+
+#QUERY_FEE_REBATE_CLAIM_THRESHOLD=1000 \
+#INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT=QmYnGeUXVNZd3MupWqPwZekCriF2CVkpoXZbuSZB9t7eQS \
+#INDEXER_AGENT_OFFCHAIN_SUBGRAPHS="Qm,Qm,Qm" \
+#GRAPHNODE_LOGLEVEL=warn \
+#ETHEREUM_TRACE_STREAM_STEP_SIZE=100 \
+#ETHEREUM_BLOCK_BATCH_SIZE=50 \
+#ETHEREUM_RPC_MAX_PARALLEL_REQUESTS=128 \
+#GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE=1000 \
+#GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE=500 \
+#FULLTEXT_SEARCH="false" \

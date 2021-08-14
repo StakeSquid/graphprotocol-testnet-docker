@@ -157,6 +157,7 @@ services:
       #INDEXER_AGENT_VECTOR_EVENT_SERVER_PORT: 8001
       #INDEXER_AGENT_VECTOR_ROUTER: "vector8BSZxfkr62As6KZX2so4yXuex5XcpPXQ2tYZrBqpub94dAobu7"
       INDEXER_AGENT_COLLECT_RECEIPTS_ENDPOINT: https://gateway.testnet.thegraph.com/collect-receipts
+      INDEXER_AGENT_OFFCHAIN_SUBGRAPHS: ${INDEXER_AGENT_OFFCHAIN_SUBGRAPHS}
     networks:
       - monitor-net
     restart: unless-stopped
@@ -171,7 +172,10 @@ services:
   index-node-0:
     image: graphprotocol/graph-node:v0.23.1
     container_name: index-node-0
+    volumes:
+      - ./graph-node-configs:/root/graph-node-configs/
     environment:
+      GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_0_config.toml
       postgres_host: ${DB_HOST:-postgres}
       postgres_user: ${DB_USER:-graph-node}
       postgres_pass: ${DB_PASS:-db-password}
@@ -183,7 +187,7 @@ services:
       BLOCK_INGESTOR: index_node_0
       RUST_LOG: INFO
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
-      STORE_CONNECTION_POOL_SIZE: ${STORE_CONNECTION_POOL_SIZE:-25}
+      STORE_CONNECTION_POOL_SIZE: ${STORE_CONNECTION_POOL_SIZE:-10}
       ETHEREUM_TRACE_STREAM_STEP_SIZE: ${ETHEREUM_TRACE_STREAM_STEP_SIZE:-50}
       ETHEREUM_BLOCK_BATCH_SIZE: ${ETHEREUM_BLOCK_BATCH_SIZE:-10}
       ETHEREUM_RPC_MAX_PARALLEL_REQUESTS: ${ETHEREUM_RPC_MAX_PARALLEL_REQUESTS:-64}
@@ -212,7 +216,10 @@ services:
   index-node-1:
     image: graphprotocol/graph-node:v0.23.1
     container_name: index-node-1
+    volumes:
+      - ./graph-node-configs:/root/graph-node-configs/
     environment:
+      GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_1_config.toml
       postgres_host: ${DB_HOST:-postgres}
       postgres_user: ${DB_USER:-graph-node}
       postgres_pass: ${DB_PASS:-db-password}
@@ -224,7 +231,7 @@ services:
       BLOCK_INGESTOR: index_node_0
       RUST_LOG: INFO
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
-      STORE_CONNECTION_POOL_SIZE: ${STORE_CONNECTION_POOL_SIZE:-25}
+      STORE_CONNECTION_POOL_SIZE: ${STORE_CONNECTION_POOL_SIZE:-10}
       ETHEREUM_TRACE_STREAM_STEP_SIZE: ${ETHEREUM_TRACE_STREAM_STEP_SIZE:-50}
       ETHEREUM_BLOCK_BATCH_SIZE: ${ETHEREUM_BLOCK_BATCH_SIZE:-10}
       ETHEREUM_RPC_MAX_PARALLEL_REQUESTS: ${ETHEREUM_RPC_MAX_PARALLEL_REQUESTS:-64}
@@ -241,6 +248,7 @@ services:
       - 8040
     networks:
       - monitor-net
+    logging: *default-logging
 
 
 ######################################################################################
@@ -251,7 +259,10 @@ services:
   query-node-0:
     image: graphprotocol/graph-node:v0.23.1
     container_name: query-node-0
+    volumes:
+      - ./graph-node-configs:/root/graph-node-configs/
     environment:
+      GRAPH_NODE_CONFIG: /root/graph-node-configs/query_node_0_config.toml
       postgres_host: ${DB_HOST:-postgres}
       postgres_user: ${DB_USER:-graph-node}
       postgres_pass: ${DB_PASS:-db-password}
@@ -262,7 +273,7 @@ services:
       node_id: query_node_0
       RUST_LOG: INFO
       GRAPH_LOG: INFO
-      STORE_CONNECTION_POOL_SIZE: 25
+      STORE_CONNECTION_POOL_SIZE: ${STORE_CONNECTION_POOL_SIZE:-10}
       GRAPH_LOG_QUERY_TIMING: gql
       EXPERIMENTAL_SUBGRAPH_VERSION_SWITCHING_MODE: synced
       GRAPH_KILL_IF_UNRESPONSIVE: "true"
@@ -270,6 +281,7 @@ services:
       VIRTUAL_PORT: 8000
       LETSENCRYPT_HOST: ${QUERY_HOST}
       GRAPH_LOG_QUERY_TIMING: ${GRAPH_LOG_QUERY_TIMING:-gql}
+      GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH: ${FULLTEXT_SEARCH:-"true"}
     restart: unless-stopped
     logging:
         driver: "journald"
