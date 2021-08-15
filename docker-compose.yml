@@ -140,6 +140,7 @@ services:
       INDEXER_AGENT_ALLOCATION_CLAIM_THRESHOLD: ${QUERY_FEE_REBATE_CLAIM_THRESHOLD:-0}
       INDEXER_AGENT_ETHEREUM_NETWORK: rinkeby
       INDEXER_AGENT_ETHEREUM: ${RINKEBY_RPC}
+      RINKEBY_RPC: ${RINKEBY_RPC}
       INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_AGENT_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
       INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
@@ -249,6 +250,52 @@ services:
     networks:
       - monitor-net
     logging: *default-logging
+
+
+
+
+######################################################################################
+#####################           INDEX NODE CONTAINER 2         #######################
+######################################################################################
+
+
+  index-node-2:
+    image: graphprotocol/graph-node:505a725
+    container_name: index-node-2
+    volumes:
+      - ./graph-node-configs:/root/graph-node-configs/
+    environment:
+      GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_2_config.toml
+      postgres_host: ${DB_HOST:-postgres}
+      postgres_user: ${DB_USER:-graph-node}
+      postgres_pass: ${DB_PASS:-db-password}
+      postgres_db: ${GRAPH_NODE_DB_NAME:-graph-node}
+      ipfs: '${IPFS_ENDPOINT:-https://ipfs.testnet.thegraph.com}'
+      MAINNET_RPC_0: ${RINKEBY_RPC}
+      node_role: index-node
+      node_id: index_node_2
+      BLOCK_INGESTOR: index_node_2
+      RUST_LOG: INFO
+      GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
+      STORE_CONNECTION_POOL_SIZE: ${STORE_CONNECTION_POOL_SIZE:-10}
+      ETHEREUM_TRACE_STREAM_STEP_SIZE: ${ETHEREUM_TRACE_STREAM_STEP_SIZE:-50}
+      ETHEREUM_BLOCK_BATCH_SIZE: ${ETHEREUM_BLOCK_BATCH_SIZE:-10}
+      ETHEREUM_RPC_MAX_PARALLEL_REQUESTS: ${ETHEREUM_RPC_MAX_PARALLEL_REQUESTS:-64}
+      GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE: ${GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE:-500}
+      GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE: ${GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE:-200}
+      GRAPH_KILL_IF_UNRESPONSIVE: "true"
+      GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH: ${FULLTEXT_SEARCH:-"true"}
+      EXPERIMENTAL_SUBGRAPH_VERSION_SWITCHING_MODE: synced
+    restart: unless-stopped
+    expose:
+      - 8001
+      - 8000
+      - 8030
+      - 8040
+    networks:
+      - monitor-net
+    logging: *default-logging
+
 
 
 ######################################################################################
