@@ -15,6 +15,7 @@ provider = [ { label = "rinkeby", url = "${RINKEBY_RPC}", features = ["archive",
 [deployment]
 [[deployment.rule]]
 indexers = [ "index_node_2" ]
+match = { network = "rinkeby" }
 
 
 [general]
