@@ -77,8 +77,10 @@ services:
     depends_on:
       - index-node-0
       - index-node-1
+      - index-node-2
       - query-node-0
       - indexer-agent
+      - postgres2
       #- vector-node
     environment:
       INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE}
@@ -125,7 +127,9 @@ services:
     depends_on:
       - index-node-0
       - index-node-1
+      - index-node-2
       - query-node-0
+      - postgres2
       #- vector-node
     expose:
       - 7300
@@ -173,6 +177,9 @@ services:
   index-node-0:
     image: graphprotocol/graph-node:505a725
     container_name: index-node-0
+    depends_on:
+      - postgres
+      - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
     environment:
@@ -217,6 +224,9 @@ services:
   index-node-1:
     image: graphprotocol/graph-node:505a725
     container_name: index-node-1
+    depends_on:
+      - postgres
+      - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
     environment:
@@ -262,6 +272,9 @@ services:
   index-node-2:
     image: graphprotocol/graph-node:505a725
     container_name: index-node-2
+    depends_on:
+      - postgres
+      - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
     environment:
@@ -306,6 +319,9 @@ services:
   query-node-0:
     image: graphprotocol/graph-node:505a725
     container_name: query-node-0
+    depends_on:
+      - postgres
+      - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
     environment:
