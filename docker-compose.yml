@@ -181,6 +181,7 @@ services:
       - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
+      - ./postgres-socket:/var/run/postgresql
     environment:
       GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_0_config.toml
       postgres_host: ${DB_HOST:-postgres}
@@ -228,6 +229,7 @@ services:
       - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
+      - ./postgres-socket:/var/run/postgresql
     environment:
       GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_1_config.toml
       postgres_host: ${DB_HOST:-postgres}
@@ -276,6 +278,7 @@ services:
       - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
+      - ./postgres-socket:/var/run/postgresql
     environment:
       GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_2_config.toml
       postgres_host: ${DB_HOST:-postgres}
@@ -324,6 +327,7 @@ services:
       - postgres2
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
+      - ./postgres-socket:/var/run/postgresql
     environment:
       GRAPH_NODE_CONFIG: /root/graph-node-configs/query_node_0_config.toml
       postgres_host: ${DB_HOST:-postgres}
@@ -423,6 +427,7 @@ services:
       POSTGRES_DB: ${GRAPH_NODE_DB_NAME:-graph-node}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./postgres-socket:/var/run/postgresql
     networks:
       - monitor-net
     expose:
