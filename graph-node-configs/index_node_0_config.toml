@@ -15,7 +15,6 @@ provider = [ { label = "mainnet", url = "${MAINNET_RPC_0}", features = ["archive
 [deployment]
 [[deployment.rule]]
 indexers = [ "index_node_0", "index_node_1" ]
-match = { network = "mainnet" }
 
 
 [general]

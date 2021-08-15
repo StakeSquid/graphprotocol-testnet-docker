@@ -17,6 +17,10 @@ provider = [ { label = "rinkeby", url = "${RINKEBY_RPC}", features = ["archive",
 indexers = [ "index_node_2" ]
 match = { network = "rinkeby" }
 
+[[deployment.rule]]
+# There's no 'match', so any subgraph matches
+indexers = [ "index_node_0", "index_node_1" ]
+
 
 [general]
 query = "query_node_0"
