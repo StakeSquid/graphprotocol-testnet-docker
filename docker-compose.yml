@@ -144,7 +144,6 @@ services:
       INDEXER_AGENT_ALLOCATION_CLAIM_THRESHOLD: ${QUERY_FEE_REBATE_CLAIM_THRESHOLD:-0}
       INDEXER_AGENT_ETHEREUM_NETWORK: rinkeby
       INDEXER_AGENT_ETHEREUM: ${RINKEBY_RPC}
-      RINKEBY_RPC: ${RINKEBY_RPC}
       INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_AGENT_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
       INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
@@ -285,6 +284,7 @@ services:
       postgres_db: ${GRAPH_NODE_DB_NAME:-graph-node}
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.testnet.thegraph.com}'
       MAINNET_RPC_0: ${RINKEBY_RPC}
+      RINKEBY_RPC: ${RINKEBY_RPC}
       node_role: index-node
       node_id: index_node_2
       BLOCK_INGESTOR: index_node_2
