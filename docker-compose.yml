@@ -419,7 +419,7 @@ services:
   postgres:
     image: postgres:13.3
     container_name: postgres
-    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    command: ${PG_CONFIG:-"postgres --shared_preload_libraries=pg_stat_statements"}
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:-graph-node}
