@@ -176,7 +176,7 @@ services:
 
 
   index-node-0:
-    image: graphprotocol/graph-node:505a725
+    image: graphprotocol/graph-node:4e89b2e
     container_name: index-node-0
     depends_on:
       - postgres
@@ -225,7 +225,7 @@ services:
 
 
   index-node-1:
-    image: graphprotocol/graph-node:505a725
+    image: graphprotocol/graph-node:4e89b2e
     container_name: index-node-1
     depends_on:
       - postgres
@@ -275,7 +275,7 @@ services:
 
 
   index-node-2:
-    image: graphprotocol/graph-node:505a725
+    image: graphprotocol/graph-node:4e89b2e
     container_name: index-node-2
     depends_on:
       - postgres
@@ -325,7 +325,7 @@ services:
 
 
   query-node-0:
-    image: graphprotocol/graph-node:505a725
+    image: graphprotocol/graph-node:4e89b2e
     container_name: query-node-0
     depends_on:
       - postgres
