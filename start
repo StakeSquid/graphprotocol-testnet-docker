@@ -20,7 +20,8 @@ docker-compose up -d --remove-orphans --build $@
 #they need to be added above the last line containing
 #docker-compose...
 
-#QUERY_FEE_REBATE_CLAIM_THRESHOLD=1000 \
+#QUERY_FEE_REBATE_CLAIM_THRESHOLD=number-in-grt \
+#REBATE_CLAIM_BATCH_THRESHOLD=number-in-grt \
 #NETWORK_SUBGRAPH_DEPLOYMENT=QmYnGeUXVNZd3MupWqPwZekCriF2CVkpoXZbuSZB9t7eQS \
 #INDEXER_AGENT_OFFCHAIN_SUBGRAPHS="Qm,Qm,Qm" \
 #GRAPHNODE_LOGLEVEL=warn \

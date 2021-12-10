@@ -73,7 +73,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ghcr.io/graphprotocol/indexer-service:v0.18.3
+    image: ghcr.io/graphprotocol/indexer-service:v0.18.4
     container_name: indexer-service
     depends_on:
       - index-node-0
@@ -124,7 +124,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ghcr.io/graphprotocol/indexer-agent:v0.18.3
+    image: ghcr.io/graphprotocol/indexer-agent:v0.18.4
     container_name: indexer-agent
     depends_on:
       - index-node-0
@@ -144,6 +144,7 @@ services:
       INDEXER_AGENT_INDEX_NODE_IDS: "index_node_0,index_node_1"
       INDEXER_AGENT_INJECT_DAI: "true"
       INDEXER_AGENT_ALLOCATION_CLAIM_THRESHOLD: ${QUERY_FEE_REBATE_CLAIM_THRESHOLD:-0}
+      INDEXER_AGENT_REBATE_CLAIM_BATCH_THRESHOLD: ${REBATE_CLAIM_BATCH_THRESHOLD:-0}
       INDEXER_AGENT_ETHEREUM_NETWORK: rinkeby
       INDEXER_AGENT_ETHEREUM: ${RINKEBY_RPC}
       INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
@@ -177,7 +178,7 @@ services:
 
 
   index-node-0:
-    image: graphprotocol/graph-node:v0.24.2
+    image: graphprotocol/graph-node:v0.25.0
     container_name: index-node-0
     depends_on:
       - postgres
@@ -226,7 +227,7 @@ services:
 
 
   index-node-1:
-    image: graphprotocol/graph-node:v0.24.2
+    image: graphprotocol/graph-node:v0.25.0
     container_name: index-node-1
     depends_on:
       - postgres
@@ -276,7 +277,7 @@ services:
 
 
   index-node-2:
-    image: graphprotocol/graph-node:v0.24.2
+    image: graphprotocol/graph-node:v0.25.0
     container_name: index-node-2
     depends_on:
       - postgres
@@ -325,7 +326,7 @@ services:
 
 
   query-node-0:
-    image: graphprotocol/graph-node:v0.24.2
+    image: graphprotocol/graph-node:v0.25.0
     container_name: query-node-0
     depends_on:
       - postgres
@@ -426,7 +427,7 @@ services:
 
 
   postgres:
-    image: postgres:13.4
+    image: postgres:13.5
     container_name: postgres
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
@@ -452,7 +453,7 @@ services:
 
 
   postgres2:
-    image: postgres:13.4
+    image: postgres:13.5
     container_name: postgres2
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
@@ -477,7 +478,7 @@ services:
 
 
   prometheus:
-    image: prom/prometheus:v2.29.1
+    image: prom/prometheus:v2.31.1
     container_name: prometheus
     volumes:
       - ./prometheus:/etc/prometheus
@@ -532,7 +533,7 @@ services:
 
 
   nodeexporter:
-    image: prom/node-exporter:v1.2.2
+    image: prom/node-exporter:v1.3.1
     container_name: nodeexporter
     volumes:
       - /proc:/host/proc:ro
@@ -561,7 +562,7 @@ services:
 
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.40.0
+    image: gcr.io/cadvisor/cadvisor:v0.43.0
     container_name: cadvisor
     volumes:
       - /:/rootfs:ro
@@ -587,7 +588,7 @@ services:
 
 
   grafana:
-    image: grafana/grafana:8.0.6
+    image: grafana/grafana:8.3.1
     container_name: grafana
     volumes:
       - grafana_data:/var/lib/grafana
@@ -624,7 +625,7 @@ services:
 
 
   pushgateway:
-    image: prom/pushgateway:v1.4.1
+    image: prom/pushgateway:v1.4.2
     container_name: pushgateway
     restart: unless-stopped
     expose:
