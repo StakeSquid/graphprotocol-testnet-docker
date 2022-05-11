@@ -73,7 +73,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ghcr.io/graphprotocol/indexer-service:v0.19.0
+    image: ghcr.io/graphprotocol/indexer-service:v0.19.2
     container_name: indexer-service
     depends_on:
       - index-node-0
@@ -124,7 +124,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ghcr.io/graphprotocol/indexer-agent:v0.19.0
+    image: ghcr.io/graphprotocol/indexer-agent:v0.19.2
     container_name: indexer-agent
     depends_on:
       - index-node-0
@@ -178,7 +178,7 @@ services:
 
 
   index-node-0:
-    image: graphprotocol/graph-node:v0.25.1
+    image: graphprotocol/graph-node:v0.26.0
     container_name: index-node-0
     depends_on:
       - postgres
@@ -201,6 +201,7 @@ services:
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
       GRAPH_ETH_CALL_GAS: 50000000
       GRAPH_GETH_ETH_CALL_ERRORS: "out of gas"
+      GRAPH_MAX_GAS_PER_HANDLER: 1000000000000000
       ETHEREUM_TRACE_STREAM_STEP_SIZE: ${ETHEREUM_TRACE_STREAM_STEP_SIZE:-50}
       ETHEREUM_BLOCK_BATCH_SIZE: ${ETHEREUM_BLOCK_BATCH_SIZE:-10}
       ETHEREUM_RPC_MAX_PARALLEL_REQUESTS: ${ETHEREUM_RPC_MAX_PARALLEL_REQUESTS:-64}
@@ -227,7 +228,7 @@ services:
 
 
   index-node-1:
-    image: graphprotocol/graph-node:v0.25.1
+    image: graphprotocol/graph-node:v0.26.0
     container_name: index-node-1
     depends_on:
       - postgres
@@ -250,6 +251,7 @@ services:
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
       GRAPH_ETH_CALL_GAS: 50000000
       GRAPH_GETH_ETH_CALL_ERRORS: "out of gas"
+      GRAPH_MAX_GAS_PER_HANDLER: 1000000000000000
       ETHEREUM_TRACE_STREAM_STEP_SIZE: ${ETHEREUM_TRACE_STREAM_STEP_SIZE:-50}
       ETHEREUM_BLOCK_BATCH_SIZE: ${ETHEREUM_BLOCK_BATCH_SIZE:-10}
       ETHEREUM_RPC_MAX_PARALLEL_REQUESTS: ${ETHEREUM_RPC_MAX_PARALLEL_REQUESTS:-64}
@@ -277,7 +279,7 @@ services:
 
 
   index-node-2:
-    image: graphprotocol/graph-node:v0.25.1
+    image: graphprotocol/graph-node:v0.26.0
     container_name: index-node-2
     depends_on:
       - postgres
@@ -300,6 +302,7 @@ services:
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
       GRAPH_ETH_CALL_GAS: 50000000
       GRAPH_GETH_ETH_CALL_ERRORS: "out of gas"
+      GRAPH_MAX_GAS_PER_HANDLER: 1000000000000000
       ETHEREUM_TRACE_STREAM_STEP_SIZE: ${ETHEREUM_TRACE_STREAM_STEP_SIZE:-50}
       ETHEREUM_BLOCK_BATCH_SIZE: ${ETHEREUM_BLOCK_BATCH_SIZE:-10}
       ETHEREUM_RPC_MAX_PARALLEL_REQUESTS: ${ETHEREUM_RPC_MAX_PARALLEL_REQUESTS:-64}
@@ -326,7 +329,7 @@ services:
 
 
   query-node-0:
-    image: graphprotocol/graph-node:v0.25.1
+    image: graphprotocol/graph-node:v0.26.0
     container_name: query-node-0
     depends_on:
       - postgres
@@ -348,6 +351,7 @@ services:
       GRAPH_LOG: INFO
       GRAPH_ETH_CALL_GAS: 50000000
       GRAPH_GETH_ETH_CALL_ERRORS: "out of gas"
+      GRAPH_MAX_GAS_PER_HANDLER: 1000000000000000
       #GRAPH_GRAPHQL_WARN_RESULT_SIZE: ${GRAPH_GRAPHQL_WARN_RESULT_SIZE}
       #GRAPH_GRAPHQL_ERROR_RESULT_SIZE: ${GRAPH_GRAPHQL_ERROR_RESULT_SIZE}
       GRAPH_LOG_QUERY_TIMING: gql
@@ -478,7 +482,7 @@ services:
 
 
   prometheus:
-    image: prom/prometheus:v2.33.4
+    image: prom/prometheus
     container_name: prometheus
     volumes:
       - ./prometheus:/etc/prometheus
@@ -508,7 +512,7 @@ services:
 
 
   alertmanager:
-    image: prom/alertmanager:v0.23.0
+    image: prom/alertmanager
     container_name: alertmanager
     volumes:
       - ./alertmanager:/etc/alertmanager
@@ -533,7 +537,7 @@ services:
 
 
   nodeexporter:
-    image: prom/node-exporter:v1.3.1
+    image: prom/node-exporter
     container_name: nodeexporter
     volumes:
       - /proc:/host/proc:ro
@@ -562,7 +566,7 @@ services:
 
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.43.0
+    image: gcr.io/cadvisor/cadvisor
     container_name: cadvisor
     volumes:
       - /:/rootfs:ro
@@ -588,7 +592,7 @@ services:
 
 
   grafana:
-    image: grafana/grafana:8.4.2
+    image: grafana/grafana
     container_name: grafana
     volumes:
       - grafana_data:/var/lib/grafana
@@ -625,7 +629,7 @@ services:
 
 
   pushgateway:
-    image: prom/pushgateway:v1.4.2
+    image: prom/pushgateway
     container_name: pushgateway
     restart: unless-stopped
     expose:
