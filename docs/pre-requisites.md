@@ -15,7 +15,7 @@
 
 In order to become an indexer on the Graph Protocol Testnet Network, you'll have to stake a minimum of 100,000 GRT.
 
-This can easily be done via the Web UI, by going to the [Graph Explorer](https://testnet.thegraph.com).
+This can easily be done via the Web UI, by going to the [Testnet Graph Explorer](https://testnet.thegraph.com).
 
 1. Go to our [Discord Server](https://discord.gg/graphprotocol). Get the Testnet role from the `#roles` channel, then to to the `#testnet-faucet` channel and get your Testnet GRT.
 
