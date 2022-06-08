@@ -18,9 +18,8 @@ RUN apt-get -q update \
     clang \
     cmake \
     wget \
-    bsdmainutils \
-    base58 \
-    bc \
+	bsdmainutils \
+	base58 \
     build-essential
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -61,7 +60,7 @@ RUN npm install -g yarn
 
 RUN npm install -g nan
 
-RUN npm i -g @graphprotocol/indexer-cli@0.19.0 --registry https://registry.npmjs.org/ --unsafe-perm=true
+RUN npm i -g @graphprotocol/indexer-cli@0.19.1 --registry https://registry.npmjs.org/ --unsafe-perm=true
 
 RUN npm i -g @graphprotocol/graph-cli --registry https://registry.npmjs.org/ --unsafe-perm=true
 
