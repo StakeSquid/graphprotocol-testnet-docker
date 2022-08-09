@@ -48,7 +48,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.2}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.1}
     container_name: indexer-service
     depends_on:
       - index-node-0
