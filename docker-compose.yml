@@ -167,7 +167,7 @@ services:
       node_role: index-node
       node_id: index_node_0
       CHAIN_0_NAME: ${CHAIN_0_NAME}
-      CHAIN_RPC_0: ${CHAIN_RPC_0}
+      CHAIN_0_RPC: ${CHAIN_0_RPC}
       BLOCK_INGESTOR: index_node_0
       RUST_LOG: INFO
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
