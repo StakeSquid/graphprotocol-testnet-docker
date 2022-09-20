@@ -4,7 +4,7 @@ echo -e "\e[1;32m How many subgraphs do you want to offchain sync? \e[0m"
 
 read subsnumber
 
-http  -b post https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-testnet query="{subgraphDeployments(first:$subsnumber, orderBy:signalledTokens, orderDirection:desc, where:{signalledTokens_gt:0, deniedAt:0}) {ipfsHash}}" | jq -r .data.subgraphDeployments[].ipfsHash | sed -z 's/\n/,/g;s/,$/\n/' | tee offchain-subgraphs &> /dev/null &
+http  -b post https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-testnet query="{subgraphDeployments(first:$subsnumber, orderBy:signalledTokens, orderDirection:desc, where:{signalledTokens_gt:0, deniedAt:0, network:"xdai"}) {ipfsHash}}" | jq -r .data.subgraphDeployments[].ipfsHash | sed -z 's/\n/,/g;s/,$/\n/' | tee offchain-subgraphs &> /dev/null &
 
 echo -e "\e[1;32m Done 👏 \e[0m"
 echo

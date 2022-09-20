@@ -72,31 +72,30 @@ If you need, you can import the wallet using the private key into Metamask
 
 ## Configure the environment variables
 
-Edit the file called `start` and add your values to the following envs:
+Edit the file called `.env` and add your values to the following envs:
 
 ```bash
-EMAIL=email@domain.com \
-INDEX_HOST=index.sld.tld \
-QUERY_HOST=query.sld.tld \
-GRAFANA_HOST=grafana.sld.tld \
-ADMIN_USER=your_user \
-ADMIN_PASSWORD=your_password \
-DB_USER=your_db_user \
-DB_PASS=your_db_password \
-GRAPH_NODE_DB_NAME=your_graphnode_db_name \
-AGENT_DB_NAME=your_agent_db_name \
-MAINNET_RPC_0="http://ip:port" \
-GOERLI_RPC="http://ip:port" \
-TXN_RPC="http://ip:port" \
-OPERATOR_SEED_PHRASE="12 or 15 word mnemonic" \
-STAKING_WALLET_ADDRESS=0xAdDreSs \
-GEO_COORDINATES="69.420 69.420" \
-docker-compose up -d --remove-orphans --build $@
+EMAIL=email@sld.tld
+INDEX_HOST=index.sld.tld
+QUERY_HOST=query.sld.tld
+GRAFANA_HOST=dashboard.sld.tld
+ADMIN_USER=your_user
+ADMIN_PASSWORD=your_password
+DB_USER=your_db_user
+DB_PASS=your_db_password
+GRAPH_NODE_DB_NAME=your_graphnode_db_name
+AGENT_DB_NAME=your_agent_db_name
+CHAIN_0_NAME=""
+CHAIN_0_RPC="http://ip:port"
+TXN_RPC="http://ip:port"
+OPERATOR_SEED_PHRASE="12 or 15 word mnemonic"
+STAKING_WALLET_ADDRESS=0xAdDreSs
+GEO_COORDINATES='69.420 69.420'
+INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 
 
 #The following ENV vars are optional
-#they need to be added above the last line containing
-#docker-compose...
+#they need to be added above the last line
 
 #QUERY_FEE_REBATE_CLAIM_THRESHOLD=number-in-grt \
 #REBATE_CLAIM_BATCH_THRESHOLD=number-in-grt \
@@ -109,8 +108,6 @@ docker-compose up -d --remove-orphans --build $@
 #GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE=1000 \
 #GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE=500 \
 #INDEXER_AGENT_GAS_PRICE_MAX=gas-price-in-gwei \
-#GRAPH_GRAPHQL_WARN_RESULT_SIZE=bytes \
-#GRAPH_GRAPHQL_ERROR_RESULT_SIZE=bytes \
 
 ```
 
@@ -123,16 +120,17 @@ docker-compose up -d --remove-orphans --build $@
 - `DB_USER` and `DB_PASS` - will be used for initializing the PostgreSQL Databases (both index/query DB and indexer agent/service DB).
 - `GRAPH_NODE_DB_NAME` - the name of the database used by the Index/Query nodes.
 - `AGENT_DB_NAME` - the name of the database used by the Indexer agent/service nodes.
-- `ETHERUM_RPC_0` and `ETHEREUM_RPC_1` - your ETH RPCs used by the index nodes. They can be different URLs or the same, up to you.
-- `TXN_RPC` - your ETH RPC used by Indexer agent/service nodes. This can be a fast/full/archive node, up to you! Please note that using Erigon as the TXN_RPC has proven unreliable by some indexers.
+- `CHAIN_0_NAME` - the name of the network that you want to index
+- `CHAIN_0_RPC - your RPCs (archive nodes) used by the index nodes.
+- `TXN_RPC` - your Goerli ETH RPC used by Indexer agent/service nodes. This can be a fast/full/archive node, up to you! Please note that using Erigon as the TXN_RPC has proven unreliable by some indexers.
 - `OPERATOR_SEED_PHRASE` - the 12/15 word mnemonic that you generated earlier. Will be used by the Agent/Service to send transactions (open/close allocations, etc)
-- `STAKING_WALLET_ADDRESS` - the address (0x...) that you staked your GRT with, ideally living on an entirely different mnemonic phrase than your Operator Wallet. 
+- `STAKING_WALLET_ADDRESS` - the address (0x...) that you staked your GRT with, ideally living on an entirely different mnemonic phrase than your Operator Wallet.
 - `GEO_COORDINATES` of your server - you can search for an ip location website and check your server exact coordinates.
 
 **Optional env vars:**
 - `QUERY_FEE_REBATE_CLAIM_THRESHOLD`  - the minimum amount of GRT to claim per allocation
 - `REBATE_CLAIM_BATCH_THRESHOLD` - the minimum amount of Total GRT to batch claim for all allocations combined
-- `NETWORK_SUBGRAPH_DEPLOYMENT` - The Mainnet Network Subgraph IPFS hash, used if you want to rely on your own subgraph deployment rather than the gateways subgraphs 
+- `NETWORK_SUBGRAPH_DEPLOYMENT` - The Mainnet Network Subgraph IPFS hash, used if you want to rely on your own subgraph deployment rather than the gateways subgraphs
 - `INDEXER_AGENT_OFFCHAIN_SUBGRAPHS` - Gives you the possibility of syncing subgraphs locally without allocating to them onchain
 - `GRAPHNODE_LOGLEVEL` - the log level of the graph-node (indexer/query) - trace/debug/info/warn/error - if you have a whackton of subgraphs, increasing the loglevel to warn/error helps lowering the indexing time
 - `ETHEREUM_TRACE_STREAM_STEP_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
@@ -142,10 +140,8 @@ docker-compose up -d --remove-orphans --build $@
 - `GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
 - `GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE` - this helps (or not) indexing times by very small margins - use at own risk
 - `INDEXER_AGENT_GAS_PRICE_MAX` - the maximum Gas Price (GWEI) that the indexer-agent will attempt to send transactions with
-- `GRAPH_GRAPHQL_WARN_RESULT_SIZE` - these vars are disabled in docker-compose.yaml for the time being, do not uncomment and leave empty
-- `GRAPH_GRAPHQL_ERROR_RESULT_SIZE` - these vars are disabled in docker-compose.yaml for the time being, do not uncomment and leave empty
 
-**Note:** If you want to use any of the optional env vars, you need to copy the line that you want to enable above the `docker-compose up...` part, and uncomment it. Do NOT uncomment lines below it, or comment lines above it.
+**Note:** If you want to use any of the optional env vars, you need to copy the line that you want to enable above the last line, and uncomment it.
 
 
 **Containers:**
@@ -188,14 +184,14 @@ Subsequent restarts will be much faster.
 
 In case something goes wrong, find the problem, edit the variables, and add `--force-recreate` at the end of the command, plus the container you want to recreate:
 
-```bash 
+```bash
 bash start --force-recreate <container_name>
 
 ```
 
 Or to recreate the entire stack:
 
-```bash 
+```bash
 bash start --force-recreate
 
 ```
@@ -212,7 +208,7 @@ docker ps
 
 And look for containers that are crash looping - you will notice `restarting` and a countdown - that means those containers are not working properly.
 
-To further debug, try looking for the container logs and see what they say. 
+To further debug, try looking for the container logs and see what they say.
 More information in the [troubleshooting](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/troubleshooting.md) section.
 
 

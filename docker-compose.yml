@@ -61,7 +61,7 @@ services:
       INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
       INDEXER_SERVICE_PORT: 7600
       INDEXER_SERVICE_ETHEREUM_NETWORK: goerli
-      INDEXER_SERVICE_ETHEREUM: ${GOERLI_RPC}
+      INDEXER_SERVICE_ETHEREUM: ${TXN_RPC}
       INDEXER_SERVICE_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_SERVICE_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
       INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
@@ -117,7 +117,7 @@ services:
       INDEXER_AGENT_ALLOCATION_CLAIM_THRESHOLD: ${QUERY_FEE_REBATE_CLAIM_THRESHOLD:-0}
       INDEXER_AGENT_REBATE_CLAIM_BATCH_THRESHOLD: ${REBATE_CLAIM_BATCH_THRESHOLD:-0}
       INDEXER_AGENT_ETHEREUM_NETWORK: goerli
-      INDEXER_AGENT_ETHEREUM: ${GOERLI_RPC}
+      INDEXER_AGENT_ETHEREUM: ${TXN_RPC}
       INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_AGENT_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
       INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
@@ -158,15 +158,16 @@ services:
       - ./graph-node-configs:/root/graph-node-configs/
       - ./postgres-socket:/var/run/postgresql
     environment:
-      GRAPH_NODE_CONFIG: /root/graph-node-configs/index_node_0_config.toml
+      GRAPH_NODE_CONFIG: /root/graph-node-configs/config.toml
       postgres_host: ${DB_HOST:-postgres}
       postgres_user: ${DB_USER:-graph-node}
       postgres_pass: ${DB_PASS:-db-password}
       postgres_db: ${GRAPH_NODE_DB_NAME:-graph-node}
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.network.thegraph.com/ipfs/}'
-      MAINNET_RPC_0: ${MAINNET_RPC_0}
       node_role: index-node
       node_id: index_node_0
+      CHAIN_0_NAME: ${CHAIN_0_NAME}
+      CHAIN_0_RPC: ${CHAIN_0_RPC}
       BLOCK_INGESTOR: index_node_0
       RUST_LOG: INFO
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
@@ -210,13 +211,12 @@ services:
       - ./graph-node-configs:/root/graph-node-configs/
       - ./postgres-socket:/var/run/postgresql
     environment:
-      GRAPH_NODE_CONFIG: /root/graph-node-configs/query_node_0_config.toml
+      GRAPH_NODE_CONFIG: /root/graph-node-configs/config.toml
       postgres_host: ${DB_HOST:-postgres}
       postgres_user: ${DB_USER:-graph-node}
       postgres_pass: ${DB_PASS:-db-password}
       postgres_db: ${GRAPH_NODE_DB_NAME:-graph-node}
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.network.thegraph.com/ipfs/}'
-      MAINNET_RPC_0: ${MAINNET_RPC_0}
       node_role: query-node
       node_id: query_node_0
       RUST_LOG: INFO
@@ -224,8 +224,6 @@ services:
       GRAPH_ETH_CALL_GAS: 50000000
       GRAPH_GETH_ETH_CALL_ERRORS: "out of gas"
       GRAPH_MAX_GAS_PER_HANDLER: 1000000000000000
-      #GRAPH_GRAPHQL_WARN_RESULT_SIZE: ${GRAPH_GRAPHQL_WARN_RESULT_SIZE}
-      #GRAPH_GRAPHQL_ERROR_RESULT_SIZE: ${GRAPH_GRAPHQL_ERROR_RESULT_SIZE}
       GRAPH_LOG_QUERY_TIMING: gql
       EXPERIMENTAL_SUBGRAPH_VERSION_SWITCHING_MODE: synced
       GRAPH_KILL_IF_UNRESPONSIVE: "true"

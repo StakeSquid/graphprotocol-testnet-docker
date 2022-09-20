@@ -12,7 +12,7 @@ The monitoring configuration runs with [Prometheus](https://prometheus.io/), [Gr
 
 The advantage of using Docker, as opposed to systemd bare-metal setups, is that Docker is easy to manipulate and scale up if needed. We personally ran the whole testnet infrastructure on the same machine, including an Erigon Archive Node (not included in this docker build). The best part of using Docker is that the data is stored in named volumes on the docker host and can be exported / copied over to a bigger machine once more performance is needed.
 
-Note that you **need** access to an **Ethereum Archive Node that supports EIP-1898**.
+Note that you **need** access to an **Archive Node that supports EIP-1898**.
 
 The setup for the archive node is **not included** in this docker setup.
 
