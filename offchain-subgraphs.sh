@@ -23,7 +23,7 @@ echo
 echo -e "\e[1;32m Should I edit the start file with the changes for you? \e[0m"
 select yn in "Yes" "No"; do
     case $yn in
-         Yes ) sed -i.bak "s/\(^INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=.*\)/INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=$(cat offchain-subgraphs) \\\/" start;break;;
+         Yes ) sed -i.bak "s/\(^INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=.*\)/INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=$(cat offchain-subgraphs) \\\/" .env;break;;
          No ) exit;;
      esac
  done
