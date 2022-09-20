@@ -166,7 +166,7 @@ services:
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.network.thegraph.com/ipfs/}'
       node_role: index-node
       node_id: index_node_0
-      CHAIN_0: ${CHAIN_0}
+      CHAIN_0_NAME: ${CHAIN_0_NAME}
       CHAIN_RPC_0: ${CHAIN_RPC_0}
       BLOCK_INGESTOR: index_node_0
       RUST_LOG: INFO
