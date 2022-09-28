@@ -254,6 +254,11 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
+    command: bash /run.sh
+    environment:                                                                                      
+      PROMETHEUS_HOST: ${PROMETHEUS_HOST}
+      HTTP_AUTH_LOGIN: ${HTTP_AUTH_USER}                                                              
+      HTTP_AUTH_PASSWORD: ${HTTP_AUTH_PASSWORD}
     ports:
       - "80:80"
       - "443:443"
@@ -263,6 +268,7 @@ services:
       - nginx_vhost:/etc/nginx/vhost.d
       - nginx_html:/usr/share/nginx/html
       - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-proxy/run.sh:/run.sh
     networks:
       - monitor-net
     restart: unless-stopped
@@ -354,6 +360,10 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    environment:
+      VIRTUAL_HOST: ${PROMETHEUS_HOST}
+      VIRTUAL_PORT: 9090
+      LETSENCRYPT_HOST: ${PROMETHEUS_HOST}
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus
