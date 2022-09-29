@@ -134,7 +134,6 @@ INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 - `INDEXER_AGENT_OFFCHAIN_SUBGRAPHS` - Gives you the possibility of syncing subgraphs locally without allocating to them onchain
 - `GRAPHNODE_LOGLEVEL` - the log level of the graph-node (indexer/query) - trace/debug/info/warn/error - if you have a whackton of subgraphs, increasing the loglevel to warn/error helps lowering the indexing time
 - `ETHEREUM_TRACE_STREAM_STEP_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
-- `ETHEREUM_TRACE_STREAM_STEP_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
 - `ETHEREUM_BLOCK_BATCH_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
 - `ETHEREUM_RPC_MAX_PARALLEL_REQUESTS` - this helps (or not) indexing times by very small margins - use at own risk
 - `GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
