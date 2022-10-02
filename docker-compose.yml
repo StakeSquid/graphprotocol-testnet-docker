@@ -254,10 +254,14 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
-    command: bash /run.sh
-    environment:                                                                                      
+    depends_on:
+      - prometheus
+      - query-node-0
+      - indexer-service
+      - grafana
+    environment:
       PROMETHEUS_HOST: ${PROMETHEUS_HOST}
-      HTTP_AUTH_LOGIN: ${HTTP_AUTH_USER}                                                              
+      HTTP_AUTH_LOGIN: ${HTTP_AUTH_USER}
       HTTP_AUTH_PASSWORD: ${HTTP_AUTH_PASSWORD}
     ports:
       - "80:80"
@@ -267,8 +271,8 @@ services:
       - nginx_certs:/etc/nginx/certs
       - nginx_vhost:/etc/nginx/vhost.d
       - nginx_html:/usr/share/nginx/html
+      - ./nginx-proxy/htpasswd:/etc/nginx/htpasswd
       - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx-proxy/run.sh:/run.sh
     networks:
       - monitor-net
     restart: unless-stopped
@@ -283,12 +287,19 @@ services:
   nginx-ssl:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-ssl
+    depends_on:
+      - prometheus
+      - query-node-0
+      - indexer-service
+      - grafana
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - nginx_certs:/etc/nginx/certs
       - nginx_vhost:/etc/nginx/vhost.d
       - nginx_html:/usr/share/nginx/html
       - nginx_acme:/etc/acme.sh
+      - ./nginx-proxy/htpasswd:/etc/nginx/htpasswd
+      - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped
     networks:
       - monitor-net
