@@ -148,30 +148,3 @@ groups:
     annotations:
       summary: "Nginx high memory usage"
       description: "Nginx memory consumption is at {{ humanize $value}}."
-
-  - alert: caddy_down
-    expr: absent((time() - container_last_seen{name="caddy"}) < 10)
-    for: 30s
-    labels:
-      severity: critical
-    annotations:
-      summary: "Caddy down"
-      description: "Caddy container is down for more than 30 seconds."
-
-  - alert: caddy_high_cpu
-    expr: sum(rate(container_cpu_usage_seconds_total{name="caddy"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
-    for: 30s
-    labels:
-      severity: warning
-    annotations:
-      summary: "Caddy high CPU usage"
-      description: "Caddy CPU usage is {{ humanize $value}}%."
-
-  - alert: caddy_high_memory
-    expr: sum(container_memory_usage_bytes{name="caddy"}) > 1200000000
-    for: 30s
-    labels:
-      severity: warning
-    annotations:
-      summary: "Caddy high memory usage"
-      description: "Caddy memory consumption is at {{ humanize $value}}."
