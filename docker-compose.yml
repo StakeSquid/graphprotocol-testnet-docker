@@ -48,7 +48,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.25.5-alpha.0}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.5-alpha.1}
     container_name: indexer-service
     depends_on:
       - index-node-0
@@ -97,7 +97,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.25.5-alpha.0}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.5-alpha.1}
     container_name: indexer-agent
     depends_on:
       - index-node-0
