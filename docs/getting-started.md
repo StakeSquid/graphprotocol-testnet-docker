@@ -46,7 +46,6 @@ Create 4 subdomains, named as follows:
 index.sld.tld
 prometheus.sld.tld
 grafana.sld.tld
-prometheus.sld.tld
 ```
 
 
