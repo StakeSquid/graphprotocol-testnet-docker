@@ -115,10 +115,9 @@ On a fresh Ubuntu server login via ssh and execute the following commands:
 ```bash
 apt update -y && apt upgrade -y && apt autoremove -y
 
-apt install docker.io docker-compose golang-go build-essential bc git curl httpie jq nano wget bsdmainutils base58 netcat net-tools libsecret-1-dev python2.7 clang cmake -y
+apt install docker.io docker-compose golang-go build-essential bc git curl httpie jq nano wget bsdmainutils base58 netcat net-tools libsecret-1-dev python2.7 clang cmake apache2-utils -y
 
-go get github.com/a8m/envsubst/cmd/envsubst
-
+go install github.com/a8m/envsubst/cmd/envsubst@latest
 
 ```
 

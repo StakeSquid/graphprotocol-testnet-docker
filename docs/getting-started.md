@@ -44,7 +44,7 @@ Under "Service > My Domains > Manage Domain > Manage Freenom DNS" you can add mo
 Create 4 subdomains, named as follows:
 ```
 index.sld.tld
-query.sld.tld
+prometheus.sld.tld
 grafana.sld.tld
 prometheus.sld.tld
 ```

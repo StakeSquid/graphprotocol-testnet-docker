@@ -48,7 +48,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.3}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.5-alpha.1}
     container_name: indexer-service
     depends_on:
       - index-node-0
@@ -97,7 +97,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.3}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.5-alpha.1}
     container_name: indexer-agent
     depends_on:
       - index-node-0
@@ -125,6 +125,7 @@ services:
       INDEXER_AGENT_INDEXER_GEO_COORDINATES: ${GEO_COORDINATES:-60.16952 24.93545}
       INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
       INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT}
+      INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/juanmardefago/block-oracle-2}
       INDEXER_AGENT_POSTGRES_HOST: ${AGENT_DB_HOST:-postgres2}
       INDEXER_AGENT_POSTGRES_USERNAME: ${DB_USER:-graph-node}
       INDEXER_AGENT_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
@@ -149,7 +150,7 @@ services:
 
 
   index-node-0:
-    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.27.0}
+    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.28.2}
     container_name: index-node-0
     depends_on:
       - postgres
@@ -202,7 +203,7 @@ services:
 
 
   query-node-0:
-    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.27.0}
+    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.28.2}
     container_name: query-node-0
     depends_on:
       - postgres
@@ -227,9 +228,9 @@ services:
       GRAPH_LOG_QUERY_TIMING: gql
       EXPERIMENTAL_SUBGRAPH_VERSION_SWITCHING_MODE: synced
       GRAPH_KILL_IF_UNRESPONSIVE: "true"
-      VIRTUAL_HOST: ${QUERY_HOST}
-      VIRTUAL_PORT: 8000
-      LETSENCRYPT_HOST: ${QUERY_HOST}
+      #VIRTUAL_HOST: ${QUERY_HOST}
+      #VIRTUAL_PORT: 8000
+      #LETSENCRYPT_HOST: ${QUERY_HOST}
       GRAPH_LOG_QUERY_TIMING: ${GRAPH_LOG_QUERY_TIMING:-gql}
       GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH: ${FULLTEXT_SEARCH:-true}
     restart: unless-stopped
