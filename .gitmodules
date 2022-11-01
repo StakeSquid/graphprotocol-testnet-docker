@@ -1,6 +1,0 @@
-[submodule "agora"]
-	path = agora
-	url = git@github.com:graphprotocol/agora.git
-[submodule "qlog"]
-	path = qlog
-	url = git@github.com:graphprotocol/qlog.git
