@@ -1,0 +1,6 @@
+[submodule "agora"]
+	path = agora
+	url = https://github.com/graphprotocol/agora
+[submodule "qlog"]
+	path = qlog
+	url = https://github.com/graphprotocol/qlog
