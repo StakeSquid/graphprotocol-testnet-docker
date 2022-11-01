@@ -16,7 +16,7 @@
 Run the following commands to clone the repository and set everything up:
 
 ```bash
-git clone git@github.com:StakeSquid/graphprotocol-testnet-docker.git
+git clone https://github.com/StakeSquid/graphprotocol-testnet-docker
 cd graphprotocol-testnet-docker
 git submodule init
 git submodule update
