@@ -41,7 +41,7 @@ In the last step choose "use dns" and enter the IP address of your server. You c
 
 Under "Service > My Domains > Manage Domain > Manage Freenom DNS" you can add more subdomains later.
 
-Create 4 subdomains, named as follows:
+Create three subdomains, named as follows:
 ```
 index.sld.tld
 prometheus.sld.tld
