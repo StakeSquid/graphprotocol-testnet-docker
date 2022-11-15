@@ -155,13 +155,13 @@ services:
     expose:
       - 3000
     environment:
-      UI_LOGIN: ${GUI_USER}
-      UI_PASS: ${GUI_PASS}
-      AGENT_ENDPOINT: ${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
-      SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
-      VIRTUAL_HOST: ${AGENT_GUI_HOST}
-      VIRTUAL_PORT: 3000
-      LETSENCRYPT_HOST: ${AGENT_GUI_HOST}
+      - UI_LOGIN=${GUI_USER:-test}
+      - UI_PASS=${GUI_PASS:-pass}
+      - AGENT_ENDPOINT=${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
+      - SUBGRAPH_ENDPOINT=${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
+      - VIRTUAL_HOST=${AGENT_GUI_HOST}
+      - VIRTUAL_PORT=3000
+      - LETSENCRYPT_HOST=${AGENT_GUI_HOST}
     restart: unless-stopped
     networks:
       - monitor-net
