@@ -155,8 +155,8 @@ services:
     expose:
       - 3000
     environment:
-      UI_LOGIN: ${GUI_USER:-user}
-      UI_PASS: ${GUI_PASS:-password}
+      UI_LOGIN: ${GUI_USER}
+      UI_PASS: ${GUI_PASS}
       AGENT_ENDPOINT: ${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
       SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
       VIRTUAL_HOST: ${AGENT_GUI_HOST}
