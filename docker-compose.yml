@@ -162,8 +162,6 @@ services:
       VIRTUAL_HOST: ${AGENT_GUI_HOST}
       VIRTUAL_PORT: 3001
       LETSENCRYPT_HOST: ${AGENT_GUI_HOST}
-    command:
-      - '--network=goerli'
     restart: unless-stopped
     networks:
       - monitor-net
