@@ -143,6 +143,39 @@ services:
     restart: unless-stopped
     logging: *default-logging
 
+######################################################################################
+#####################            INDEXER AGENT GUI             #######################
+######################################################################################
+
+  indexer-agent-gui:
+    image: ${INDEXER_AGENT_GUI:-ghcr.io/stakemachine/indexer-agent-ui}
+    container_name: indexer-agent-gui
+    depends_on:
+      - indexer-agent
+    expose:
+      - 3000
+    environment:
+      UI_LOGIN: ${ADMIN_USER:-user}
+      UI_PASS: ${ADMIN_PASS:-password}
+      AGENT_ENDPOINT: ${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
+      SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
+      VIRTUAL_HOST: ${AGENT_GUI_HOST}
+      VIRTUAL_PORT: 3001
+      LETSENCRYPT_HOST: ${AGENT_GUI_HOST}
+    command:
+      - '--network=goerli'
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    logging: *default-logging
+
+
+
+
+
+
+
+
 
 ######################################################################################
 #####################           INDEX NODE CONTAINER 0         #######################
