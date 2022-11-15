@@ -45,21 +45,19 @@ services:
 #####################           POIFIER CONTAINER              #######################
 ######################################################################################
 
-  poifier:
-    image: grassets/poifier-client
-    container_name: poifier
-    command:
-      - '--poifier-token=${POIFIER_TOKEN}'
-      - '--poifier-server=${POIFIER_SERVER}'
-      - '--ethereum-endpoint=${ETHEREUM_ENDPOINT}'
-      - '--mainnet-subgraph-endpoint=${MAINNET_GRAPH_SUBGRAPH}'
-      - '--graph-node-status-endpoint=${GRAPH_NODE_ENDPOINT}'
-    tty: true
-    networks:
-       - monitor-net
-    restart: unless-stopped
-
-
+#  poifier:
+#    image: grassets/poifier-client
+#    container_name: poifier
+#    command:
+#      - '--poifier-token=${POIFIER_TOKEN}'
+#      - '--poifier-server=${POIFIER_SERVER}'
+#      - '--ethereum-endpoint=${ETHEREUM_ENDPOINT}'
+#      - '--mainnet-subgraph-endpoint=${MAINNET_GRAPH_SUBGRAPH}'
+#      - '--graph-node-status-endpoint=${GRAPH_NODE_ENDPOINT}'
+#    tty: true
+#    networks:
+#       - monitor-net
+#    restart: unless-stopped
 
 ######################################################################################
 #####################         INDEXER SERVICE CONTAINER        #######################
