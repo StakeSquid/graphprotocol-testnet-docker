@@ -148,7 +148,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:pr-541}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-2ae5fb6}
     container_name: indexer-agent
     depends_on:
       - index-node-0
