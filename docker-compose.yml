@@ -45,26 +45,26 @@ services:
 #####################           POIFIER CONTAINER              #######################
 ######################################################################################
 
-#  poifier:
-#    image: grassets/poifier-client
-#    container_name: poifier
-#    command:
-#      - '--poifier-token=${POIFIER_TOKEN}'
-#      - '--poifier-server=${POIFIER_SERVER}'
-#      - '--ethereum-endpoint=${ETHEREUM_ENDPOINT}'
-#      - '--mainnet-subgraph-endpoint=${MAINNET_GRAPH_SUBGRAPH}'
-#      - '--graph-node-status-endpoint=${GRAPH_NODE_ENDPOINT}'
-#    tty: true
-#    networks:
-#       - monitor-net
-#    restart: unless-stopped
+  poifier:
+    image: grassets/poifier-client
+    container_name: poifier
+    command:
+      - '--poifier-token=${POIFIER_TOKEN}'
+      - '--poifier-server=https://poifier.io'
+      - '--ethereum-endpoint=${TXN_RPC}'
+      - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
+      - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
+    tty: true
+    networks:
+       - monitor-net
+    restart: unless-stopped
 
 ######################################################################################
 #####################         INDEXER SERVICE CONTAINER        #######################
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:pr-541}
+    image: ${INDEXER_SERVICE_VERSION:-kwetlesen/autoagora-indexer-service:latest}
     container_name: indexer-service
     depends_on:
       - index-node-0
@@ -87,9 +87,9 @@ services:
       INDEXER_SERVICE_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
       INDEXER_SERVICE_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
       INDEXER_SERVICE_WALLET_WORKER_THREADS: ${WORKER_THREADS_PER_INDEXER_SERVICE:-8}
-      #INDEXER_SERVICE_VECTOR_NODE: "http://vector-node:8000"
-      #INDEXER_SERVICE_VECTOR_ROUTER: "vector8BSZxfkr62As6KZX2so4yXuex5XcpPXQ2tYZrBqpub94dAobu7"
       INDEXER_SERVICE_CLIENT_SIGNER_ADDRESS: "0xe1EC4339019eC9628438F8755f847e3023e4ff9c"
+      INDEXER_SERVICE_QUERY_TIMING_LOGS: true
+      RABBITMQ_HOST: rabbitmq #might need http proto
       SKIP_EVM_VALIDATION: "true"
       SERVER_HOST: ${AGENT_DB_HOST:-postgres2}
       SERVER_PORT: 5432
@@ -107,6 +107,41 @@ services:
     restart: unless-stopped
     logging: *default-logging
 
+
+######################################################################################
+#####################           RABBITMQ CONTAINER             #######################
+######################################################################################
+
+  rabbitmq:
+    image: rabbitmq:3.9.25
+    container_name: rabbitmq
+    networks:
+       - monitor-net
+    restart: unless-stopped
+
+######################################################################################
+#####################      AUTOAGORA PROCESSOR CONTAINER       #######################
+######################################################################################
+
+  ag-processor:
+    image: kwetlesen/autoagora-processor:latest
+    container_name: ag-processor
+    restart: unless-stopped
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
+      GRAPH_POSTGRES_HOST:
+      GRAPH_POSTGRES_DATABASE:
+      GRAPH_POSTGRES_USERNAME:
+      GRAPH_POSTGRES_PASSWORD:
+      LOG_LEVEL:
+      POSTGRES_HOST:
+      POSTGRES_DATABASE:
+      POSTGRES_USERNAME:
+      POSTGRES_PASSWORD:
+    networks:
+      - monitor-net
+    logging: *default-logging
 
 ######################################################################################
 #####################        INDEXER AGENT CONTAINER           #######################
