@@ -123,25 +123,25 @@ services:
 #####################      AUTOAGORA PROCESSOR CONTAINER       #######################
 ######################################################################################
 
-  ag-processor:
-    image: kwetlesen/autoagora-processor:latest
-    container_name: ag-processor
-    restart: unless-stopped
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
-      GRAPH_POSTGRES_HOST:
-      GRAPH_POSTGRES_DATABASE:
-      GRAPH_POSTGRES_USERNAME:
-      GRAPH_POSTGRES_PASSWORD:
-      LOG_LEVEL:
-      POSTGRES_HOST:
-      POSTGRES_DATABASE:
-      POSTGRES_USERNAME:
-      POSTGRES_PASSWORD:
-    networks:
-      - monitor-net
-    logging: *default-logging
+#  ag-processor:
+#    image: kwetlesen/autoagora-processor:latest
+#    container_name: ag-processor
+#    restart: unless-stopped
+#    environment:
+#      RABBITMQ_HOST: rabbitmq
+#      GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
+#      GRAPH_POSTGRES_HOST:
+#      GRAPH_POSTGRES_DATABASE:
+#      GRAPH_POSTGRES_USERNAME:
+#      GRAPH_POSTGRES_PASSWORD:
+#      LOG_LEVEL:
+#      POSTGRES_HOST:
+#      POSTGRES_DATABASE:
+#      POSTGRES_USERNAME:
+#      POSTGRES_PASSWORD:
+#    networks:
+#      - monitor-net
+#    logging: *default-logging
 
 ######################################################################################
 #####################        INDEXER AGENT CONTAINER           #######################
