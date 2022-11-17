@@ -50,7 +50,7 @@ services:
     container_name: poifier
     command:
       - '--poifier-token=${POIFIER_TOKEN}'
-      - '--poifier-server=https://poifier.io'
+      - '--poifier-server=https://goerli.poifier.io'
       - '--ethereum-endpoint=${TXN_RPC}'
       - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
       - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
