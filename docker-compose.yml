@@ -16,10 +16,13 @@ volumes:
     grafana_data: {}
     postgres_data: {}
     postgres2_data: {}
+    postgres_agora_data: {}
     nginx_certs: {}
     nginx_vhost: {}
     nginx_html: {}
     nginx_acme: {}
+    rabbitmq_etc: {}
+    rabbitmq_data: {}
 
 services:
 
@@ -71,7 +74,7 @@ services:
       - query-node-0
       - indexer-agent
       - postgres2
-      #- vector-node
+      - rabbitmq
     environment:
       INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE}
       INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
@@ -89,7 +92,9 @@ services:
       INDEXER_SERVICE_WALLET_WORKER_THREADS: ${WORKER_THREADS_PER_INDEXER_SERVICE:-8}
       INDEXER_SERVICE_CLIENT_SIGNER_ADDRESS: "0xe1EC4339019eC9628438F8755f847e3023e4ff9c"
       INDEXER_SERVICE_QUERY_TIMING_LOGS: "true"
-      RABBITMQ_HOST: rabbitmq #might need http proto
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USERNAME: ${RABBITMQ_USER:-rabbitmquser}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-rabbitmqpassword}
       SKIP_EVM_VALIDATION: "true"
       SERVER_HOST: ${AGENT_DB_HOST:-postgres2}
       SERVER_PORT: 5432
@@ -115,6 +120,15 @@ services:
   rabbitmq:
     image: rabbitmq:3.9.25
     container_name: rabbitmq
+    volumes:
+      - rabbitmq_etc:/etc/rabbitmq/
+      - rabbitmq_data:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-rabbitmquser}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-rabbitmqpassword}
+    expose:
+      - 5672
+      - 15672
     networks:
        - monitor-net
     restart: unless-stopped
@@ -123,25 +137,69 @@ services:
 #####################      AUTOAGORA PROCESSOR CONTAINER       #######################
 ######################################################################################
 
-#  ag-processor:
-#    image: kwetlesen/autoagora-processor:latest
-#    container_name: ag-processor
-#    restart: unless-stopped
-#    environment:
-#      RABBITMQ_HOST: rabbitmq
-#      GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
-#      GRAPH_POSTGRES_HOST:
-#      GRAPH_POSTGRES_DATABASE:
-#      GRAPH_POSTGRES_USERNAME:
-#      GRAPH_POSTGRES_PASSWORD:
-#      LOG_LEVEL:
-#      POSTGRES_HOST:
-#      POSTGRES_DATABASE:
-#      POSTGRES_USERNAME:
-#      POSTGRES_PASSWORD:
-#    networks:
-#      - monitor-net
-#    logging: *default-logging
+  ag-processor:
+    image: kwetlesen/autoagora-processor:latest
+    container_name: ag-processor
+    volumes:
+      - ./postgres-socket:/var/run/postgresql
+    depends_on:
+      - indexer-agent
+      - indexer-service
+      - postgres
+      - postgres-agora
+      - rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USERNAME: ${RABBITMQ_USER:-rabbitmquser}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-rabbitmqpassword}
+      GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
+      GRAPH_POSTGRES_HOST: ${DB_HOST:-postgres}
+      GRAPH_POSTGRES_DATABASE: ${GRAPH_NODE_DB_NAME:-graph-node}
+      GRAPH_POSTGRES_USERNAME: ${DB_USER:-graph-node}
+      GRAPH_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
+      LOG_LEVEL: DEBUG
+      POSTGRES_HOST: postgres-agora
+      POSTGRES_DATABASE: autoagora
+      POSTGRES_USERNAME: autoagora
+      POSTGRES_PASSWORD: autoagora-password
+    networks:
+      - monitor-net
+    logging: *default-logging
+
+
+######################################################################################
+#####################           AUTOAGORA CONTAINER            #######################
+######################################################################################
+
+  ag:
+    image: kwetlesen/autoagora:latest
+    container_name: ag
+    restart: unless-stopped
+    volumes:
+      - ./postgres-socket:/var/run/postgresql
+    depends_on:
+      - indexer-agent
+      - indexer-service
+      - postgres-agora
+      - rabbitmq
+      - autoagora-processor
+    environment:
+      INDEXER_AGENT_MGMT_ENDPOINT: http://indexer-agent:8000
+      INDEXER_SERVICE_METRICS_ENDPOINT: http://indexer-service:7300/metrics
+      LOGS_POSTGRES_HOST: postgres-agora
+      LOGS_POSTGRES_PORT: 5432
+      LOGS_POSTGRES_DATABASE: autoagora
+      LOGS_POSTGRES_USERNAME: autoagora
+      LOGS_POSTGRES_PASSWORD: autoagora-password
+      LOG_LEVEL: DEBUG
+      JSON_LOGS: "true"
+    networks:
+      - monitor-net
+    logging: *default-logging
+
+
+
 
 ######################################################################################
 #####################        INDEXER AGENT CONTAINER           #######################
@@ -415,7 +473,7 @@ services:
 
 
 ######################################################################################
-#####################          POSTGRES 2 CONTAINER            #######################
+#####################       POSTGRES AGENT CONTAINER           #######################
 ######################################################################################
 
 
@@ -431,6 +489,29 @@ services:
       POSTGRES_DB: ${AGENT_DB_NAME:-indexer-agent}
     volumes:
       - postgres2_data:/var/lib/postgresql/data
+    networks:
+      - monitor-net
+    expose:
+      - 5432
+    logging: *default-logging
+
+
+
+######################################################################################
+#####################          POSTGRES AGORA CONTAINER        #######################
+######################################################################################
+
+  postgres-agora:
+    image: postgres:13.6
+    container_name: postgres-agora
+    command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: autoagora
+      POSTGRES_PASSWORD: autoagora-password
+      POSTGRES_DB: autoagora
+    volumes:
+      - postgres_agora_data:/var/lib/postgresql/data
     networks:
       - monitor-net
     expose:
