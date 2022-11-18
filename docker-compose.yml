@@ -183,7 +183,7 @@ services:
       - indexer-service
       - postgres-agora
       - rabbitmq
-      - autoagora-processor
+      - ag-processor
     environment:
       INDEXER_AGENT_MGMT_ENDPOINT: http://indexer-agent:8000
       INDEXER_SERVICE_METRICS_ENDPOINT: http://indexer-service:7300/metrics
