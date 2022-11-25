@@ -52,11 +52,12 @@ services:
     image: grassets/poifier-client
     container_name: poifier
     command:
-      - '--poifier-token=${POIFIER_TOKEN}'
       - '--poifier-server=https://goerli.poifier.io'
       - '--ethereum-endpoint=${TXN_RPC}'
       - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
       - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
+      - '--mnemonic=${INDEXER_AGENT_MNEMONIC}'
+      - '--indexer-address=${STAKING_WALLET_ADDRESS}'
     tty: true
     networks:
        - monitor-net
@@ -390,14 +391,13 @@ services:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
     depends_on:
-      - prometheus
-      - query-node-0
       - indexer-service
       - grafana
-    environment:
-      PROMETHEUS_HOST: ${PROMETHEUS_HOST}
-      HTTP_AUTH_LOGIN: ${HTTP_AUTH_USER}
-      HTTP_AUTH_PASSWORD: ${HTTP_AUTH_PASSWORD}
+      - indexer-agent-gui
+    #environment:
+    #  PROMETHEUS_HOST: ${PROMETHEUS_HOST}
+    #  HTTP_AUTH_LOGIN: ${HTTP_AUTH_USER}
+    #  HTTP_AUTH_PASSWORD: ${HTTP_AUTH_PASSWORD}
     ports:
       - "80:80"
       - "443:443"
@@ -406,7 +406,7 @@ services:
       - nginx_certs:/etc/nginx/certs
       - nginx_vhost:/etc/nginx/vhost.d
       - nginx_html:/usr/share/nginx/html
-      - ./nginx-proxy/htpasswd:/etc/nginx/htpasswd
+    #  - ./nginx-proxy/htpasswd:/etc/nginx/htpasswd
       - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - monitor-net
@@ -423,17 +423,16 @@ services:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-ssl
     depends_on:
-      - prometheus
-      - query-node-0
       - indexer-service
       - grafana
+      - indexer-agent-gui
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - nginx_certs:/etc/nginx/certs
       - nginx_vhost:/etc/nginx/vhost.d
       - nginx_html:/usr/share/nginx/html
       - nginx_acme:/etc/acme.sh
-      - ./nginx-proxy/htpasswd:/etc/nginx/htpasswd
+    #  - ./nginx-proxy/htpasswd:/etc/nginx/htpasswd
       - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped
     networks:
@@ -529,10 +528,10 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
-    environment:
-      VIRTUAL_HOST: ${PROMETHEUS_HOST}
-      VIRTUAL_PORT: 9090
-      LETSENCRYPT_HOST: ${PROMETHEUS_HOST}
+    #environment:
+    #  VIRTUAL_HOST: ${PROMETHEUS_HOST}
+    #  VIRTUAL_PORT: 9090
+    #  LETSENCRYPT_HOST: ${PROMETHEUS_HOST}
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus
