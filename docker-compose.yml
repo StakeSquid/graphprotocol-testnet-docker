@@ -56,7 +56,7 @@ services:
       - '--ethereum-endpoint=${TXN_RPC}'
       - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
       - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
-      - '--mnemonic=${INDEXER_AGENT_MNEMONIC}'
+      - '--mnemonic=${OPERATOR_SEED_PHRASE}'
       - '--indexer-address=${STAKING_WALLET_ADDRESS}'
     tty: true
     networks:
