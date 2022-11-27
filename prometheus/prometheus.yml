@@ -39,16 +39,6 @@ scrape_configs:
     static_configs:
       - targets: ['index-node-0:8040']
 
-  - job_name: 'index-node-1'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['index-node-1:8040']
-
-  - job_name: 'index-node-2'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['index-node-2:8040']
-
   - job_name: 'query-node-0'
     scrape_interval: 5s
     static_configs:
