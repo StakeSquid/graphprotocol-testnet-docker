@@ -167,6 +167,43 @@ INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 - Graph-Node - [environment-variables.md](https://github.com/graphprotocol/graph-node/blob/master/docs/environment-variables.md)
 
 
+## Supporting multiple chains
+
+To add support for multiple chains, you need to edit the [config.tmpl](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/graph-node-configs/config.tmpl) file yourself.
+
+For each chain you wish to support, you need to add the corresponding provider line.
+
+**Example:**
+
+By default, we only support one chain:
+```toml
+[chains.${CHAIN_0_NAME}]
+shard = "primary"
+provider = [ { label = "${CHAIN_0_NAME}", url = "${CHAIN_0_RPC}", features = ["archive", "traces"] } ]
+```
+
+To add another one, simply duplicate this, and increment the chain number:
+```toml
+[chains.${CHAIN_0_NAME}]
+shard = "primary"
+provider = [ { label = "${CHAIN_0_NAME}", url = "${CHAIN_0_RPC}", features = ["archive", "traces"] } ]
+
+[chains.${CHAIN_1_NAME}]
+shard = "primary"
+provider = [ { label = "${CHAIN_1_NAME}", url = "${CHAIN_1_RPC}", features = ["archive", "traces"] } ]
+```
+
+After this, all you have to do is to include in the [.env file](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/.env) your new environment variables.
+
+**Example:**
+```
+CHAIN_0_NAME="gnosis"
+CHAIN_0_RPC="http://ip:port"
+CHAIN_1_NAME="matic"
+CHAIN_1_RPC="http://ip:port"
+```
+
+
 ## Start
 
 To start, all you need to do is to:

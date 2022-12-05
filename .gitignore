@@ -2,7 +2,6 @@
 .vs/
 .vscode/
 .idea/
-start
 .obsidian/app.json
 .obsidian/appearance.json
 .obsidian/core-plugins.json
@@ -10,3 +9,5 @@ start
 .obsidian/workspace
 offchain-subgraphs
 .env
+graph-node-configs/config.tmpl
+graph-node-configs/config.toml

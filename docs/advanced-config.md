@@ -75,19 +75,7 @@ Note that your postgres will automatically come back up on system startup. It wi
 
 
 
-## Advanced Graph Node configuration
-
-In the [graph-node-configs](https://github.com/StakeSquid/graphprotocol-testnet-docker/tree/graph-node-configs) folder you can see a few configuration files specific to each graph-node you are running (by default, two index nodes and one query node).
-
-The configs are basic, and work by default just like before. They're loaded as volumes in `/root/graph-node-configs/` inside the Graph Node containers, and passed as flags `GRAPH_NODE_CONFIG=` in the compose file under each Graph Node component.
-
-Configuring your Graph Nodes this way allows you to do a lot more than through having simple flags in the startup of your nodes. For example, this enables you to be able to spin up database shards, organize your subgraph according to your needs and also enables the use of `graphman`, a very powerful utility that everyone should master.
-
-The following section was taken from the Graph Node [config.md](https://github.com/graphprotocol/graph-node/blob/master/docs/config.md) written by the team. Although we will try to keep this section up to date, it might lag behind the changes in the main repo, so please refer to the original guide to see if there are any breaking changes.
-
 # Advanced Graph Node configuration
-
-**This feature is considered experimental. In particular, the format of the configuration file might still change in backwards-incompatible ways**
 
 A TOML configuration file can be used to set more complex configurations than those exposed in the
 CLI. The location of the file is passed with the `--config` command line switch. When using a
@@ -99,6 +87,11 @@ The TOML file consists of four sections:
 * `[store]` describes the available databases.
 * `[ingestor]` sets the name of the node responsible for block ingestion.
 * `[deployment]` describes how to place newly deployed subgraphs.
+
+Some of these sections support environment variable expansion out of the box,
+most notably Postgres connection strings. The official `graph-node` Docker image
+includes [`envsubst`](https://github.com/a8m/envsubst) for more complex use
+cases.
 
 ## Configuring Multiple Databases
 
@@ -200,6 +193,11 @@ chain. For each provider, the following information must be given:
 * `features`: an array of features that the provider supports, either empty
   or any combination of `traces` and `archive`
 * `headers`: HTTP headers to be added on every request. Defaults to none.
+* `limit`: the maximum number of subgraphs that can use this provider.
+  Defaults to unlimited. At least one provider should be unlimited,
+  otherwise `graph-node` might not be able to handle all subgraphs. The
+  tracking for this is approximate, and a small amount of deviation from
+  this value should be expected. The deviation will be less than 10.
 
 The following example configures two chains, `mainnet` and `kovan`, where
 blocks for `mainnet` are stored in the `vip` shard and blocks for `kovan`
@@ -219,6 +217,37 @@ provider = [
 shard = "primary"
 provider = [ { label = "kovan", url = "http://..", features = [] } ]
 ```
+
+### Controlling the number of subgraphs using a provider
+
+**This feature is experimental and might be removed in a future release**
+
+Each provider can set a limit for the number of subgraphs that can use this
+provider. The measurement of the number of subgraphs using a provider is
+approximate and can differ from the true number by a small amount
+(generally less than 10)
+
+The limit is set through rules that match on the node name. If a node's
+name does not match any rule, the corresponding provider can be used for an
+unlimited number of subgraphs. It is recommended that at least one provider
+is generally unlimited. The limit is set in the following way:
+
+```toml
+[chains.mainnet]
+shard = "vip"
+provider = [
+  { label = "mainnet-0", url = "http://..", features = [] },
+  { label = "mainnet-1", url = "http://..", features = [],
+    match = [
+      { name = "some_node_.*", limit = 10 },
+      { name = "other_node_.*", limit = 0 } ] } ]
+```
+
+Nodes named `some_node_.*` will use `mainnet-1` for at most 10 subgraphs,
+and `mainnet-0` for everything else, nodes named `other_node_.*` will never
+use `mainnet-1` and always `mainnet-0`. Any node whose name does not match
+one of these patterns will use `mainnet-0` and `mainnet-1` for an unlimited
+number of subgraphs.
 
 ## Controlling Deployment
 
@@ -325,9 +354,6 @@ would be placed. The output will indicate the database shard that will hold
 the subgraph's data, and a list of indexing nodes that could be used for
 indexing that subgraph. During deployment, `graph-node` chooses the indexing
 nodes with the fewest subgraphs currently assigned from that list.
-
-
-
 
 -----------------
 
