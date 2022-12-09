@@ -214,7 +214,6 @@ services:
       - index-node-0
       - query-node-0
       - postgres2
-      #- vector-node
     expose:
       - 7300
       - 8000
@@ -246,10 +245,6 @@ services:
       INDEXER_AGENT_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
       INDEXER_AGENT_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
       INDEXER_AGENT_DAI_CONTRACT: "0x9e7e607afd22906f7da6f1ec8f432d6f244278be"
-      #INDEXER_AGENT_VECTOR_NODE: "http://vector-node:8000"
-      #INDEXER_AGENT_VECTOR_EVENT_SERVER: "http://indexer-agent:8001"
-      #INDEXER_AGENT_VECTOR_EVENT_SERVER_PORT: 8001
-      #INDEXER_AGENT_VECTOR_ROUTER: "vector8BSZxfkr62As6KZX2so4yXuex5XcpPXQ2tYZrBqpub94dAobu7"
       INDEXER_AGENT_COLLECT_RECEIPTS_ENDPOINT: https://gateway.testnet.thegraph.com/collect-receipts
       INDEXER_AGENT_OFFCHAIN_SUBGRAPHS: ${INDEXER_AGENT_OFFCHAIN_SUBGRAPHS}
       INDEXER_AGENT_GAS_PRICE_MAX: ${INDEXER_AGENT_GAS_PRICE_MAX:-50}
@@ -307,8 +302,6 @@ services:
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.network.thegraph.com/ipfs/}'
       node_role: index-node
       node_id: index_node_0
-      CHAIN_0_NAME: ${CHAIN_0_NAME}
-      CHAIN_0_RPC: ${CHAIN_0_RPC}
       BLOCK_INGESTOR: index_node_0
       RUST_LOG: INFO
       GRAPH_LOG: ${GRAPHNODE_LOGLEVEL:-DEBUG}
