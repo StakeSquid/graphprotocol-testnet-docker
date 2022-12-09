@@ -22,52 +22,6 @@ volumes:
 services:
 
 ######################################################################################
-#####################           POIFIER CONTAINER              #######################
-######################################################################################
-
-  poifier:
-    image: grassets/poifier-client
-    container_name: poifier
-    command:
-      - '--poifier-server=https://goerli.poifier.io'
-      - '--ethereum-endpoint=${TXN_RPC}'
-      - '--mainnet-subgraph-endpoint=https://gateway.testnet.thegraph.com/network'
-      - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
-      - '--mnemonic=${OPERATOR_SEED_PHRASE}'
-      - '--indexer-address=${STAKING_WALLET_ADDRESS}'
-      - '--poifier-token=${POIFIER_TOKEN}'
-    tty: true
-    networks:
-       - monitor-net
-    restart: unless-stopped
-
-
-######################################################################################
-#####################            INDEXER AGENT GUI             #######################
-######################################################################################
-
-  indexer-agent-gui:
-    image: ${INDEXER_AGENT_GUI:-ghcr.io/stakemachine/indexer-agent-ui:v0.1.7}
-    container_name: indexer-agent-gui
-    depends_on:
-      - indexer-agent
-    expose:
-      - 3000
-    environment:
-      - UI_LOGIN=${ADMIN_USER:-test}
-      - UI_PASS=${ADMIN_PASSWORD:-pass}
-      - AGENT_ENDPOINT=${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
-      - SUBGRAPH_ENDPOINT=${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
-      - VIRTUAL_HOST=${AGENT_GUI_HOST}
-      - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=${AGENT_GUI_HOST}
-    restart: unless-stopped
-    networks:
-      - monitor-net
-    logging: *default-logging
-
-
-######################################################################################
 #####################          NGINX PROXY CONTAINER           #######################
 ######################################################################################
 
@@ -76,7 +30,6 @@ services:
     container_name: nginx-proxy
     depends_on:
       - grafana
-      - indexer-agent-gui
     #environment:
     #  PROMETHEUS_HOST: ${PROMETHEUS_HOST}
     #  HTTP_AUTH_LOGIN: ${HTTP_AUTH_USER}
@@ -107,7 +60,6 @@ services:
     container_name: nginx-ssl
     depends_on:
       - grafana
-      - indexer-agent-gui
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - nginx_certs:/etc/nginx/certs
