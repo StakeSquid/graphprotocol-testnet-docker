@@ -263,16 +263,15 @@ services:
 ######################################################################################
 
   indexer-agent-gui:
-    image: ${INDEXER_AGENT_GUI:-ghcr.io/stakemachine/indexer-agent-ui:v0.1.7}
+    image: ${INDEXER_AGENT_GUI:-ghcr.io/stakemachine/indexer-agent-ui:v0.1.9}
     container_name: indexer-agent-gui
-    depends_on:
-      - indexer-agent
     expose:
       - 3000
     environment:
       - UI_LOGIN=${ADMIN_USER:-test}
       - UI_PASS=${ADMIN_PASSWORD:-pass}
       - AGENT_ENDPOINT=${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
+      - NEXTAUTH_SECRET=1234
       - SUBGRAPH_ENDPOINT=${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
       - VIRTUAL_HOST=${AGENT_GUI_HOST}
       - VIRTUAL_PORT=3000
