@@ -23,24 +23,6 @@ volumes:
 
 services:
 
-######################################################################################
-#####################            CLI CONTAINER                 #######################
-######################################################################################
-
-  cli:
-    build:
-      context: ./cli
-    container_name: cli
-    restart: unless-stopped
-    environment:
-      GEO_COORDINATES: ${GEO_COORDINATES:-69.42069 69.42069}
-    tty: true
-    networks:
-      - monitor-net
-    logging: *default-logging
-    volumes:
-      - ./cli/scripts:/home/graph/scripts
-
 
 ######################################################################################
 #####################         INDEXER SERVICE CONTAINER        #######################
@@ -120,7 +102,6 @@ services:
     volumes:
       - ./postgres-socket:/var/run/postgresql
     depends_on:
-      - indexer-agent
       - indexer-service
       - postgres-agora
       - rabbitmq
@@ -155,7 +136,6 @@ services:
     volumes:
       - ./postgres-socket:/var/run/postgresql
     depends_on:
-      - indexer-agent
       - indexer-service
       - postgres-agora
       - rabbitmq
@@ -172,62 +152,6 @@ services:
       JSON_LOGS: "true"
     networks:
       - monitor-net
-    logging: *default-logging
-
-
-
-
-######################################################################################
-#####################        INDEXER AGENT CONTAINER           #######################
-######################################################################################
-
-  indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-2ae5fb6}
-    container_name: indexer-agent
-    depends_on:
-      - postgres2
-      #- vector-node
-    expose:
-      - 7300
-      - 8000
-      - 8001
-      - 8002
-    environment:
-      INDEXER_AGENT_MNEMONIC: ${OPERATOR_SEED_PHRASE}
-      INDEXER_AGENT_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
-      INDEXER_AGENT_INDEX_NODE_IDS: "index_node_0"
-      INDEXER_AGENT_INJECT_DAI: "true"
-      INDEXER_AGENT_REBATE_CLAIM_TRESHOLD: ${REBATE_CLAIM_TRESHOLD:-200}
-      INDEXER_AGENT_REBATE_CLAIM_BATCH_THRESHOLD: ${REBATE_CLAIM_BATCH_THRESHOLD:-2000}
-      INDEXER_AGENT_REBATE_CLAIM_MAX_BATCH_SIZE: ${REBATE_CLAIM_MAX_BATCH_SIZE:-100}
-      INDEXER_AGENT_VOUCHER_REDEMPTION_THRESHOLD: ${VOUCHER_REDEMPTION_THRESHOLD:-200}
-      INDEXER_AGENT_VOUCHER_REDEMPTION_BATCH_THRESHOLD: ${VOUCHER_REDEMPTION_BATCH_THRESHOLD:-2000}
-      INDEXER_AGENT_VOUCHER_REDEMPTION_MAX_BATCH_SIZE: ${VOUCHER_REDEMPTION_MAX_BATCH_SIZE:-100}
-      INDEXER_AGENT_ETHEREUM_NETWORK: goerli
-      INDEXER_AGENT_ETHEREUM: ${TXN_RPC}
-      INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
-      INDEXER_AGENT_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
-      INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
-      INDEXER_AGENT_PUBLIC_INDEXER_URL: 'https://${INDEX_HOST}/'
-      INDEXER_AGENT_INDEXER_GEO_COORDINATES: ${GEO_COORDINATES:-60.16952 24.93545}
-      INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
-      INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT}
-      INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/goerli-epoch-block-oracle}
-      INDEXER_AGENT_POSTGRES_HOST: ${AGENT_DB_HOST:-postgres2}
-      INDEXER_AGENT_POSTGRES_USERNAME: ${DB_USER:-graph-node}
-      INDEXER_AGENT_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
-      INDEXER_AGENT_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
-      INDEXER_AGENT_DAI_CONTRACT: "0x9e7e607afd22906f7da6f1ec8f432d6f244278be"
-      #INDEXER_AGENT_VECTOR_NODE: "http://vector-node:8000"
-      #INDEXER_AGENT_VECTOR_EVENT_SERVER: "http://indexer-agent:8001"
-      #INDEXER_AGENT_VECTOR_EVENT_SERVER_PORT: 8001
-      #INDEXER_AGENT_VECTOR_ROUTER: "vector8BSZxfkr62As6KZX2so4yXuex5XcpPXQ2tYZrBqpub94dAobu7"
-      INDEXER_AGENT_COLLECT_RECEIPTS_ENDPOINT: https://gateway.testnet.thegraph.com/collect-receipts
-      INDEXER_AGENT_OFFCHAIN_SUBGRAPHS: ${INDEXER_AGENT_OFFCHAIN_SUBGRAPHS}
-      INDEXER_AGENT_GAS_PRICE_MAX: ${INDEXER_AGENT_GAS_PRICE_MAX:-50}
-    networks:
-      - monitor-net
-    restart: unless-stopped
     logging: *default-logging
 
 
