@@ -271,7 +271,7 @@ services:
       - UI_LOGIN=${ADMIN_USER:-test}
       - UI_PASS=${ADMIN_PASSWORD:-pass}
       - AGENT_ENDPOINT=${INDEXER_AGENT_ENDPOINT:-http://indexer-agent:8000}
-      - NEXTAUTH_SECRET=1234
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=https://${AGENT_GUI_HOST}/
       - SUBGRAPH_ENDPOINT=${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
       - VIRTUAL_HOST=${AGENT_GUI_HOST}
