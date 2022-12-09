@@ -96,7 +96,7 @@ groups:
       description: "{{ $labels.instance }} memory consumption is at {{ humanize $value}}."
 
   - alert: postgres_down
-    expr: absent((time() - container_last_seen{name=~"postgres|postgres2"}) < 10)
+    expr: absent((time() - container_last_seen{name=~"postgres.*"}) < 10)
     for: 10s
     labels:
       severity: critical
@@ -105,7 +105,7 @@ groups:
       description: "{{ $labels.instance }} container is down for more than 30 seconds."
 
   - alert: postgres_high_cpu
-    expr: sum(rate(container_cpu_usage_seconds_total{name=~"postgres|postgres2"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
+    expr: sum(rate(container_cpu_usage_seconds_total{name=~"postgres.*"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
     for: 30s
     labels:
       severity: warning
@@ -114,7 +114,7 @@ groups:
       description: "{{ $labels.instance }} CPU usage is {{ humanize $value}}%."
 
   - alert: postgres_high_memory
-    expr: sum(container_memory_usage_bytes{name=~"postgres|postgres2"}) > 1200000000
+    expr: sum(container_memory_usage_bytes{name=~"postgres.*"}) > 1200000000
     for: 30s
     labels:
       severity: warning
