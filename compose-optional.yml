@@ -58,7 +58,7 @@ services:
       - SUBGRAPH_ENDPOINT=${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://gateway.testnet.thegraph.com/network}
       - VIRTUAL_HOST=${AGENT_GUI_HOST}
       - VIRTUAL_PORT=3000
-      #- LETSENCRYPT_HOST=${AGENT_GUI_HOST}
+      - LETSENCRYPT_HOST=${AGENT_GUI_HOST}
     restart: unless-stopped
     networks:
       - monitor-net
