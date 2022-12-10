@@ -43,38 +43,35 @@ Okay, assuming that you followed the instructions and you have your new Operator
 
 
 
+### Ethereum clients options
 
-## Ethereum Archive Node Specs
+| Self-hosted        | Trace API | Stable | EIP-1898 | Deprecated |
+| ------------------ | --------- | ------ | -------- |------------|
+| OpenEthereum       | yes ✔️     | yes ✔️  | yes ✔️    |yes ⚠️      |
+| GETH               | no ⚠️      | yes ✔️  | yes ✔️    |no ✔️       |
+| Erigon             | yes ✔️     | yes ✔️  | yes ✔️    |no ✔️       |
+| Nethermind | yes ✔️ | yes ✔️ | yes ✔️ |no ✔️ |
 
-Again, as mentioned in the [README.md](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/README.md), the setup for the archive node is **not included** in this docker setup.
+### Execution Clients
 
-This section is purely informative.
+| Network          | Client     | Size*  | Release |
+| ---------------- | ---------- | ------ | ------- |
+| Ethereum Mainnet | Erigon     | 1.8 TB | Stable  |
+| Gnosis Mainnet   | Nethermind | 2.0 TB | Stable  |
+| Gnosis Mainnet   | Erigon     | 291 GB | WIP     |
+| Polygon Mainnet  | Erigon     | 5.6 TB | Stable  |
 
-|         | Minimum Specs   | Recommended Specs | Maxed out Specs   |
-| ------- | --------------- | ----------------- | ----------------- |
-| CPUs    | 16 vcore        | 32 vcore          | 64 vcore          |
-| RAM     | 32 GB           | 64 GB             | 128 GB            |
-| Storage | 3 TB SATA SSD   | 5 TB NVME         | 5 TB NVME RAID 10 |
+### Consensus Clients
 
-*Note: The 3 TB requirement for storage is the absolute minimum, it needs to be at least SATA SSD as spinning disks as too slow to also serve the RPC data to the Graph stack. Also, only Erigon has that little space required. OE (now deprecated) and GETH all take 10 TB+ at the very minimum, and expanding pretty fast.*
+| Network          | Client     | Size*  |
+| ---------------- | ---------- | ------ |
+| Ethereum Mainnet | Lighthouse | 169 GB |
+| Gnosis Mainnet   | Lighthouse | 141 GB |
+| Polygon Mainnet  | Heimdall   | 251 GB |
 
-
-### Archive node options
-
-| Self-hosted        | Trace API | Stable | EIP-1898 | Min Disk Size | Deprecated |
-| ------------------ | --------- | ------ | -------- | ------------- |------------|
-| OpenEthereum       | yes ✔️     | yes ✔️  | yes ✔️    | 8 TB      |yes ⚠️      |
-| GETH               | no ⚠️      | yes ✔️  | yes ✔️    | 8 TB      |no ✔️       |
-| Erigon             | yes ✔️     | yes ✔️  | yes ✔️    | 3 TB      |no ✔️       |
+*Size data as of 10th of December 2022
 
 
-| Service Providers (WIP) |
-| ----------------------- |
-| Infura                             |
-| Alchemy                        |
-| ChainStack                   |
-| Quiknode                      |
-| Ankr                              |
 
 
 
@@ -86,14 +83,14 @@ This section is purely informative.
 | RAM     | 32 GB           | 128 GB            | 256/512+ GB        |
 | Storage | 300 GB SATA SSD | 2 TB NVME         | 8+ TB NVME RAID 10 |
 
-*The specs/requirements listed here come from our own experience during the testnet.*
+*The specs/requirements listed here come from our own experience during the mission control testnet from 2020.*
 *Your mileage may vary, so take this with a grain of salt and be ready to upgrade.* :)
 
 - The minimum specs will definitely get you running, but not for long, assuming you want to serve data for more than a few heavy-weight subgraphs in the future.
 
 - The recommended specs are a good setup for those that want to dip more than their feet in the indexing waters. Can serve a decent number of subgraphs, but it's limited by the CPU if too many requests flow through.
 
-- The maxed out specs rule of thumb is basically more is better. More CPUs, more RAM, faster disks. There is never enough. IT...NEEDS....MORE!!!!11
+- The maxed out specs rule of thumb is basically more is better. More CPUs, more RAM, faster disks.
 
 Closing note, regarding the specs mentioned above: ideally, they need to scale up proportional with your stake in the protocol.
 
@@ -101,14 +98,6 @@ Closing note, regarding the specs mentioned above: ideally, they need to scale u
 
 
 ## Software Prerequisites
-
-* Docker Engine
-* Docker Compose
-* git
-* httpie
-* curl
-* wget
-* jq
 
 On a fresh Ubuntu server login via ssh and execute the following commands:
 
