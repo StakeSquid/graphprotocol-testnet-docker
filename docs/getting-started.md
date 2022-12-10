@@ -41,11 +41,17 @@ In the last step choose "use dns" and enter the IP address of your server. You c
 
 Under "Service > My Domains > Manage Domain > Manage Freenom DNS" you can add more subdomains later.
 
-Create 4 subdomains, named as follows:
+**Create 2 subdomains, named as follows:**
+
 ```
 index.sld.tld
-prometheus.sld.tld
 grafana.sld.tld
+```
+
+**Optional, create an additional subdomain for the Indexer Agent GUI:**
+
+```
+agent.sld.tld
 ```
 
 
@@ -56,7 +62,7 @@ You need a wallet with a seed phrase that is registered as your operator wallet.
 
 The operator wallet has limited functionality, and it's recommended to be used for security reasons.
 
-*You need a 12-word, or 15-word mnemonic phrase in order for it to work.*
+***You need a 12-word, or 15-word mnemonic phrase in order for it to work.***
 
 To make yourself a mnemonic eth wallet you can go to this [website](https://iancoleman.io/bip39/), select ETH from the dropdown and press generate.
 
@@ -77,8 +83,8 @@ Edit the file called `.env` and add your values to the following envs:
 ```bash
 EMAIL=email@sld.tld
 INDEX_HOST=index.sld.tld
-QUERY_HOST=query.sld.tld
-GRAFANA_HOST=dashboard.sld.tld
+GRAFANA_HOST=grafana.sld.tld
+AGENT_GUI_HOST=agent.sld.tld
 ADMIN_USER=your_user
 ADMIN_PASSWORD=your_password
 DB_USER=your_db_user
@@ -94,77 +100,39 @@ GEO_COORDINATES='69.420 69.420'
 INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 
 
-#The following ENV vars are optional
-#they need to be added above the last line
 
-#QUERY_FEE_REBATE_CLAIM_THRESHOLD=number-in-grt \
-#REBATE_CLAIM_BATCH_THRESHOLD=number-in-grt \
-#NETWORK_SUBGRAPH_DEPLOYMENT=QmTePWCvPedmVxAvPnDFmFVxxYNW73z6xisyKCL2xa5P6e \
-#INDEXER_AGENT_OFFCHAIN_SUBGRAPHS="Qm,Qm,Qm" \
-#GRAPHNODE_LOGLEVEL=warn \
-#ETHEREUM_TRACE_STREAM_STEP_SIZE=100 \
-#ETHEREUM_BLOCK_BATCH_SIZE=50 \
-#ETHEREUM_RPC_MAX_PARALLEL_REQUESTS=128 \
-#GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE=1000 \
-#GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE=500 \
-#INDEXER_AGENT_GAS_PRICE_MAX=gas-price-in-gwei \
+#Optional env vars depending on which services you use:
+
+###Indexer agent GUI:
+#AGENT_GUI_HOST=agent.sld.tld
+#NEXTAUTH_SECRET=$(openssl rand -base64 32)
+
+###POIfier
+#POIFIER_TOKEN=token
 
 ```
 
 **Required env vars:**
 - `EMAIL` - only used as contact to create SSL certificates. Usually it doesn't receive any emails but is required by the certificate issuer.
 - `INDEX_HOST` - your indexer public endpoint. The gateway will be sending queries to this endpoint.
-- `QUERY_HOST` - your query public playground. You can use this endpoint to send test queries directly into your Graph infrastructure to see if everything works properly. This env var is not present on the Mainnet Docker build.
 - `GRAFANA_HOST` - your Grafana dashboard for indexer stack monitoring.
 - `ADMIN_USER` and `ADMIN_PASSWORD` - will be used by Grafana, Prometheus and AlertManager.
 - `DB_USER` and `DB_PASS` - will be used for initializing the PostgreSQL Databases (both index/query DB and indexer agent/service DB).
 - `GRAPH_NODE_DB_NAME` - the name of the database used by the Index/Query nodes.
 - `AGENT_DB_NAME` - the name of the database used by the Indexer agent/service nodes.
 - `CHAIN_0_NAME` - the name of the network that you want to index
-- `CHAIN_0_RPC - your RPCs (archive nodes) used by the index nodes.
+- `CHAIN_0_RPC` - your RPCs (archive nodes) used by the index nodes.
 - `TXN_RPC` - your Goerli ETH RPC used by Indexer agent/service nodes. This can be a fast/full/archive node, up to you! Please note that using Erigon as the TXN_RPC has proven unreliable by some indexers.
 - `OPERATOR_SEED_PHRASE` - the 12/15 word mnemonic that you generated earlier. Will be used by the Agent/Service to send transactions (open/close allocations, etc)
 - `STAKING_WALLET_ADDRESS` - the address (0x...) that you staked your GRT with, ideally living on an entirely different mnemonic phrase than your Operator Wallet.
 - `GEO_COORDINATES` of your server - you can search for an ip location website and check your server exact coordinates.
 
 **Optional env vars:**
-- `QUERY_FEE_REBATE_CLAIM_THRESHOLD`  - the minimum amount of GRT to claim per allocation
-- `REBATE_CLAIM_BATCH_THRESHOLD` - the minimum amount of Total GRT to batch claim for all allocations combined
-- `NETWORK_SUBGRAPH_DEPLOYMENT` - The Mainnet Network Subgraph IPFS hash, used if you want to rely on your own subgraph deployment rather than the gateways subgraphs
-- `INDEXER_AGENT_OFFCHAIN_SUBGRAPHS` - Gives you the possibility of syncing subgraphs locally without allocating to them onchain
-- `GRAPHNODE_LOGLEVEL` - the log level of the graph-node (indexer/query) - trace/debug/info/warn/error - if you have a whackton of subgraphs, increasing the loglevel to warn/error helps lowering the indexing time
-- `ETHEREUM_TRACE_STREAM_STEP_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
-- `ETHEREUM_BLOCK_BATCH_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
-- `ETHEREUM_RPC_MAX_PARALLEL_REQUESTS` - this helps (or not) indexing times by very small margins - use at own risk
-- `GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE` - this helps (or not) indexing times by very small margins - use at own risk
-- `GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE` - this helps (or not) indexing times by very small margins - use at own risk
-- `INDEXER_AGENT_GAS_PRICE_MAX` - the maximum Gas Price (GWEI) that the indexer-agent will attempt to send transactions with
+- `AGENT_GUI_HOST` - your Agent GUI endpoint for controlling the Agent and allocations remotely
+- `NEXTAUTH_SECRET` - used by the Agent GUI to salt your password
+- `POIFIER_TOKEN` - token for Poifier
 
 **Note:** If you want to use any of the optional env vars, you need to copy the line that you want to enable above the last line, and uncomment it.
-
-
-**Containers:**
-* Graph Node (query node)
-* Graph Node (index node)
-* Indexer Agent
-* Indexer Service
-* Indexer CLI
-* Postgres Database for the index/query nodes
-* Postgres Database for the agent/service nodes
-* Prometheus (metrics database) `http://<host-ip>:9090`
-* Prometheus-Pushgateway (push acceptor for ephemeral and batch jobs) `http://<host-ip>:9091`
-* AlertManager (alerts management) `http://<host-ip>:9093`
-* Grafana (visualize metrics) `http://<host-ip>:3000`
-* NodeExporter (host metrics collector)
-* cAdvisor (containers metrics collector)
-* Caddy (reverse proxy and basic auth provider for prometheus and alertmanager)
-
-
-
-**Additional configs and details:**
-
-- Agent/Service - [networks.md](https://github.com/graphprotocol/indexer/blob/main/docs/networks.md)
-- Graph-Node - [environment-variables.md](https://github.com/graphprotocol/graph-node/blob/master/docs/environment-variables.md)
 
 
 ## Supporting multiple chains
@@ -203,14 +171,72 @@ CHAIN_1_NAME="matic"
 CHAIN_1_RPC="http://ip:port"
 ```
 
+**Additional configs and details:**
+
+- Agent/Service - [networks.md](https://github.com/graphprotocol/indexer/blob/main/docs/networks.md)
+- Graph-Node - [environment-variables.md](https://github.com/graphprotocol/graph-node/blob/master/docs/environment-variables.md)
+
+
+
+## Containers in each configuration:
+
+**Graphnode Stack:**
+
+- Index Node
+- Query Node
+- Postgres Database for the Graphnode Stack
+
+**Indexer Stack:**
+
+- Indexer Agent
+- Indexer Service
+- Indexer CLI
+- Nginx Proxy
+- Nginx SSL
+- Posgres Database for the Indexer Stack
+
+**Autoagora Stack:**
+
+- Indexer Service
+- Rabbitmq
+- Autoagora Processor
+- Autoagora
+- Nginx Proxy
+- Nginx SSL
+- Posgres Database for the Indexer Stack
+- Posgres Database for the Autoagora Stack
+
+**Monitoring Stack:**
+
+- Prometheus
+- Grafana
+- Alertmanager
+- Node exporter
+- Cadvisor
+- Pushgateway
+- Nginx Proxy
+- Nginx SSL
+
+**Optional Stack:**
+
+- Poifier client
+- Indexer Agent GUI
+- Nginx Proxy
+- Nginx SSL
+
+
+
 
 ## Start
 
-To start, all you need to do is to:
+Start by picking up the right stack that you want to spin up.
+
+There are several start files used to spin up different components.
+
+I would recommend to start with:
 
 ```bash
-bash start
-
+bash start-essential
 
 ```
 
@@ -221,16 +247,28 @@ Subsequent restarts will be much faster.
 In case something goes wrong, find the problem, edit the variables, and add `--force-recreate` at the end of the command, plus the container you want to recreate:
 
 ```bash
-bash start --force-recreate <container_name>
+bash start-essential --force-recreate <container_name>
 
 ```
 
 Or to recreate the entire stack:
 
 ```bash
-bash start --force-recreate
+bash start-essential --force-recreate
 
 ```
+
+### Start file variants:
+
+**start-essential** - starts up the graphnode, indexer and monitoring stack - all you need to get up and running on the network
+
+**start-optional** - starts up the optional stack (for components, read above)
+
+**start-autoagora** - starts up the autoagora stack  (for components, read above)
+
+**start-all** - starts up the entire stack
+
+
 
 
 ## Verify that it runs properly
