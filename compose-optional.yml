@@ -27,7 +27,7 @@ services:
     image: grassets/poifier-client:v2.0.0
     container_name: poifier
     command:
-      - '--poifier-server=https://poifier.io'
+      - '--poifier-server=https://goerli.poifier.io'
       - '--graph-node-status-endpoint=http://index-node-0:8030/graphql'
       - '--mnemonic=${OPERATOR_SEED_PHRASE}'
       - '--indexer-address=${STAKING_WALLET_ADDRESS}'
