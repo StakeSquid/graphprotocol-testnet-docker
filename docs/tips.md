@@ -8,3 +8,13 @@
 - [Setting Up Cost Models](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/costmodels.md)
 - [Tips and Tricks](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/tips.md) <- you are here
 - [Troubleshooting](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/troubleshooting.md)
+
+
+
+# Getting subgraph sizes in the indexing overview dashboard
+
+## Setup a cronjob to refresh materialized view:
+
+```bash
+echo "0 0,12 * * * $HOME/graphprotocol-testnet-docker/refresh-sizes.sh" | crontab -
+```
