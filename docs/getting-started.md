@@ -107,9 +107,6 @@ INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 #AGENT_GUI_HOST=agent.sld.tld
 #NEXTAUTH_SECRET=$(openssl rand -base64 32)
 
-###POIfier
-#POIFIER_TOKEN=token
-
 ```
 
 **Required env vars:**
@@ -130,7 +127,6 @@ INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 **Optional env vars:**
 - `AGENT_GUI_HOST` - your Agent GUI endpoint for controlling the Agent and allocations remotely
 - `NEXTAUTH_SECRET` - used by the Agent GUI to salt your password
-- `POIFIER_TOKEN` - token for Poifier
 
 **Note:** If you want to use any of the optional env vars, you need to copy the line that you want to enable above the last line, and uncomment it.
 
