@@ -33,9 +33,9 @@ git branch --set-upstream-to=origin
 
 To enable SSL on your host you should get a domain.
 
-You can use any domain and any regsitrar that allowes you to edit DNS records to point subdomains to your IP address.
+You can use any domain and any registrar that allows you to edit DNS records to point subdomains to your IP address.
 
-For a free option go to [myFreenom](https://my.freenom.com/) and find a free domain name. Create a account and complete the registration.
+For a free option go to [myFreenom](https://my.freenom.com/) and find a free domain name. Create an account and complete the registration.
 
 In the last step choose "use dns" and enter the IP address of your server. You can choose up to 12 months for free.
 
