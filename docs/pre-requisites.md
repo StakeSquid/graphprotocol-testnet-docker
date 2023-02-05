@@ -17,7 +17,7 @@ In order to become an indexer on the Graph Protocol Testnet Network, you'll have
 
 This can easily be done via the Web UI, by going to the [Testnet Graph Explorer](https://testnet.thegraph.com).
 
-1. Go to our [Discord Server](https://discord.gg/graphprotocol). Get the Testnet role from the `#roles` channel, then to to the `#testnet-faucet` channel and get your Testnet GRT.
+1. Go to our [Discord Server](https://discord.gg/graphprotocol). Get the Testnet role from the `#roles` channel, then go to the `#testnet-faucet` channel and get your Testnet GRT.
 
 2. Login with Metamask on the Wallet that holds your GRT
 
@@ -33,7 +33,7 @@ The Operator is a wallet address that is entirely separate from the address whic
 
 For this, follow the [instructions here](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/getting-started.md#create-a-mnemonic) first, then head back for the rest.
 
-Okay, assuming that you followed the instructions and you have your new Operator wallet at hand, lets go and link it up with the wallet that you used to stake your GRT.
+Okay, assuming that you followed the instructions and you have your new Operator wallet at hand, let's go and link it up with the wallet that you used to stake your GRT.
 
 1. Login with Metamask on the wallet that you used to stake your GRT
 2. Click the Profile dropdown button, and go to "Settings", and then to the "Operators" tab
