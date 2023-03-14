@@ -43,7 +43,7 @@ services:
 ######################################################################################
 
   indexer-agent-gui:
-    image: ${INDEXER_AGENT_GUI:-ghcr.io/stakemachine/indexer-agent-ui:v0.1.9}
+    image: ${INDEXER_AGENT_GUI:-ghcr.io/stakemachine/indexer-agent-ui:v0.1.14}
     container_name: indexer-agent-gui
     expose:
       - 3000
