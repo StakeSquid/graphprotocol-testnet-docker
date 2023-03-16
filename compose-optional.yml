@@ -23,6 +23,27 @@ services:
 #####################           POIFIER CONTAINER              #######################
 ######################################################################################
 
+  poi-radio:
+    image: ghcr.io/graphops/poi-radio:0.0.10
+    container_name: poi-radio
+    restart: unless-stopped
+    environment:
+      GRAPHCAST_NETWORK: "testnet"
+      REGISTRY_SUBGRAPH: "https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-goerli"
+      NETWORK_SUBGRAPH: "https://gateway.testnet.thegraph.com/network"
+      #ETH_NODE: "http://${TXN_RPC}:8545"
+      PRIVATE_KEY: "${GRAPHCAST_ID_PRIVATE_KEY}"
+      GRAPH_NODE_STATUS_ENDPOINT: "http://index-node-0:8030/graphql"
+      RUST_LOG: "warn,hyper=warn,graphcast_sdk=info,poi_radio=info"
+    networks:
+      - monitor-net
+    logging: *default-logging
+
+
+######################################################################################
+#####################           POIFIER CONTAINER              #######################
+######################################################################################
+
   poifier:
     image: grassets/poifier-client:v2.0.2
     container_name: poifier
