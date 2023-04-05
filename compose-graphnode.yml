@@ -22,7 +22,7 @@ services:
 
 
   index-node-0:
-    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.29.0}
+    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.30.0}
     container_name: index-node-0
     depends_on:
       - postgres
@@ -92,9 +92,6 @@ services:
       GRAPH_LOG_QUERY_TIMING: gql
       EXPERIMENTAL_SUBGRAPH_VERSION_SWITCHING_MODE: synced
       GRAPH_KILL_IF_UNRESPONSIVE: "true"
-      #VIRTUAL_HOST: ${QUERY_HOST}
-      #VIRTUAL_PORT: 8000
-      #LETSENCRYPT_HOST: ${QUERY_HOST}
       GRAPH_LOG_QUERY_TIMING: ${GRAPH_LOG_QUERY_TIMING:-gql}
       GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH: ${FULLTEXT_SEARCH:-true}
     restart: unless-stopped
@@ -133,3 +130,42 @@ services:
     expose:
       - 5432
     logging: *default-logging
+
+
+######################################################################################
+#####################         TRAEFIK PROXY CONTAINER          #######################
+######################################################################################      
+
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    expose:
+      - "8082"
+    ports:
+      - "443:443"
+      - "80:80"
+    command:
+      - "--api=true"
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/dynamic_config.yml"
+      - "--entrypoints.websecure.address=:443"
+      - "--entryPoints.metrics.address=:8082"
+      - "--metrics.prometheus.entryPoint=metrics"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      # TESTING
+      - "--certificatesresolvers.myresolver.acme.email=$EMAIL"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - "./traefik/letsencrypt:/letsencrypt"
+      - "./traefik/config/dynamic_config.yml:/dynamic_config.yml"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - monitor-net
+    labels:
+      - "traefik.enable=true"
