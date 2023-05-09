@@ -123,6 +123,7 @@ services:
       INDEXER_AGENT_COLLECT_RECEIPTS_ENDPOINT: https://gateway.testnet.thegraph.com/collect-receipts
       INDEXER_AGENT_OFFCHAIN_SUBGRAPHS: ${INDEXER_AGENT_OFFCHAIN_SUBGRAPHS}
       INDEXER_AGENT_GAS_PRICE_MAX: ${INDEXER_AGENT_GAS_PRICE_MAX:-50}
+      INDEXER_AGENT_ALLOCATION_MANAGEMENT: auto
     networks:
       - monitor-net
     restart: unless-stopped
