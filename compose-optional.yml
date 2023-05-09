@@ -24,7 +24,7 @@ services:
 ######################################################################################
 
   poi-radio:
-    image: ghcr.io/graphops/poi-radio:0.0.10
+    image: ghcr.io/graphops/poi-radio:0.1
     container_name: poi-radio
     restart: unless-stopped
     environment:
