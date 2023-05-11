@@ -11,12 +11,6 @@ networks:
   monitor-net:
     driver: bridge
 
-volumes:
-    nginx_certs: {}
-    nginx_vhost: {}
-    nginx_html: {}
-    nginx_acme: {}
-
 services:
 
 ######################################################################################
@@ -24,13 +18,13 @@ services:
 ######################################################################################
 
   poi-radio:
-    image: ghcr.io/graphops/poi-radio:0.1
+    image: ghcr.io/graphops/poi-radio:0.2
     container_name: poi-radio
     restart: unless-stopped
     environment:
       GRAPHCAST_NETWORK: "testnet"
       REGISTRY_SUBGRAPH: "https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-goerli"
-      NETWORK_SUBGRAPH: "https://gateway.testnet.thegraph.com/network"
+      NETWORK_SUBGRAPH: "https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli"
       #ETH_NODE: "http://${TXN_RPC}:8545"
       PRIVATE_KEY: "${GRAPHCAST_ID_PRIVATE_KEY}"
       GRAPH_NODE_STATUS_ENDPOINT: "http://index-node-0:8030/graphql"

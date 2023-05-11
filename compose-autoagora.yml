@@ -14,10 +14,6 @@ networks:
 volumes:
     postgres2_data: {}
     postgres_agora_data: {}
-    nginx_certs: {}
-    nginx_vhost: {}
-    nginx_html: {}
-    nginx_acme: {}
     rabbitmq_etc: {}
     rabbitmq_data: {}
 
