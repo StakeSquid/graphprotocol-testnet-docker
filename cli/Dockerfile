@@ -11,7 +11,7 @@ WORKDIR /root/
 #RUN git clone -b v0.20.16 https://github.com/graphprotocol/indexer /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
 RUN git clone https://github.com/graphprotocol/indexer /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
 WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli 
-RUN git reset --hard c3eb328ba46542a484aedaa6f717c34b69d2a25a
+RUN git reset --hard c3eb328
 
 
 WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
