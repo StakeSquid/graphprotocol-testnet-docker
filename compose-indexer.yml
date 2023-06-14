@@ -39,7 +39,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.16}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:pr-668}
     container_name: indexer-service
     depends_on:
       - postgres2
@@ -84,7 +84,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.16}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:pr-668}
     container_name: indexer-agent
     depends_on:
       - postgres2
@@ -137,7 +137,7 @@ services:
 
 
   postgres2:
-    image: postgres:13.10
+    image: postgres:13.11
     container_name: postgres2
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped

@@ -24,7 +24,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.16}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:pr-668}
     container_name: indexer-agent
     depends_on:
       - postgres2
@@ -127,7 +127,7 @@ services:
 ######################################################################################
 
   rabbitmq:
-    image: rabbitmq:3.9.25
+    image: rabbitmq:3.11
     container_name: rabbitmq
     volumes:
       - rabbitmq_etc:/etc/rabbitmq/
@@ -147,7 +147,7 @@ services:
 ######################################################################################
 
   ag-processor:
-    image: kwetlesen/autoagora-processor:latest
+    image: ghcr.io/semiotic-ai/autoagora-processor:latest
     container_name: ag-processor
     volumes:
       - ./postgres-socket:/var/run/postgresql
@@ -180,7 +180,7 @@ services:
 ######################################################################################
 
   ag:
-    image: ghcr.io/semiotic-ai/autoagora:v1.3.0
+    image: ghcr.io/semiotic-ai/autoagora:v1.4.0
     container_name: ag
     restart: unless-stopped
     volumes:
@@ -212,7 +212,7 @@ services:
 
 
   postgres2:
-    image: postgres:13.10
+    image: postgres:13.11
     container_name: postgres2
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
@@ -235,7 +235,7 @@ services:
 ######################################################################################
 
   postgres-agora:
-    image: postgres:13.10
+    image: postgres:13.11
     container_name: postgres-agora
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
