@@ -39,7 +39,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:sha-a4ba1a6}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:v0.20.16}
     container_name: indexer-service
     depends_on:
       - postgres2
