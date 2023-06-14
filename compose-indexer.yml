@@ -39,7 +39,7 @@ services:
 ######################################################################################
 
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:sha-b6c7795}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:sha-a4ba1a6}
     container_name: indexer-service
     depends_on:
       - postgres2
@@ -84,7 +84,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-b6c7795}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-a4ba1a6}
     container_name: indexer-agent
     depends_on:
       - postgres2

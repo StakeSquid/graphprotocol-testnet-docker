@@ -24,7 +24,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-b6c7795}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-a4ba1a6}
     container_name: indexer-agent
     depends_on:
       - postgres2
