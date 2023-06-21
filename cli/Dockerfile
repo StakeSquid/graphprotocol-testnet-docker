@@ -9,8 +9,8 @@ ENV PATH="/root/.cargo/bin:$PATH"
 
 WORKDIR /root/
 RUN git clone -b tiago/multi-network-aware-components https://github.com/graphprotocol/indexer /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
-#WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli/
-#RUN git fetch origin pull/668/head:pr-668
+WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
+RUN git checkout tiago/multi-network-aware-components
 
 WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
 RUN yarn --global --frozen-lockfile --non-interactive --production=false
