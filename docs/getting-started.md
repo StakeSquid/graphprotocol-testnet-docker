@@ -9,8 +9,6 @@
 - [Tips and Tricks](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/tips.md)
 - [Troubleshooting](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/troubleshooting.md)
 
-
-
 ## Install from scratch
 
 Run the following commands to clone the repository and set everything up:
@@ -23,11 +21,7 @@ git submodule update
 git config --global user.email "you@example.com"
 git config --global user.name "Example User"
 git branch --set-upstream-to=origin
-
-
 ```
-
-
 
 ## Get a domain
 
@@ -54,15 +48,13 @@ grafana.sld.tld
 agent.sld.tld
 ```
 
-
-
 ## Create a mnemonic
 
 You need a wallet with a seed phrase that is registered as your operator wallet. This wallet will be the one that makes transactions on behalf of your main wallet (which holds and stakes the GRT).
 
 The operator wallet has limited functionality, and it's recommended to be used for security reasons.
 
-***You need a 12-word, or 15-word mnemonic phrase in order for it to work.***
+**_You need a 12-word, or 15-word mnemonic phrase in order for it to work._**
 
 To make yourself a mnemonic eth wallet you can go to this [website](https://iancoleman.io/bip39/), select ETH from the dropdown and press generate.
 
@@ -73,8 +65,6 @@ You can find your address, public key and private key in the first row of the ta
 **Make sure you save the mnemonic, private key and the wallet address somewhere safe.**
 
 If you need, you can import the wallet using the private key into Metamask
-
-
 
 ## Configure the environment variables
 
@@ -99,17 +89,37 @@ STAKING_WALLET_ADDRESS=0xAdDreSs
 GEO_COORDINATES='69.420 69.420'
 INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 
+# Optional env vars depending on which services you use:
 
+### Indexer agent GUI:
+# AGENT_GUI_HOST=agent.sld.tld
+# NEXTAUTH_SECRET=$(openssl rand -base64 32)
 
-#Optional env vars depending on which services you use:
+### POIfier
+# POIFIER_TOKEN=token
 
-###Indexer agent GUI:
-#AGENT_GUI_HOST=agent.sld.tld
-#NEXTAUTH_SECRET=$(openssl rand -base64 32)
+### Graphcast Subgraph Radio
+# PRIVATE_KEY=
+# GRAPHCAST_NETWORK=
+# REGISTRY_SUBGRAPH=
+# NETWORK_SUBGRAPH=
+# GRAPH_NODE_STATUS_ENDPOINT=
+# RUST_LOG=
+# INDEXER_ADDRESS=
+# METRICS_HOST=
 
+# If you change METRICS_PORT, make sure to also change the subgraph-radio job's targets in
+# prometheus/prometheus.yml, from targets: ['subgraph-radio:3010'] to targets: ['subgraph-radio:YOUR_NEW_PORT']
+# METRICS_PORT=
+
+# SERVER_PORT=
+# ID_VALIDATION=
+# COVERAGE=
+# PERSISTENCE_FILE_PATH=
 ```
 
-**Required env vars:**
+### Required env vars
+
 - `EMAIL` - only used as contact to create SSL certificates. Usually it doesn't receive any emails but is required by the certificate issuer.
 - `INDEX_HOST` - your indexer public endpoint. The gateway will be sending queries to this endpoint.
 - `GRAFANA_HOST` - your Grafana dashboard for indexer stack monitoring.
@@ -124,12 +134,22 @@ INDEXER_AGENT_OFFCHAIN_SUBGRAPHS=""
 - `STAKING_WALLET_ADDRESS` - the address (0x...) that you staked your GRT with, ideally living on an entirely different mnemonic phrase than your Operator Wallet.
 - `GEO_COORDINATES` of your server - you can search for an ip location website and check your server exact coordinates.
 
-**Optional env vars:**
-- `AGENT_GUI_HOST` - your Agent GUI endpoint for controlling the Agent and allocations remotely
-- `NEXTAUTH_SECRET` - used by the Agent GUI to salt your password
+### Optional env vars
 
 **Note:** If you want to use any of the optional env vars, you need to copy the line that you want to enable above the last line, and uncomment it.
 
+#### Agent GUI
+
+- `AGENT_GUI_HOST` - your Agent GUI endpoint for controlling the Agent and allocations remotely
+- `NEXTAUTH_SECRET` - used by the Agent GUI to salt your password
+
+#### POIfier
+
+- `POIFIER_TOKEN` - Auth token for POIfier-client
+
+#### Graphcast Subgraph Radio
+
+There are a number of optional env vars available to configure [Subgraph Radio](https://github.com/graphops/subgraph-radio), you can learn more about them [here](https://docs.graphops.xyz/graphcast/radios/subgraph-radio#basic-configuration).
 
 ## Supporting multiple chains
 
@@ -140,6 +160,7 @@ For each chain you wish to support, you need to add the corresponding provider l
 **Example:**
 
 By default, we only support one chain:
+
 ```toml
 [chains.${CHAIN_0_NAME}]
 shard = "primary"
@@ -147,6 +168,7 @@ provider = [ { label = "${CHAIN_0_NAME}", url = "${CHAIN_0_RPC}", features = ["a
 ```
 
 To add another one, simply duplicate this, and increment the chain number:
+
 ```toml
 [chains.${CHAIN_0_NAME}]
 shard = "primary"
@@ -160,6 +182,7 @@ provider = [ { label = "${CHAIN_1_NAME}", url = "${CHAIN_1_RPC}", features = ["a
 After this, all you have to do is to include in the [.env file](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/.env) your new environment variables.
 
 **Example:**
+
 ```
 CHAIN_0_NAME="gnosis"
 CHAIN_0_RPC="http://ip:port"
@@ -171,8 +194,6 @@ CHAIN_1_RPC="http://ip:port"
 
 - Agent/Service - [networks.md](https://github.com/graphprotocol/indexer/blob/main/docs/networks.md)
 - Graph-Node - [environment-variables.md](https://github.com/graphprotocol/graph-node/blob/master/docs/environment-variables.md)
-
-
 
 ## Containers in each configuration:
 
@@ -219,9 +240,7 @@ CHAIN_1_RPC="http://ip:port"
 - Indexer Agent GUI
 - Nginx Proxy
 - Nginx SSL
-
-
-
+- [Subgraph Radio](https://docs.graphops.xyz/graphcast/radios/subgraph-radio)
 
 ## Start
 
@@ -260,12 +279,9 @@ bash start-essential --force-recreate
 
 **start-optional** - starts up the optional stack (for components, read above)
 
-**start-autoagora** - starts up the autoagora stack  (for components, read above)
+**start-autoagora** - starts up the autoagora stack (for components, read above)
 
 **start-all** - starts up the entire stack
-
-
-
 
 ## Verify that it runs properly
 
@@ -280,9 +296,6 @@ And look for containers that are crash looping - you will notice `restarting` an
 
 To further debug, try looking for the container logs and see what they say.
 More information in the [troubleshooting](https://github.com/StakeSquid/graphprotocol-testnet-docker/blob/master/docs/troubleshooting.md) section.
-
-
-
 
 ## Indexer Infrastructure Ports
 
@@ -307,18 +320,16 @@ the CLI flags and environment variables that can be used to change the ports.
 
 #### Indexer Service
 
-| Port | Purpose                                         | Routes                                                              | CLI argument | Environment variable   |
-| ---- | ----------------------------------------------- | ------------------------------------------------------------------- | ------------ | ---------------------- |
+| Port | Purpose                                         | Routes                              | CLI argument | Environment variable   |
+| ---- | ----------------------------------------------- | ----------------------------------- | ------------ | ---------------------- |
 | 7600 | GraphQL HTTP server (for paid subgraph queries) | `/subgraphs/id/...` <br/> `/status` | `--port`     | `INDEXER_SERVICE_PORT` |
-| 7300 | Prometheus metrics                              | `/metrics`                                                          | -            | -                      |
+| 7300 | Prometheus metrics                              | `/metrics`                          | -            | -                      |
 
 #### Indexer Agent
 
 | Port | Purpose                                      | Routes | CLI argument                | Environment variable                    |
 | ---- | -------------------------------------------- | ------ | --------------------------- | --------------------------------------- |
 | 8000 | Indexer management API (for `graph indexer`) | `/`    | `--indexer-management-port` | `INDEXER_AGENT_INDEXER_MANAGEMENT_PORT` |
-
-
 
 ## Install or Update the Agora and Qlog modules
 
@@ -329,8 +340,6 @@ git submodule update
 
 ```
 
-
-
 To use qlog or agora execute the `runqlog` or `runagora` scripts in the root of the repository.
 
 ```bash
@@ -338,8 +347,6 @@ To use qlog or agora execute the `runqlog` or `runagora` scripts in the root of 
 ./runqlog --help
 
 ```
-
-
 
 This will use the compiled qlog tool and extract queries since yesterday or 5 hours ago and store them to the query-logs folder.
 
@@ -349,19 +356,12 @@ This will use the compiled qlog tool and extract queries since yesterday or 5 ho
 
 ```
 
-
-
 To make journald logs persistent across restarts you need to create a folder for the logs to store in like this:
 
 ```
 mkdir -p /var/log/journal
 
 ```
-
-
-
-
-
 
 ## Updates and Upgrades
 
@@ -377,11 +377,11 @@ git pull
 This will update the scripts from the repository.
 
 To upgrade the containers:
+
 ```bash
 bash start --force-recreate
 
 ```
-
 
 To update Agora or Qlog repos to the latest version just do the following command occasionally:
 
@@ -390,7 +390,6 @@ git submodule update
 
 ```
 
-
 To use qlog or agora execute the `runqlog` or `runagora` scripts in the root of the repository.
 
 ```bash
@@ -398,12 +397,6 @@ To use qlog or agora execute the `runqlog` or `runagora` scripts in the root of 
 ./runqlog --help
 
 ```
-
-
-
-
-
-
 
 #### Table of contents
 
