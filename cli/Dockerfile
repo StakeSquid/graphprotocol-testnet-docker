@@ -8,9 +8,9 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/rustup.sh &
 ENV PATH="/root/.cargo/bin:$PATH"
 
 WORKDIR /root/
-RUN git clone -b tiago/multi-network-aware-components https://github.com/graphprotocol/indexer /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
+RUN git clone -b v0.20.18 https://github.com/graphprotocol/indexer /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
 WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
-RUN git checkout tiago/multi-network-aware-components
+RUN git checkout v0.20.18
 
 WORKDIR /root/.npm-global/lib/node_modules/@graphprotocol/indexer-cli
 RUN yarn --global --frozen-lockfile --non-interactive --production=false
