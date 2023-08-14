@@ -16,7 +16,7 @@ services:
   ######################################################################################
 
   subgraph-radio:
-    image: ghcr.io/graphops/subgraph-radio:0.1
+    image: ghcr.io/graphops/subgraph-radio:0.1.3
     container_name: subgraph-radio
     expose:
       - 3010

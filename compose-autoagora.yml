@@ -24,7 +24,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-4666630}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.18}
     container_name: indexer-agent
     depends_on:
       - postgres2
@@ -180,7 +180,7 @@ services:
 ######################################################################################
 
   ag:
-    image: ghcr.io/semiotic-ai/autoagora:v1.4.0
+    image: ghcr.io/semiotic-ai/autoagora:v1.5.0
     container_name: ag
     restart: unless-stopped
     volumes:
@@ -212,7 +212,7 @@ services:
 
 
   postgres2:
-    image: postgres:13.11
+    image: postgres:15.4
     container_name: postgres2
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
@@ -235,7 +235,7 @@ services:
 ######################################################################################
 
   postgres-agora:
-    image: postgres:13.11
+    image: postgres:15.4
     container_name: postgres-agora
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
