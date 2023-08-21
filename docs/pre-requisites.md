@@ -106,7 +106,7 @@ apt update -y && apt upgrade -y && apt autoremove -y
 
 apt install docker.io docker-compose golang-go build-essential bc git curl httpie jq nano wget bsdmainutils base58 netcat net-tools libsecret-1-dev python2.7 clang cmake apache2-utils -y
 
-go install github.com/a8m/envsubst/cmd/envsubst@latest
+rm -rf $(which envsubst) && curl -L https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-`uname -s`-`uname -m` -o envsubst && chmod +x envsubst && sudo mv envsubst /usr/bin/envsubst
 
 ```
 

@@ -35,36 +35,29 @@ services:
       - ./cli/scripts:/home/graph/scripts
 
 ######################################################################################
-#####################         INDEXER SERVICE CONTAINER        #######################
+#####################      INDEXER SERVICE CONTAINER GOERLI    #######################
 ######################################################################################
 
-  indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service:sha-8d21f0a}
-    container_name: indexer-service
+  indexer-service-goerli:
+    image: ${INDEXER_SERVICE_VERSION_GOERLI:-ghcr.io/graphprotocol/indexer-service:sha-cca6d8c}
+    container_name: indexer-service-goerli
     depends_on:
       - postgres2
     environment:
-      INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE}
-      INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
+      INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE_GOERLI}
+      INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS_GOERLI}
       INDEXER_SERVICE_PORT: 7600
       INDEXER_SERVICE_ETHEREUM_NETWORK: goerli
-      INDEXER_SERVICE_ETHEREUM: ${TXN_RPC}
+      INDEXER_SERVICE_ETHEREUM: ${TXN_RPC_GOERLI}
       INDEXER_SERVICE_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_SERVICE_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
-      INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli}
-      INDEXER_SERVICE_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT}
+      INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT_GOERLI:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli}
+      INDEXER_SERVICE_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT_GOERLI}
       INDEXER_SERVICE_POSTGRES_HOST: postgres2
       INDEXER_SERVICE_POSTGRES_USERNAME: ${DB_USER:-graph-node}
       INDEXER_SERVICE_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
       INDEXER_SERVICE_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
-      INDEXER_SERVICE_WALLET_WORKER_THREADS: ${WORKER_THREADS_PER_INDEXER_SERVICE:-8}
       INDEXER_SERVICE_CLIENT_SIGNER_ADDRESS: "0xe1EC4339019eC9628438F8755f847e3023e4ff9c"
-      SKIP_EVM_VALIDATION: "true"
-      SERVER_HOST: ${AGENT_DB_HOST:-postgres2}
-      SERVER_PORT: 5432
-      SERVER_DB_USER: ${DB_USER:-graph-node}
-      SERVER_DB_PASSWORD: ${DB_PASS:-db-password}
-      SERVER_DB_NAME: ${AGENT_DB_NAME:-indexer-agent}
     expose:
       - 7300
       - 7600
@@ -74,47 +67,89 @@ services:
     logging: *default-logging
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.indexer-service.loadbalancer.server.port=7600"
-      - "traefik.http.routers.indexer-service.entrypoints=websecure"
-      - "traefik.http.routers.indexer-service.tls.certresolver=myresolver"
-      - "traefik.http.routers.indexer-service.rule=Host(`$INDEX_HOST`)"
+      - "traefik.http.services.indexer-service-goerli.loadbalancer.server.port=7600"
+      - "traefik.http.routers.indexer-service-goerli.entrypoints=websecure"
+      - "traefik.http.routers.indexer-service-goerli.tls.certresolver=myresolver"
+      - "traefik.http.routers.indexer-service-goerli.rule=Host(`$INDEX_HOST`)"
+
 
 ######################################################################################
-#####################        INDEXER AGENT CONTAINER           #######################
+#####################    INDEXER SERVICE CONTAINER ARBI GOERLI  ######################
+######################################################################################
+
+  indexer-service-arbi-goerli:
+    image: ${INDEXER_SERVICE_VERSION_ARBI_GOERLI:-ghcr.io/graphprotocol/indexer-service:sha-cca6d8c}
+    container_name: indexer-service-arbi-goerli
+    depends_on:
+      - postgres2
+    environment:
+      INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE_ARBI_GOERLI}
+      INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS_ARBI_GOERLI}
+      INDEXER_SERVICE_PORT: 7600
+      INDEXER_SERVICE_ETHEREUM_NETWORK: arbitrum-goerli
+      INDEXER_SERVICE_ETHEREUM: ${TXN_RPC_ARBI_GOERLI}
+      INDEXER_SERVICE_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
+      INDEXER_SERVICE_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
+      INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT_ARBI_GOERLI:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-goerli}
+      INDEXER_SERVICE_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT_ARBI_GOERLI}
+      INDEXER_SERVICE_POSTGRES_HOST: postgres2
+      INDEXER_SERVICE_POSTGRES_USERNAME: ${DB_USER:-graph-node}
+      INDEXER_SERVICE_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
+      INDEXER_SERVICE_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
+      INDEXER_SERVICE_CLIENT_SIGNER_ADDRESS: "0xac01B0b3B2Dc5D8E0D484c02c4d077C15C96a7b4"
+    expose:
+      - 7300
+      - 7600
+    networks:
+      - monitor-net
+    restart: unless-stopped
+    logging: *default-logging
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.indexer-service-arbi-goerli.loadbalancer.server.port=7600"
+      - "traefik.http.routers.indexer-service-arbi-goerli.entrypoints=websecure"
+      - "traefik.http.routers.indexer-service-arbi-goerli.tls.certresolver=myresolver"
+      - "traefik.http.routers.indexer-service-arbi-goerli.rule=Host(`$INDEX_HOST`)"
+
+######################################################################################
+#####################     INDEXER AGENT CONTAINER GOERLI       #######################
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-8d21f0a}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:sha-cca6d8c}
     container_name: indexer-agent
     depends_on:
       - postgres2
-      #- vector-node
     expose:
       - 7300
       - 8000
       - 8001
       - 8002
+    volumes:
+      - ./indexer-agent-configs:/root/indexer-agent-configs/
     environment:
-      INDEXER_AGENT_MNEMONIC: ${OPERATOR_SEED_PHRASE}
-      INDEXER_AGENT_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
+      INDEXER_AGENT_MULTINETWORK_MODE: ${INDEXER_AGENT_MULTINETWORK_MODE:-false}
+      INDEXER_AGENT_NETWORK_SPECIFICATIONS_DIRECTORY: /root/indexer-agent-configs/
+      INDEXER_AGENT_MNEMONIC: ${OPERATOR_SEED_PHRASE_GOERLI}
+      INDEXER_AGENT_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS_GOERLI}
       INDEXER_AGENT_INDEX_NODE_IDS: "index_node_0"
       INDEXER_AGENT_INJECT_DAI: "true"
-      INDEXER_AGENT_REBATE_CLAIM_THRESHOLD: ${REBATE_CLAIM_THRESHOLD:-200}
-      INDEXER_AGENT_REBATE_CLAIM_BATCH_THRESHOLD: ${REBATE_CLAIM_BATCH_THRESHOLD:-2000}
-      INDEXER_AGENT_REBATE_CLAIM_MAX_BATCH_SIZE: ${REBATE_CLAIM_MAX_BATCH_SIZE:-100}
-      INDEXER_AGENT_VOUCHER_REDEMPTION_THRESHOLD: ${VOUCHER_REDEMPTION_THRESHOLD:-200}
-      INDEXER_AGENT_VOUCHER_REDEMPTION_BATCH_THRESHOLD: ${VOUCHER_REDEMPTION_BATCH_THRESHOLD:-2000}
-      INDEXER_AGENT_VOUCHER_REDEMPTION_MAX_BATCH_SIZE: ${VOUCHER_REDEMPTION_MAX_BATCH_SIZE:-100}
+      INDEXER_AGENT_REBATE_CLAIM_THRESHOLD: ${REBATE_CLAIM_THRESHOLD_GOERLI:-200}
+      INDEXER_AGENT_REBATE_CLAIM_BATCH_THRESHOLD: ${REBATE_CLAIM_BATCH_THRESHOLD_GOERLI:-2000}
+      INDEXER_AGENT_REBATE_CLAIM_MAX_BATCH_SIZE: ${REBATE_CLAIM_MAX_BATCH_SIZE_GOERLI:-100}
+      INDEXER_AGENT_VOUCHER_REDEMPTION_THRESHOLD: ${VOUCHER_REDEMPTION_THRESHOLD_GOERLI:-200}
+      INDEXER_AGENT_VOUCHER_REDEMPTION_BATCH_THRESHOLD: ${VOUCHER_REDEMPTION_BATCH_THRESHOLD_GOERLI:-2000}
+      INDEXER_AGENT_VOUCHER_REDEMPTION_MAX_BATCH_SIZE: ${VOUCHER_REDEMPTION_MAX_BATCH_SIZE_GOERLI:-100}
       INDEXER_AGENT_ETHEREUM_NETWORK: goerli
-      INDEXER_AGENT_ETHEREUM: ${TXN_RPC}
+      INDEXER_AGENT_ETHEREUM: ${TXN_RPC_GOERLI}
       INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_AGENT_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
       INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
       INDEXER_AGENT_PUBLIC_INDEXER_URL: 'https://${INDEX_HOST}/'
       INDEXER_AGENT_INDEXER_GEO_COORDINATES: ${GEO_COORDINATES:-60.16952 24.93545}
-      INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli}
-      INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT}
-      INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/goerli-epoch-block-oracle}
+      INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT_GOERLI:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli}
+      INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT_GOERLI}
+      INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT_GOERLI:-https://api.thegraph.com/subgraphs/name/graphprotocol/goerli-epoch-block-oracle}
       INDEXER_AGENT_POSTGRES_HOST: ${AGENT_DB_HOST:-postgres2}
       INDEXER_AGENT_POSTGRES_USERNAME: ${DB_USER:-graph-node}
       INDEXER_AGENT_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
@@ -122,8 +157,8 @@ services:
       INDEXER_AGENT_DAI_CONTRACT: "0x9e7e607afd22906f7da6f1ec8f432d6f244278be"
       INDEXER_AGENT_COLLECT_RECEIPTS_ENDPOINT: https://gateway.testnet.thegraph.com/collect-receipts
       INDEXER_AGENT_OFFCHAIN_SUBGRAPHS: ${INDEXER_AGENT_OFFCHAIN_SUBGRAPHS}
-      INDEXER_AGENT_GAS_PRICE_MAX: ${INDEXER_AGENT_GAS_PRICE_MAX:-50}
-      INDEXER_AGENT_ALLOCATION_MANAGEMENT: auto
+      INDEXER_AGENT_GAS_PRICE_MAX: ${INDEXER_AGENT_GAS_PRICE_MAX_GOERLI:-50}
+      INDEXER_AGENT_ALLOCATION_MANAGEMENT: ${INDEXER_AGENT_ALLOCATION_MANAGEMENT:-auto}
     networks:
       - monitor-net
     restart: unless-stopped
