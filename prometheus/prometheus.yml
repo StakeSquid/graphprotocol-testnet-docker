@@ -44,10 +44,15 @@ scrape_configs:
     static_configs:
       - targets: ['query-node-0:8040']
 
-  - job_name: 'indexer-service'
+  - job_name: 'indexer-service-goerli'
     scrape_interval: 5s
     static_configs:
-      - targets: ['indexer-service:7300']
+      - targets: ['indexer-service-goerli:7300']
+
+  - job_name: 'indexer-service-arbi-goerli'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['indexer-service-arbi:7300']
 
   - job_name: 'autoagora'
     scrape_interval: 5s
