@@ -2,12 +2,6 @@ version: "3.8"
 
 name: optional
 
-x-logging: &default-logging
-  options:
-    max-file: "1"
-    compress: "false"
-  driver: local
-
 networks:
   monitor-net:
     driver: bridge
@@ -50,7 +44,6 @@ services:
     restart: unless-stopped
     networks:
       - monitor-net
-    logging: *default-logging
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.indexer-agent-gui.loadbalancer.server.port=3000"

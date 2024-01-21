@@ -2,13 +2,6 @@ version: '3.8'
 
 name: monitoring
 
-x-logging:
-  &default-logging
-  options:
-    max-file: '1'
-    compress: 'false'
-  driver: local
-
 networks:
   monitor-net:
     driver: bridge
@@ -33,9 +26,7 @@ services:
     restart: unless-stopped
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
 
 ######################################################################################
 #####################          PROMTAIL CONTAINER              #######################
@@ -53,9 +44,7 @@ services:
     restart: unless-stopped
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
 
 ######################################################################################
 #####################          PROMETHEUS CONTAINER            #######################
@@ -81,9 +70,8 @@ services:
       - 9090
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
+
 
 
 
@@ -106,9 +94,8 @@ services:
       - 9093
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
+
 
 
 
@@ -135,9 +122,8 @@ services:
       - 9100
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
+
 
 
 
@@ -161,9 +147,8 @@ services:
       - 8080
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
+
 
 
 
@@ -194,7 +179,6 @@ services:
       - 3000
     networks:
       - monitor-net
-    logging: *default-logging
     labels:
       - "org.label-schema.group=monitoring"
       - "traefik.enable=true"
@@ -219,9 +203,8 @@ services:
       - 9091
     networks:
       - monitor-net
-    labels:
-      org.label-schema.group: "monitoring"
-    logging: *default-logging
+
+
 
 
 ######################################################################################
