@@ -26,6 +26,7 @@ services:
 
   loki:
     image: grafana/loki
+    container_name: loki
     command: -config.file=/etc/loki/local-config.yaml
     expose:
       - 3000
