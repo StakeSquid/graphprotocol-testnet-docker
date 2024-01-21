@@ -211,6 +211,7 @@ CHAIN_1_RPC="http://ip:port"
 - Nginx Proxy
 - Nginx SSL
 - Posgres Database for the Indexer Stack
+- [Subgraph Radio](https://docs.graphops.xyz/graphcast/radios/subgraph-radio)
 
 **Autoagora Stack:**
 
@@ -240,7 +241,6 @@ CHAIN_1_RPC="http://ip:port"
 - Indexer Agent GUI
 - Nginx Proxy
 - Nginx SSL
-- [Subgraph Radio](https://docs.graphops.xyz/graphcast/radios/subgraph-radio)
 
 ## Start
 

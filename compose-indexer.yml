@@ -1,10 +1,9 @@
-version: '2.1'
+version: "2.1"
 
-x-logging:
-  &default-logging
+x-logging: &default-logging
   options:
-    max-file: '1'
-    compress: 'false'
+    max-file: "1"
+    compress: "false"
   driver: local
 
 networks:
@@ -12,13 +11,12 @@ networks:
     driver: bridge
 
 volumes:
-    postgres2_data: {}
+  postgres2_data: {}
 
 services:
-
-######################################################################################
-#####################            CLI CONTAINER                 #######################
-######################################################################################
+  ######################################################################################
+  #####################            CLI CONTAINER                 #######################
+  ######################################################################################
 
   cli:
     build:
@@ -34,9 +32,9 @@ services:
     volumes:
       - ./cli/scripts:/home/graph/scripts
 
-######################################################################################
-#####################      INDEXER SERVICE CONTAINER GOERLI    #######################
-######################################################################################
+  ######################################################################################
+  #####################      INDEXER SERVICE CONTAINER GOERLI    #######################
+  ######################################################################################
 
   indexer-service-goerli:
     image: ${INDEXER_SERVICE_VERSION_GOERLI:-ghcr.io/graphprotocol/indexer-service:v0.20.22}
@@ -72,10 +70,9 @@ services:
       - "traefik.http.routers.indexer-service-goerli.tls.certresolver=myresolver"
       - "traefik.http.routers.indexer-service-goerli.rule=Host(`$INDEX_HOST`)"
 
-
-######################################################################################
-#####################    INDEXER SERVICE CONTAINER ARBI GOERLI  ######################
-######################################################################################
+  ######################################################################################
+  #####################    INDEXER SERVICE CONTAINER ARBI GOERLI  ######################
+  ######################################################################################
 
   indexer-service-arbi-goerli:
     image: ${INDEXER_SERVICE_VERSION_ARBI_GOERLI:-ghcr.io/graphprotocol/indexer-service:v0.20.22}
@@ -111,9 +108,9 @@ services:
       - "traefik.http.routers.indexer-service-arbi-goerli.tls.certresolver=myresolver"
       - "traefik.http.routers.indexer-service-arbi-goerli.rule=Host(`$INDEX_HOST`)"
 
-######################################################################################
-#####################     INDEXER AGENT CONTAINER GOERLI       #######################
-######################################################################################
+  ######################################################################################
+  #####################     INDEXER AGENT CONTAINER GOERLI       #######################
+  ######################################################################################
 
   indexer-agent:
     image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.20.22}
@@ -145,7 +142,7 @@ services:
       INDEXER_AGENT_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
       INDEXER_AGENT_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
       INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
-      INDEXER_AGENT_PUBLIC_INDEXER_URL: 'https://${INDEX_HOST}/'
+      INDEXER_AGENT_PUBLIC_INDEXER_URL: "https://${INDEX_HOST}/"
       INDEXER_AGENT_INDEXER_GEO_COORDINATES: ${GEO_COORDINATES:-60.16952 24.93545}
       INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: ${INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT_GOERLI:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli}
       INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT_GOERLI}
@@ -164,12 +161,9 @@ services:
     restart: unless-stopped
     logging: *default-logging
 
-
-######################################################################################
-#####################       POSTGRES AGENT CONTAINER           #######################
-######################################################################################
-
-
+  ######################################################################################
+  #####################       POSTGRES AGENT CONTAINER           #######################
+  ######################################################################################
 
   postgres2:
     image: postgres:16.1
@@ -188,10 +182,38 @@ services:
       - 5432
     logging: *default-logging
 
-######################################################################################
-#####################         TRAEFIK PROXY CONTAINER          #######################
-######################################################################################      
+  ######################################################################################
+  #####################           SUBGRAPH RADIO CONTAINER            ##################
+  ######################################################################################
 
+  subgraph-radio:
+    image: ghcr.io/graphops/subgraph-radio:0.1
+    container_name: subgraph-radio
+    expose:
+      - 3010
+      - 3012
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      GRAPHCAST_NETWORK: ${GRAPHCAST_NETWORK:-testnet}
+      REGISTRY_SUBGRAPH: ${REGISTRY_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-goerli}
+      NETWORK_SUBGRAPH: ${NETWORK_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli}
+      MNEMONIC: ${OPERATOR_SEED_PHRASE_GOERLI}
+      GRAPH_NODE_STATUS_ENDPOINT: ${GRAPH_NODE_STATUS_ENDPOINT:-http://index-node-0:8030/graphql}
+      RUST_LOG: ${RUST_LOG:-warn,hyper=warn,graphcast_sdk=info,subgraph_radio=info}
+      INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS_GOERLI}
+      METRICS_HOST: ${METRICS_HOST:-0.0.0.0}
+      METRICS_PORT: ${METRICS_PORT:-3010}
+      SERVER_PORT: ${SERVER_PORT:-3012}
+      PERSISTENCE_FILE_PATH: ${PERSISTENCE_FILE_PATH:-./state.json}
+    networks:
+      - monitor-net
+    logging: *default-logging
+
+  ######################################################################################
+  #####################         TRAEFIK PROXY CONTAINER          #######################
+  ######################################################################################
 
   traefik:
     image: traefik:latest
