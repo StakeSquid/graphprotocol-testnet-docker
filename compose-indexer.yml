@@ -1,7 +1,5 @@
 version: '3.8'
 
-name: indexer
-
 networks:
   monitor-net:
     driver: bridge

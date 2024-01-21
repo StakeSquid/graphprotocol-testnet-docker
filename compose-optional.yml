@@ -1,7 +1,5 @@
 version: "3.8"
 
-name: optional
-
 networks:
   monitor-net:
     driver: bridge
