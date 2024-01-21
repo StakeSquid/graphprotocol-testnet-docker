@@ -1,4 +1,6 @@
-version: '2.1'
+version: '3.8'
+
+name: monitoring
 
 x-logging:
   &default-logging
@@ -18,6 +20,41 @@ volumes:
 services:
 
 
+######################################################################################
+#####################             LOKI CONTAINER               #######################
+######################################################################################
+
+  loki:
+    image: grafana/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    expose:
+      - 3000
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    logging: *default-logging
+
+######################################################################################
+#####################          PROMTAIL CONTAINER              #######################
+######################################################################################
+
+
+  promtail:
+    image:  grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - ./promtail/promtail.yaml:/etc/promtail/docker-config.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/docker-config.yaml
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    logging: *default-logging
 
 ######################################################################################
 #####################          PROMETHEUS CONTAINER            #######################
