@@ -109,7 +109,6 @@ services:
     networks:
       - monitor-net
     restart: unless-stopped
-
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.indexer-service.loadbalancer.server.port=7600"
