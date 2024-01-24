@@ -125,7 +125,7 @@ services:
 
 
   postgres-agent:
-    image: postgres:16.1
+    image: ${POSTGRES_AGENT_VERSION:-postgres:16.1}
     container_name: postgres-agent
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
