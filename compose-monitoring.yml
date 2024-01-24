@@ -132,8 +132,9 @@ services:
 
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor
+    command: --enable_metrics=cpu,memory,network --store_container_labels=false --docker_only=true
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -145,6 +146,10 @@ services:
       - 8080
     networks:
       - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    logging: *default-logging
+
 
 
 
