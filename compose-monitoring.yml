@@ -152,9 +152,6 @@ services:
       - monitor-net
     labels:
       org.label-schema.group: "monitoring"
-    logging: *default-logging
-
-
 
 
 
