@@ -12,6 +12,8 @@ positions:
 
 clients:
   - url: http://loki:3100/loki/api/v1/push
+    batchsize: 1024000  # Max size of logs to batch in bytes. Default is 100KB.
+    batchwait: 1s      # Max time to wait before sending a batch. Default is 1s.
 
 scrape_configs:
   - job_name: 'docker-containers'
@@ -30,3 +32,30 @@ scrape_configs:
         target_label: 'container_id'
       - source_labels: ['__meta_docker_network_name']
         target_label: 'network'
+
+  - job_name: system
+    static_configs:
+      - targets: ["localhost"]
+        labels:
+          job: varlogs
+          nodename: system
+          __path__: /var/log/*log
+
+  - job_name: journal
+    journal:
+      json: false
+      max_age: 12h
+      path: /var/log/journal
+      # matches: _TRANSPORT=kernel
+      labels:
+        job: systemd-journal
+    relabel_configs:
+    - source_labels:
+      - __journal__systemd_unit
+      target_label: systemd_unit
+    - source_labels:
+      - __journal__hostname
+      target_label: nodename
+    - source_labels:
+      - __journal_syslog_identifier
+      target_label: syslog_identifier

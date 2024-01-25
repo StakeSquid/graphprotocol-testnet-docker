@@ -18,9 +18,12 @@ services:
   loki:
     image: grafana/loki
     container_name: loki
-    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/config.yaml
+      - loki_data:/data
+    command: -config.file=/etc/loki/config.yaml --print-config-stderr 
     expose:
-      - 3000
+      - 3100
     restart: unless-stopped
     networks:
       - monitor-net
@@ -38,6 +41,7 @@ services:
       - ./promtail/promtail.yaml:/etc/promtail/docker-config.yaml
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log:/var/log:ro
     command: -config.file=/etc/promtail/docker-config.yaml
     restart: unless-stopped
     networks:
@@ -206,44 +210,3 @@ services:
       - 9091
     networks:
       - monitor-net
-
-
-
-
-#######################################################################################
-######################         TRAEFIK PROXY CONTAINER          #######################
-#######################################################################################      
-#
-#
-#  traefik:
-#    image: traefik:latest
-#    container_name: traefik
-#    restart: always
-#    expose:
-#      - "8082"
-#    ports:
-#      - "443:443"
-#      - "80:80"
-#    command:
-#      - "--api=true"
-#      - "--api.insecure=true"
-#      - "--api.dashboard=true"
-#      - "--log.level=DEBUG"
-#      - "--providers.docker=true"
-#      - "--providers.docker.exposedbydefault=false"
-#      - "--providers.file.filename=/dynamic_config.yml"
-#      - "--entrypoints.websecure.address=:443"
-#      - "--entryPoints.metrics.address=:8082"
-#      - "--metrics.prometheus.entryPoint=metrics"
-#      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-#      # TESTING
-#      - "--certificatesresolvers.myresolver.acme.email=$EMAIL"
-#      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-#    volumes:
-#      - "./traefik/letsencrypt:/letsencrypt"
-#      - "./traefik/config/dynamic_config.yml:/dynamic_config.yml"
-#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-#    networks:
-#      - monitor-net
-#    labels:
-#      - "traefik.enable=true"
