@@ -6,6 +6,7 @@ networks:
 
 volumes:
     postgres-agent_data: {}
+    subgraph_radio_data: {}
 
 services:
 
@@ -145,32 +146,31 @@ services:
   #####################           SUBGRAPH RADIO CONTAINER            ##################
   ######################################################################################
 
-#    subgraph-radio:
-#      image: ghcr.io/graphops/subgraph-radio:1.0
-#      container_name: subgraph-radio
-#      expose:
-#        - 3010
-#        - 3012
-#      restart: unless-stopped
-#      environment:
-#        GRAPHCAST_NETWORK: ${GRAPHCAST_NETWORK:-testnet}
-#        REGISTRY_SUBGRAPH: ${REGISTRY_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-arb-one}
-#        NETWORK_SUBGRAPH: ${NETWORK_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
-#        MNEMONIC: ${OPERATOR_SEED_PHRASE}
-#        GRAPH_NODE_STATUS_ENDPOINT: ${GRAPH_NODE_STATUS_ENDPOINT:-http://index-node-0:8030/graphql}
-#        RUST_LOG: ${RUST_LOG:-warn,hyper=warn,graphcast_sdk=info,subgraph_radio=info}
-#        INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
-#        METRICS_HOST: ${METRICS_HOST:-0.0.0.0}
-#        METRICS_PORT: ${METRICS_PORT:-3010}
-#        SERVER_PORT: ${SERVER_PORT:-3012}
-#        ID_VALIDATION: ${ID_VALIDATION:-indexer}
-#        GOSSIP_TOPIC_COVERAGE: ${COVERAGE:-comprehensive}
-#        SQLITE_FILE_PATH: ${SQLITE_FILE_PATH:-/data/state.sqlite}
-#      volumes:
-#        - subgraph_radio_data:/data
-#      networks:
-#        - monitor-net
-
+  subgraph-radio:
+    image: ghcr.io/graphops/subgraph-radio:1.0
+    container_name: subgraph-radio
+    expose:
+      - 3010
+      - 3012
+    restart: unless-stopped
+    environment:
+      GRAPHCAST_NETWORK: ${GRAPHCAST_NETWORK:-testnet}
+      REGISTRY_SUBGRAPH: ${REGISTRY_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-arb-one}
+      NETWORK_SUBGRAPH: ${NETWORK_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
+      MNEMONIC: ${OPERATOR_SEED_PHRASE}
+      GRAPH_NODE_STATUS_ENDPOINT: ${GRAPH_NODE_STATUS_ENDPOINT:-http://index-node-0:8030/graphql}
+      RUST_LOG: ${RUST_LOG:-warn,hyper=warn,graphcast_sdk=info,subgraph_radio=info}
+      INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
+      METRICS_HOST: ${METRICS_HOST:-0.0.0.0}
+      METRICS_PORT: ${METRICS_PORT:-3010}
+      SERVER_PORT: ${SERVER_PORT:-3012}
+      ID_VALIDATION: ${ID_VALIDATION:-indexer}
+      GOSSIP_TOPIC_COVERAGE: ${COVERAGE:-comprehensive}
+      SQLITE_FILE_PATH: ${SQLITE_FILE_PATH:-/data/state.sqlite}
+    volumes:
+      - subgraph_radio_data:/data
+    networks:
+      - monitor-net
 
 ######################################################################################
 #####################         TRAEFIK PROXY CONTAINER          #######################
