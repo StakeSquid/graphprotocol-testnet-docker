@@ -6,7 +6,7 @@ networks:
 
 volumes:
     postgres-agent_data: {}
-    subgraph_radio_data: {}
+    subgraph-radio-data: {}
 
 services:
 
@@ -17,6 +17,9 @@ services:
   cli:
     build:
       context: ./cli
+      dockerfile: Dockerfile
+      args:
+        INDEXER_CLI_VERSION: ${INDEXER_CLI_VERSION:-ghcr.io/graphprotocol/indexer-cli:v0.21.4}
     container_name: cli
     restart: unless-stopped
     environment:
@@ -25,14 +28,14 @@ services:
     networks:
       - monitor-net
     volumes:
-      - ./cli/scripts:/home/graph/scripts
+      - ./cli/scripts:/root/scripts/
 
-    ######################################################################################
-    #####################        INDEXER AGENT CONTAINER           #######################
-    ######################################################################################
+######################################################################################
+#####################        INDEXER AGENT CONTAINER           #######################
+######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.21.2}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.21.4}
     container_name: indexer-agent
     depends_on:
       - postgres-agent
@@ -60,9 +63,9 @@ services:
       INDEXER_AGENT_GRAPH_NODE_ADMIN_ENDPOINT: http://index-node-0:8020
       INDEXER_AGENT_PUBLIC_INDEXER_URL: 'https://${INDEX_HOST}/'
       INDEXER_AGENT_INDEXER_GEO_COORDINATES: ${GEO_COORDINATES:-60.16952 24.93545}
-      INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia
+      INDEXER_AGENT_NETWORK_SUBGRAPH_ENDPOINT: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
       INDEXER_AGENT_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT}
-      INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT: https://api.thegraph.com/subgraphs/name/graphprotocol/arbitrum-sepolia-ebo
+      INDEXER_AGENT_EPOCH_SUBGRAPH_ENDPOINT: ${EPOCH_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/arbitrum-sepolia-ebo}
       INDEXER_AGENT_POSTGRES_HOST: ${AGENT_DB_HOST:-postgres-agent}
       INDEXER_AGENT_POSTGRES_USERNAME: ${DB_USER:-agent}
       INDEXER_AGENT_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
@@ -71,7 +74,8 @@ services:
       INDEXER_AGENT_COLLECT_RECEIPTS_ENDPOINT: https://gateway-arbitrum.testnet.thegraph.com/collect-receipts
       INDEXER_AGENT_OFFCHAIN_SUBGRAPHS: ${INDEXER_AGENT_OFFCHAIN_SUBGRAPHS}
       INDEXER_AGENT_GAS_PRICE_MAX: ${INDEXER_AGENT_GAS_PRICE_MAX:-5000}
-      INDEXER_AGENT_SUBGRAPH_MAX_BLOCK_DISTANCE: 1000 
+      INDEXER_AGENT_SUBGRAPH_MAX_BLOCK_DISTANCE: 1000
+      INDEXER_AGENT_TAP_SUBGRAPH_ENDPOINT: ${NETWORK_ESCROW_ENDPOINT}
       #INDEXER_AGENT_POI_DISPUTE_MONITORING: "true"
       #INDEXER_AGENT_POI_DISPUTABLE_EPOCHS: 100
     networks:
@@ -84,26 +88,56 @@ services:
 #####################         INDEXER SERVICE CONTAINER        #######################
 ######################################################################################
   indexer-service:
-    image: ghcr.io/graphprotocol/indexer-service:v0.21.2
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service-rs:1.0.0-rc.6}
     container_name: indexer-service
     depends_on:
       - postgres-agent
     environment:
-      INDEXER_SERVICE_MNEMONIC: ${OPERATOR_SEED_PHRASE}
-      INDEXER_SERVICE_INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
-      INDEXER_SERVICE_PORT: 7600
-      INDEXER_SERVICE_ETHEREUM_NETWORK: arbitrum-sepolia
-      INDEXER_SERVICE_ETHEREUM: ${TXN_RPC}
-      INDEXER_SERVICE_GRAPH_NODE_QUERY_ENDPOINT: http://query-node-0:8000
-      INDEXER_SERVICE_GRAPH_NODE_STATUS_ENDPOINT: http://index-node-0:8030/graphql
-      INDEXER_SERVICE_NETWORK_SUBGRAPH_ENDPOINT: https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia
-      INDEXER_SERVICE_NETWORK_SUBGRAPH_DEPLOYMENT: ${NETWORK_SUBGRAPH_DEPLOYMENT}
-      INDEXER_SERVICE_POSTGRES_HOST: postgres-agent
-      INDEXER_SERVICE_POSTGRES_USERNAME: ${DB_USER:-agent}
-      INDEXER_SERVICE_POSTGRES_PASSWORD: ${DB_PASS:-db-password}
-      INDEXER_SERVICE_POSTGRES_DATABASE: ${AGENT_DB_NAME:-indexer-agent}
-      INDEXER_SERVICE_CLIENT_SIGNER_ADDRESS: "0xac01B0b3B2Dc5D8E0D484c02c4d077C15C96a7b4"
-      INDEXER_SERVICE_QUERY_TIMING_LOGS: "true"
+      # Legacy configuration
+      INDEXER_SERVICE_INDEXER__INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
+      INDEXER_SERVICE_INDEXER__OPERATOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
+      INDEXER_SERVICE_METRICS__PORT: 7300
+      INDEXER_SERVICE_DATABASE__POSTGRES_URL: "postgres://${DB_USER}@${AGENT_DB_HOST}:5432/${AGENT_DB_NAME}"
+      INDEXER_SERVICE_GRAPH_NODE__QUERY_URL: "http://query-node-0:8000"
+      INDEXER_SERVICE_GRAPH_NODE__STATUS_URL: "http://index-node-0:8030/graphql"
+      
+      # Subgraphs - Network Configuration
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_URL: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
+#     INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__DEPLOYMENT_ID: ${NETWORK_SUBGRAPH_DEPLOYMENT}
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS: ${RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS:-3600}
+      
+      # Subgraphs - Escrow Configuration
+      INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_URL: ${NETWORK_ESCROW_ENDPOINT}
+#     INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+      INDEXER_SERVICE_SUBGRAPHS__ESCROW__DEPLOYMENT_ID: ${NETWORK_ESCROW_DEPLOYMENT}
+      INDEXER_SERVICE_SUBGRAPHS__ESCROW__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
+      
+      # Blockchain Configuration
+      INDEXER_SERVICE_BLOCKCHAIN__CHAIN_ID: ${INDEXER_SERVICE_CHAIN_ID:-421614}
+#     INDEXER_SERVICE_BLOCKCHAIN__RECEIPTS_VERIFIER_ADDRESS: ${INDEXER_SERVICE_RECEIPTS_VERIFIER_ADDRESS:-}
+      
+      # Service Configuration
+      INDEXER_SERVICE_SERVICE__HOST_AND_PORT: "127.0.0.1:7600"
+      INDEXER_SERVICE_SERVICE__URL_PREFIX: "/"
+      INDEXER_SERVICE_SERVICE__SERVE_NETWORK_SUBGRAPH: ${INDEXER_SERVICE_SERVE_NETWORK_SUBGRAPH:-false}
+      INDEXER_SERVICE_SERVICE__SERVE_ESCROW_SUBGRAPH: ${INDEXER_SERVICE_SERVE_ESCROW_SUBGRAPH:-false}
+#     INDEXER_SERVICE_SERVICE__SERVE_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+#     INDEXER_SERVICE_SERVICE__FREE_QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+      
+      # TAP Configuration
+      INDEXER_SERVICE_SERVICE__TAP__MAX_RECEIPT_VALUE_GRT: "0.001"
+      INDEXER_SERVICE_TAP__MAX_AMOUNT_WILLING_TO_LOSE_GRT: "20"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__TRIGGER_VALUE_DIVISOR: "10"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__TIMESTAMP_BUFFER_SECS: "60"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__REQUEST_TIMEOUT_SECS: "5"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__MAX_RECEIPTS_PER_REQUEST: "10000"
+      
+      # TAP Sender Aggregator Endpoints
+  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xdeadbeefcafebabedeadbeefcafebabedeadbeef: "https://example.com/aggregate-receipts"
+  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0x0123456789abcdef0123456789abcdef01234567: "https://other.example.com/aggregate-receipts"
+      INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xC3dDf37906724732FfD748057FEBe23379b0710D: "https://tap-aggregator.testnet.thegraph.com"
     expose:
       - 7300
       - 7600
@@ -117,16 +151,71 @@ services:
       - "traefik.http.routers.indexer-service.tls.certresolver=myresolver"
       - "traefik.http.routers.indexer-service.rule=Host(`$INDEX_HOST`)"
 
+######################################################################################
+######################         INDEXER TAP CONTAINER        ##########################
+######################################################################################
+  indexer-tap:
+    image: ${INDEXER_TAP_VERSION:-ghcr.io/graphprotocol/indexer-tap-agent:1.0.0-rc.6}
+    container_name: indexer-tap
+    depends_on:
+      - postgres-agent
+    environment:
+      # Legacy configuration
+      INDEXER_SERVICE_INDEXER__INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
+      INDEXER_SERVICE_INDEXER__OPERATOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
+      INDEXER_SERVICE_METRICS__PORT: 7300
+      INDEXER_SERVICE_DATABASE__POSTGRES_URL: "postgres://${DB_USER}@${AGENT_DB_HOST}:5432/${AGENT_DB_NAME}"
+      INDEXER_SERVICE_GRAPH_NODE__QUERY_URL: "http://query-node-0:8000"
+      INDEXER_SERVICE_GRAPH_NODE__STATUS_URL: "http://index-node-0:8030/graphql"
+      
+      # Subgraphs - Network Configuration
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_URL: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
+#     INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__DEPLOYMENT_ID: ${NETWORK_SUBGRAPH_DEPLOYMENT}
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
+      INDEXER_SERVICE_SUBGRAPHS__NETWORK__RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS: ${RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS:-3600}
+      
+      # Subgraphs - Escrow Configuration
+      INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_URL: ${NETWORK_ESCROW_ENDPOINT}
+#     INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+      INDEXER_SERVICE_SUBGRAPHS__ESCROW__DEPLOYMENT_ID: ${NETWORK_ESCROW_DEPLOYMENT}
+      INDEXER_SERVICE_SUBGRAPHS__ESCROW__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
+      
+      # Blockchain Configuration
+      INDEXER_SERVICE_BLOCKCHAIN__CHAIN_ID: ${INDEXER_SERVICE_CHAIN_ID:-421614}
+#     INDEXER_SERVICE_BLOCKCHAIN__RECEIPTS_VERIFIER_ADDRESS: ${INDEXER_SERVICE_RECEIPTS_VERIFIER_ADDRESS:-}
+      
+      # Service Configuration
+      INDEXER_SERVICE_SERVICE__HOST_AND_PORT: "127.0.0.1:7600"
+      INDEXER_SERVICE_SERVICE__URL_PREFIX: "/"
+      INDEXER_SERVICE_SERVICE__SERVE_NETWORK_SUBGRAPH: ${INDEXER_SERVICE_SERVE_NETWORK_SUBGRAPH:-false}
+      INDEXER_SERVICE_SERVICE__SERVE_ESCROW_SUBGRAPH: ${INDEXER_SERVICE_SERVE_ESCROW_SUBGRAPH:-false}
+#     INDEXER_SERVICE_SERVICE__SERVE_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+#     INDEXER_SERVICE_SERVICE__FREE_QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
+      
+      # TAP Configuration
+      INDEXER_SERVICE_SERVICE__TAP__MAX_RECEIPT_VALUE_GRT: "0.001"
+      INDEXER_SERVICE_TAP__MAX_AMOUNT_WILLING_TO_LOSE_GRT: "20"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__TRIGGER_VALUE_DIVISOR: "10"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__TIMESTAMP_BUFFER_SECS: "60"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__REQUEST_TIMEOUT_SECS: "5"
+      INDEXER_SERVICE_TAP__RAV_REQUEST__MAX_RECEIPTS_PER_REQUEST: "10000"
+      
+      # TAP Sender Aggregator Endpoints
+  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xdeadbeefcafebabedeadbeefcafebabedeadbeef: "https://example.com/aggregate-receipts"
+  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0x0123456789abcdef0123456789abcdef01234567: "https://other.example.com/aggregate-receipts"
+      INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xC3dDf37906724732FfD748057FEBe23379b0710D: "https://tap-aggregator.testnet.thegraph.com"
+    networks:
+      - monitor-net
+    restart: unless-stopped
 
 
 ######################################################################################
 #####################       POSTGRES AGENT CONTAINER           #######################
 ######################################################################################
 
-
-
   postgres-agent:
-    image: ${POSTGRES_AGENT_VERSION:-postgres:16.1}
+    image: ${POSTGRES_AGENT_VERSION:-postgres:16.4}
     container_name: postgres-agent
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
@@ -147,7 +236,7 @@ services:
   ######################################################################################
 
   subgraph-radio:
-    image: ghcr.io/graphops/subgraph-radio:1.0
+    image: ghcr.io/graphops/subgraph-radio:1.0.6
     container_name: subgraph-radio
     expose:
       - 3010

@@ -15,7 +15,7 @@ services:
 
 
   index-node-0:
-    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.34.0-rc.0}
+    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.35.1}
     container_name: index-node-0
     depends_on:
       - postgres
@@ -59,7 +59,7 @@ services:
 
 
   query-node-0:
-    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.34.0-rc.0}
+    image: ${GRAPH_NODE_VERSION:-graphprotocol/graph-node:v0.35.1}
     container_name: query-node-0
     depends_on:
       - postgres
@@ -100,7 +100,7 @@ services:
 
 
   postgres:
-    image: ${POSTGRES_VERSION:-postgres:16.1}
+    image: ${POSTGRES_VERSION:-postgres:16.4}
     container_name: postgres
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
