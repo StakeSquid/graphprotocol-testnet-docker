@@ -257,7 +257,7 @@ services:
       GOSSIP_TOPIC_COVERAGE: ${COVERAGE:-comprehensive}
       SQLITE_FILE_PATH: ${SQLITE_FILE_PATH:-/data/state.sqlite}
     volumes:
-      - subgraph_radio_data:/data
+      - subgraph-radio-data:/data
     networks:
       - monitor-net
 
