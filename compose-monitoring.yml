@@ -39,6 +39,8 @@ services:
     restart: unless-stopped
     depends_on:
       - init-loki
+    networks:
+      - monitor-net
 
 
 ######################################################################################
