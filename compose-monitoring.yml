@@ -24,12 +24,14 @@ services:
     volumes:
       - ./loki/loki.yaml:/etc/loki/config.yaml
       - loki_data:/data # need to sudo chown -R 10001:10001 /var/lib/docker/volumes/<loki_volume>
+      - ./loki/loki_startup.sh:/loki_startup.sh  # Mount the entrypoint script
     command: -config.file=/etc/loki/config.yaml --print-config-stderr 
     expose:
       - 3100
     restart: unless-stopped
     networks:
       - monitor-net
+    entrypoint: /loki_startup.sh
 
 
 ######################################################################################

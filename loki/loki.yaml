@@ -29,6 +29,9 @@ frontend_worker:
     max_send_msg_size: 52428800
     
 ingester:
+  wal:
+    enabled: true
+    dir: /loki/wal
   lifecycler:
     ring:
       kvstore:
