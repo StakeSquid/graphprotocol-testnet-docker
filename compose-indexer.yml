@@ -12,6 +12,7 @@ volumes:
 ##################      SERVICE & TAP ENVIRONMENT VARIABLES     ######################
 ######################################################################################
 x-environments: &shared-env-vars
+  RUST_LOG: INFO
   # Legacy configuration
   INDEXER_SERVICE_INDEXER__INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
   INDEXER_SERVICE_INDEXER__OPERATOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
