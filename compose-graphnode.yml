@@ -105,9 +105,9 @@ services:
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER:-graph-node}
-      POSTGRES_PASSWORD: ${DB_PASS:-db-password}
-      POSTGRES_DB: ${GRAPH_NODE_DB_NAME:-graph-node}
+      POSTGRES_USER: ${DB_USER:-your-db-user}
+      POSTGRES_PASSWORD: ${DB_PASS:-your-db-password}
+      POSTGRES_DB: ${GRAPH_NODE_DB_NAME:-your-graphnode-db-name}
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     volumes:
       - postgres_data:/var/lib/postgresql/data
