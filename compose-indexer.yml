@@ -84,60 +84,16 @@ services:
 
 
 
-######################################################################################
-#####################         INDEXER SERVICE CONTAINER        #######################
-######################################################################################
+  ######################################################################################
+  #####################         INDEXER SERVICE CONTAINER        #######################
+  ######################################################################################
   indexer-service:
     image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service-rs:1.0.0-rc.6}
     container_name: indexer-service
     depends_on:
       - postgres-agent
     environment:
-      # Legacy configuration
-      INDEXER_SERVICE_INDEXER__INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
-      INDEXER_SERVICE_INDEXER__OPERATOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
-      INDEXER_SERVICE_METRICS__PORT: 7300
-      INDEXER_SERVICE_DATABASE__POSTGRES_URL: "postgres://${AGENT_DB_USER}:${AGENT_DB_PASS}@${AGENT_DB_HOST}:5432/${AGENT_DB_NAME}"
-      INDEXER_SERVICE_GRAPH_NODE__QUERY_URL: "http://query-node-0:8000"
-      INDEXER_SERVICE_GRAPH_NODE__STATUS_URL: "http://index-node-0:8030/graphql"
-      
-      # Subgraphs - Network Configuration
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_URL: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
-#     INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__DEPLOYMENT_ID: ${NETWORK_SUBGRAPH_DEPLOYMENT}
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS: ${RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS:-3600}
-      
-      # Subgraphs - Escrow Configuration
-      INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_URL: ${NETWORK_ESCROW_ENDPOINT}
-#     INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-      INDEXER_SERVICE_SUBGRAPHS__ESCROW__DEPLOYMENT_ID: ${NETWORK_ESCROW_DEPLOYMENT}
-      INDEXER_SERVICE_SUBGRAPHS__ESCROW__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
-      
-      # Blockchain Configuration
-      INDEXER_SERVICE_BLOCKCHAIN__CHAIN_ID: ${INDEXER_SERVICE_CHAIN_ID:-421614}
-      INDEXER_SERVICE_BLOCKCHAIN__RECEIPTS_VERIFIER_ADDRESS: ${INDEXER_SERVICE_RECEIPTS_VERIFIER_ADDRESS:-0xfC24cE7a4428A6B89B52645243662A02BA734ECF}
-      
-      # Service Configuration
-      INDEXER_SERVICE_SERVICE__HOST_AND_PORT: "127.0.0.1:7600"
-      INDEXER_SERVICE_SERVICE__URL_PREFIX: "/"
-      INDEXER_SERVICE_SERVICE__SERVE_NETWORK_SUBGRAPH: ${INDEXER_SERVICE_SERVE_NETWORK_SUBGRAPH:-false}
-      INDEXER_SERVICE_SERVICE__SERVE_ESCROW_SUBGRAPH: ${INDEXER_SERVICE_SERVE_ESCROW_SUBGRAPH:-false}
-#     INDEXER_SERVICE_SERVICE__SERVE_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-#     INDEXER_SERVICE_SERVICE__FREE_QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-      
-      # TAP Configuration
-      INDEXER_SERVICE_SERVICE__TAP__MAX_RECEIPT_VALUE_GRT: "0.001"
-      INDEXER_SERVICE_TAP__MAX_AMOUNT_WILLING_TO_LOSE_GRT: "20"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__TRIGGER_VALUE_DIVISOR: "10"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__TIMESTAMP_BUFFER_SECS: "60"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__REQUEST_TIMEOUT_SECS: "5"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__MAX_RECEIPTS_PER_REQUEST: "10000"
-      
-      # TAP Sender Aggregator Endpoints
-  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xdeadbeefcafebabedeadbeefcafebabedeadbeef: "https://example.com/aggregate-receipts"
-  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0x0123456789abcdef0123456789abcdef01234567: "https://other.example.com/aggregate-receipts"
-      INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xC3dDf37906724732FfD748057FEBe23379b0710D: "https://tap-aggregator.testnet.thegraph.com"
+      <<: *shared-env-vars
     command: "--config /dev/null"
     expose:
       - 7300
@@ -152,64 +108,64 @@ services:
       - "traefik.http.routers.indexer-service.tls.certresolver=myresolver"
       - "traefik.http.routers.indexer-service.rule=Host(`$INDEX_HOST`)"
 
-######################################################################################
-######################         INDEXER TAP CONTAINER        ##########################
-######################################################################################
+  ######################################################################################
+  ######################         INDEXER TAP CONTAINER        ##########################
+  ######################################################################################
   indexer-tap:
     image: ${INDEXER_TAP_VERSION:-ghcr.io/graphprotocol/indexer-tap-agent:1.0.0-rc.6}
     container_name: indexer-tap
     depends_on:
       - postgres-agent
     environment:
-      # Legacy configuration
-      INDEXER_SERVICE_INDEXER__INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
-      INDEXER_SERVICE_INDEXER__OPERATOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
-      INDEXER_SERVICE_METRICS__PORT: 7300
-      INDEXER_SERVICE_DATABASE__POSTGRES_URL: "postgres://${AGENT_DB_USER}:${AGENT_DB_PASS}@${AGENT_DB_HOST}:5432/${AGENT_DB_NAME}"
-      INDEXER_SERVICE_GRAPH_NODE__QUERY_URL: "http://query-node-0:8000"
-      INDEXER_SERVICE_GRAPH_NODE__STATUS_URL: "http://index-node-0:8030/graphql"
-      
-      # Subgraphs - Network Configuration
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_URL: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
-#     INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__DEPLOYMENT_ID: ${NETWORK_SUBGRAPH_DEPLOYMENT}
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
-      INDEXER_SERVICE_SUBGRAPHS__NETWORK__RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS: ${RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS:-3600}
-      
-      # Subgraphs - Escrow Configuration
-      INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_URL: ${NETWORK_ESCROW_ENDPOINT}
-#     INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-      INDEXER_SERVICE_SUBGRAPHS__ESCROW__DEPLOYMENT_ID: ${NETWORK_ESCROW_DEPLOYMENT}
-      INDEXER_SERVICE_SUBGRAPHS__ESCROW__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
-      
-      # Blockchain Configuration
-      INDEXER_SERVICE_BLOCKCHAIN__CHAIN_ID: ${INDEXER_SERVICE_CHAIN_ID:-421614}
-      INDEXER_SERVICE_BLOCKCHAIN__RECEIPTS_VERIFIER_ADDRESS: ${INDEXER_SERVICE_RECEIPTS_VERIFIER_ADDRESS:-0xfC24cE7a4428A6B89B52645243662A02BA734ECF}
-      
-      # Service Configuration
-      INDEXER_SERVICE_SERVICE__HOST_AND_PORT: "127.0.0.1:7600"
-      INDEXER_SERVICE_SERVICE__URL_PREFIX: "/"
-      INDEXER_SERVICE_SERVICE__SERVE_NETWORK_SUBGRAPH: ${INDEXER_SERVICE_SERVE_NETWORK_SUBGRAPH:-false}
-      INDEXER_SERVICE_SERVICE__SERVE_ESCROW_SUBGRAPH: ${INDEXER_SERVICE_SERVE_ESCROW_SUBGRAPH:-false}
-#     INDEXER_SERVICE_SERVICE__SERVE_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-#     INDEXER_SERVICE_SERVICE__FREE_QUERY_AUTH_TOKEN: ${FREE_QUERY_AUTH_TOKEN}
-      
-      # TAP Configuration
-      INDEXER_SERVICE_SERVICE__TAP__MAX_RECEIPT_VALUE_GRT: "0.001"
-      INDEXER_SERVICE_TAP__MAX_AMOUNT_WILLING_TO_LOSE_GRT: "20"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__TRIGGER_VALUE_DIVISOR: "10"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__TIMESTAMP_BUFFER_SECS: "60"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__REQUEST_TIMEOUT_SECS: "5"
-      INDEXER_SERVICE_TAP__RAV_REQUEST__MAX_RECEIPTS_PER_REQUEST: "10000"
-      
-      # TAP Sender Aggregator Endpoints
-  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xdeadbeefcafebabedeadbeefcafebabedeadbeef: "https://example.com/aggregate-receipts"
-  #   INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0x0123456789abcdef0123456789abcdef01234567: "https://other.example.com/aggregate-receipts"
-      INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xC3dDf37906724732FfD748057FEBe23379b0710D: "https://tap-aggregator.testnet.thegraph.com"
+      <<: *shared-env-vars
+    command: "--config /dev/null"
     networks:
       - monitor-net
     restart: unless-stopped
-    command: "--config /dev/null"
+
+######################################################################################
+##################      SERVICE & TAP ENVIRONMENT VARIABLES     ######################
+######################################################################################
+x-environments: &shared-env-vars
+  # Legacy configuration
+  INDEXER_SERVICE_INDEXER__INDEXER_ADDRESS: ${STAKING_WALLET_ADDRESS}
+  INDEXER_SERVICE_INDEXER__OPERATOR_MNEMONIC: ${OPERATOR_SEED_PHRASE}
+  INDEXER_SERVICE_METRICS__PORT: 7300
+  INDEXER_SERVICE_DATABASE__POSTGRES_URL: "postgres://${AGENT_DB_USER}:${AGENT_DB_PASS}@${AGENT_DB_HOST}:5432/${AGENT_DB_NAME}"
+  INDEXER_SERVICE_GRAPH_NODE__QUERY_URL: "http://query-node-0:8000"
+  INDEXER_SERVICE_GRAPH_NODE__STATUS_URL: "http://index-node-0:8030/graphql"
+  
+  # Subgraphs - Network Configuration
+  INDEXER_SERVICE_SUBGRAPHS__NETWORK__QUERY_URL: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
+  INDEXER_SERVICE_SUBGRAPHS__NETWORK__DEPLOYMENT_ID: ${NETWORK_SUBGRAPH_DEPLOYMENT}
+  INDEXER_SERVICE_SUBGRAPHS__NETWORK__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
+  INDEXER_SERVICE_SUBGRAPHS__NETWORK__RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS: ${RECENTLY_CLOSED_ALLOCATION_BUFFER_SECS:-3600}
+  
+  # Subgraphs - Escrow Configuration
+  INDEXER_SERVICE_SUBGRAPHS__ESCROW__QUERY_URL: ${NETWORK_ESCROW_ENDPOINT}
+  INDEXER_SERVICE_SUBGRAPHS__ESCROW__DEPLOYMENT_ID: ${NETWORK_ESCROW_DEPLOYMENT}
+  INDEXER_SERVICE_SUBGRAPHS__ESCROW__SYNCING_INTERVAL_SECS: ${NETWORK_SYNCING_INTERVAL_SECS:-60}
+  
+  # Blockchain Configuration
+  INDEXER_SERVICE_BLOCKCHAIN__CHAIN_ID: ${INDEXER_SERVICE_CHAIN_ID:-421614}
+  INDEXER_SERVICE_BLOCKCHAIN__RECEIPTS_VERIFIER_ADDRESS: ${INDEXER_SERVICE_RECEIPTS_VERIFIER_ADDRESS:-0xfC24cE7a4428A6B89B52645243662A02BA734ECF}
+  
+  # Service Configuration
+  INDEXER_SERVICE_SERVICE__HOST_AND_PORT: "127.0.0.1:7600"
+  INDEXER_SERVICE_SERVICE__URL_PREFIX: "/"
+  INDEXER_SERVICE_SERVICE__SERVE_NETWORK_SUBGRAPH: ${INDEXER_SERVICE_SERVE_NETWORK_SUBGRAPH:-false}
+  INDEXER_SERVICE_SERVICE__SERVE_ESCROW_SUBGRAPH: ${INDEXER_SERVICE_SERVE_ESCROW_SUBGRAPH:-false}
+  
+  # TAP Configuration
+  INDEXER_SERVICE_SERVICE__TAP__MAX_RECEIPT_VALUE_GRT: "0.001"
+  INDEXER_SERVICE_TAP__MAX_AMOUNT_WILLING_TO_LOSE_GRT: "20"
+  INDEXER_SERVICE_TAP__RAV_REQUEST__TRIGGER_VALUE_DIVISOR: "10"
+  INDEXER_SERVICE_TAP__RAV_REQUEST__TIMESTAMP_BUFFER_SECS: "60"
+  INDEXER_SERVICE_TAP__RAV_REQUEST__REQUEST_TIMEOUT_SECS: "5"
+  INDEXER_SERVICE_TAP__RAV_REQUEST__MAX_RECEIPTS_PER_REQUEST: "10000"
+  
+  # TAP Sender Aggregator Endpoints
+  INDEXER_SERVICE_TAP__SENDER_AGGREGATOR_ENDPOINTS__0xC3dDf37906724732FfD748057FEBe23379b0710D: "https://tap-aggregator.testnet.thegraph.com"
 
 
 ######################################################################################
