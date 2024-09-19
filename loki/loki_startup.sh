@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# Ensure correct permissions on the /data directory
-chown -R 10001:10001 /data
-
-# Execute the main Loki process with the passed arguments
-exec "$@"
+# Ensure that root is used to modify permissions on the /data directory
+if [ "$(id -u)" = "0" ]; then
+    chown -R 10001:10001 /data
+    # Now drop to user 10001 after setting permissions
+    exec su-exec 10001 "$@"
+else
+    exec "$@"
+fi
