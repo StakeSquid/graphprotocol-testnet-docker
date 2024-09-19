@@ -145,7 +145,9 @@ services:
       - postgres-agent
     environment:
       <<: *shared-env-vars
-    command: "--config /dev/null"
+    command: "--config /root/indexer-configs/service.toml"
+    volumes:
+      - ./indexer-configs:/root/indexer-configs/
     expose:
       - 7300
       - 7600
@@ -169,7 +171,9 @@ services:
       - postgres-agent
     environment:
       <<: *shared-env-vars
-    command: "--config /dev/null"
+    command: "--config /root/indexer-configs/service.toml"
+    volumes:
+      - ./indexer-configs:/root/indexer-configs/
     networks:
       - monitor-net
     restart: unless-stopped
