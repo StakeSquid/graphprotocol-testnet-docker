@@ -21,7 +21,6 @@ services:
       - postgres
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
-      - ./postgres-socket:/var/run/postgresql
     environment:
       GRAPH_NODE_CONFIG: /root/graph-node-configs/config.toml
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.network.thegraph.com/ipfs/}'
@@ -65,7 +64,6 @@ services:
       - postgres
     volumes:
       - ./graph-node-configs:/root/graph-node-configs/
-      - ./postgres-socket:/var/run/postgresql
     environment:
       GRAPH_NODE_CONFIG: /root/graph-node-configs/config.toml
       ipfs: '${IPFS_ENDPOINT:-https://ipfs.network.thegraph.com/ipfs/}'
@@ -111,7 +109,6 @@ services:
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres-socket:/var/run/postgresql
     networks:
       - monitor-net
     expose:
