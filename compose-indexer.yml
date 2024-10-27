@@ -200,8 +200,8 @@ services:
     restart: unless-stopped
     environment:
       GRAPHCAST_NETWORK: ${GRAPHCAST_NETWORK:-testnet}
-      REGISTRY_SUBGRAPH: ${REGISTRY_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-arb-one}
-      NETWORK_SUBGRAPH: ${NETWORK_SUBGRAPH:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
+      REGISTRY_SUBGRAPH: ${REGISTRY_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/hopeyen/graphcast-registry-arb-one}
+      NETWORK_SUBGRAPH: ${NETWORK_SUBGRAPH_ENDPOINT:-https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum-sepolia}
       MNEMONIC: ${OPERATOR_SEED_PHRASE}
       GRAPH_NODE_STATUS_ENDPOINT: ${GRAPH_NODE_STATUS_ENDPOINT:-http://index-node-0:8030/graphql}
       RUST_LOG: ${RUST_LOG:-warn,hyper=warn,graphcast_sdk=info,subgraph_radio=info}
