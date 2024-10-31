@@ -1,5 +1,5 @@
 # Accept the full base image URL as a build argument
-ARG INDEXER_CLI_VERSION=ghcr.io/graphprotocol/indexer-cli:v0.21.4
+ARG INDEXER_CLI_VERSION=ghcr.io/graphprotocol/indexer-cli:v0.21.6-2
 FROM ${INDEXER_CLI_VERSION}
 
 # Switch to root user to run apt-get commands

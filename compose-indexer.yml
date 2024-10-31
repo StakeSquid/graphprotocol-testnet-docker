@@ -64,7 +64,7 @@ services:
       context: ./cli
       dockerfile: Dockerfile
       args:
-        INDEXER_CLI_VERSION: ${INDEXER_CLI_VERSION:-ghcr.io/graphprotocol/indexer-cli:v0.21.4}
+        INDEXER_CLI_VERSION: ${INDEXER_CLI_VERSION:-ghcr.io/graphprotocol/indexer-cli:v0.21.6-2}
     container_name: cli
     restart: unless-stopped
     environment:
@@ -80,7 +80,7 @@ services:
 ######################################################################################
 
   indexer-agent:
-    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.21.4}
+    image: ${INDEXER_AGENT_VERSION:-ghcr.io/graphprotocol/indexer-agent:v0.21.6-2}
     container_name: indexer-agent
     depends_on:
       - postgres-agent
@@ -131,7 +131,7 @@ services:
   #####################         INDEXER SERVICE CONTAINER        #######################
   ######################################################################################
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service-rs:1.1.1}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service-rs:v1.2.1}
     container_name: indexer-service
     depends_on:
       - postgres-agent
@@ -155,7 +155,7 @@ services:
   ######################         INDEXER TAP CONTAINER        ##########################
   ######################################################################################
   indexer-tap:
-    image: ${INDEXER_TAP_VERSION:-ghcr.io/graphprotocol/indexer-tap-agent:1.2.1}
+    image: ${INDEXER_TAP_VERSION:-ghcr.io/graphprotocol/indexer-tap-agent:v1.4.1}
     container_name: indexer-tap
     depends_on:
       - postgres-agent
