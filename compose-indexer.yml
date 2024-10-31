@@ -129,7 +129,7 @@ services:
   #####################         INDEXER SERVICE CONTAINER        #######################
   ######################################################################################
   indexer-service:
-    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service-rs:v1.2.1}
+    image: ${INDEXER_SERVICE_VERSION:-ghcr.io/graphprotocol/indexer-service-rs:1.2.1}
     container_name: indexer-service
     depends_on:
       - postgres-agent
@@ -153,7 +153,7 @@ services:
   ######################         INDEXER TAP CONTAINER        ##########################
   ######################################################################################
   indexer-tap:
-    image: ${INDEXER_TAP_VERSION:-ghcr.io/graphprotocol/indexer-tap-agent:v1.4.1}
+    image: ${INDEXER_TAP_VERSION:-ghcr.io/graphprotocol/indexer-tap-agent:1.4.1}
     container_name: indexer-tap
     depends_on:
       - postgres-agent
