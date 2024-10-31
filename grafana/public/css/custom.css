@@ -1,0 +1,30 @@
+/* DEBUG messages - handles DEBG, DEBUG (common variations) */
+.logs-row:has(span:contains("DEBG")), 
+.logs-row:has(span:contains("debug")),
+.logs-row:has(span:contains("DEBUG")) {
+    color: #1E90FF; /* Dodger Blue for DEBUG */
+}
+
+/* INFO messages - handles INFO and variations */
+.logs-row:has(span:contains("INFO")),
+.logs-row:has(span:contains("info")) {
+    color: #32CD32; /* Lime Green for INFO */
+}
+
+/* WARN messages - handles WARN, WARNING */
+.logs-row:has(span:contains("WARN")),
+.logs-row:has(span:contains("warn")),
+.logs-row:has(span:contains("WARNING")),
+.logs-row:has(span:contains("warning")) {
+    color: #FFA500; /* Orange for WARN */
+}
+
+/* ERROR messages - handles ERR, ERROR */
+.logs-row:has(span:contains("ERR")),
+.logs-row:has(span:contains("err")),
+.logs-row:has(span:contains("ERRO"))
+.logs-row:has(span:contains("erro"))
+.logs-row:has(span:contains("ERROR")),
+.logs-row:has(span:contains("error")) {
+    color: #FF4500; /* Orange Red for ERROR */
+}
