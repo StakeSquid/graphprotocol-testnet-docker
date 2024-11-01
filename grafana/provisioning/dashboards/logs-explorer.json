@@ -20,7 +20,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 15,
+  "id": 3,
   "links": [
     {
       "$$hashKey": "object:59",
@@ -31,7 +31,7 @@
       "targetBlank": true,
       "title": "View In Explore",
       "type": "link",
-      "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{service_name=\\\"$source\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
+      "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{service_name=\\\"${source}\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
     },
     {
       "$$hashKey": "object:61",
@@ -41,6 +41,30 @@
       "title": "Learn LogQL",
       "type": "link",
       "url": "https://grafana.com/docs/loki/latest/logql/"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Indexing Performance Metrics",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/indexing-performance-metrics/indexing-performance-metrics?from=now-24h&to=now&var-deployment=${filter}&var-network=$__all&var-shard=$__all&var-provider=$__all"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Deployment Details",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/SjWDBHSGz/deployment-details-graph?from=now-6h&to=now&var-account=indexer-agent&var-deployment=${filter}&var-shard=PA942B37CCFAF5A81&var-horizon=1y"
     }
   ],
   "panels": [
@@ -133,8 +157,8 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=\"$source\"} |= \"$search\" [$__interval]))",
-          "legendFormat": "Number of Logs",
+          "expr": "sum(count_over_time({service_name=\"$source\"} |= \"$filter\" [$__interval]))",
+          "legendFormat": "",
           "queryType": "range",
           "refId": "A"
         }
@@ -162,12 +186,12 @@
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": false,
-        "prettifyLogMessage": true,
+        "prettifyLogMessage": false,
         "showCommonLabels": false,
         "showLabels": false,
         "showTime": false,
         "sortOrder": "Descending",
-        "wrapLogMessage": true
+        "wrapLogMessage": false
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -177,7 +201,7 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "{service_name=\"$source\"} |= \"$search\" | logfmt",
+          "expr": "{service_name=\"$source\"} |= \"$filter\" | logfmt",
           "hide": false,
           "legendFormat": "",
           "queryType": "range",
@@ -221,8 +245,8 @@
           "text": "",
           "value": ""
         },
-        "label": "String Match",
-        "name": "search",
+        "label": "LogQL Filter",
+        "name": "filter",
         "options": [
           {
             "selected": true,
@@ -236,7 +260,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -255,6 +279,6 @@
   "timezone": "",
   "title": "Logs explorer",
   "uid": "a9T5kG7dF",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
