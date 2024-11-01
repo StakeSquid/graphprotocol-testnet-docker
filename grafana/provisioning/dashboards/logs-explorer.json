@@ -20,7 +20,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 16,
+  "id": 13,
   "links": [
     {
       "$$hashKey": "object:59",
@@ -134,7 +134,7 @@
           },
           "editorMode": "code",
           "expr": "sum(count_over_time({service_name=\"$source\"} |= \"$filter\" [$__interval]))",
-          "legendFormat": "",
+          "legendFormat": "Number of logs",
           "queryType": "range",
           "refId": "A"
         }
@@ -255,6 +255,6 @@
   "timezone": "",
   "title": "Logs explorer",
   "uid": "a9T5kG7dF",
-  "version": 1,
+  "version": 3,
   "weekStart": ""
 }
