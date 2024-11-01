@@ -235,7 +235,7 @@ services:
       - "--api.dashboard=true"
       - "--log.level=DEBUG"
       - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.exposedbydefault=true"
       - "--providers.file.filename=/dynamic_config.yml"
       - "--entrypoints.websecure.address=:443"
       - "--entryPoints.metrics.address=:8082"
