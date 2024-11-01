@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 12,
+  "id": 9,
   "links": [
     {
       "asDropdown": false,
@@ -36,7 +36,7 @@
       "title": "Indexing Performance",
       "tooltip": "",
       "type": "link",
-      "url": "/d/indexing-performance-metrics/indexing-performance-metrics?from=now-24h&to=now&var-deployment=${deployment}&var-network=$__all&var-shard=$__all&var-provider=$__all"
+      "url": "/d/indexing-performance/indexing-performance?from=now-24h&to=now&var-deployment=${deployment}&var-network=$__all&var-shard=$__all&var-provider=$__all"
     },
     {
       "asDropdown": false,
@@ -1192,6 +1192,6 @@
   "timezone": "",
   "title": "Deployment details",
   "uid": "SjWDBHSGz",
-  "version": 4,
+  "version": 3,
   "weekStart": ""
 }

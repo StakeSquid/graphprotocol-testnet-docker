@@ -20,7 +20,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 12,
   "links": [
     {
       "$$hashKey": "object:59",
@@ -52,7 +52,7 @@
       "title": "Indexing Performance Metrics",
       "tooltip": "",
       "type": "link",
-      "url": "/d/indexing-performance-metrics/indexing-performance-metrics?from=now-24h&to=now&var-deployment=${filter}&var-network=$__all&var-shard=$__all&var-provider=$__all"
+      "url": "/d/indexing-performance/indexing-performance?from=now-24h&to=now&var-deployment=${filter}&var-network=$__all&var-shard=$__all&var-provider=$__all"
     },
     {
       "asDropdown": false,
@@ -242,19 +242,19 @@
       },
       {
         "current": {
-          "text": "",
-          "value": ""
+          "text": "Qmc6zPWLPCj42k2vujAYaHaMZBFHAnpfsa4KzUwtFXFLA2",
+          "value": "Qmc6zPWLPCj42k2vujAYaHaMZBFHAnpfsa4KzUwtFXFLA2"
         },
         "label": "LogQL Filter",
         "name": "filter",
         "options": [
           {
             "selected": true,
-            "text": "",
-            "value": ""
+            "text": "Qmc6zPWLPCj42k2vujAYaHaMZBFHAnpfsa4KzUwtFXFLA2",
+            "value": "Qmc6zPWLPCj42k2vujAYaHaMZBFHAnpfsa4KzUwtFXFLA2"
           }
         ],
-        "query": "",
+        "query": "Qmc6zPWLPCj42k2vujAYaHaMZBFHAnpfsa4KzUwtFXFLA2",
         "type": "textbox"
       }
     ]
@@ -279,6 +279,6 @@
   "timezone": "",
   "title": "Logs explorer",
   "uid": "a9T5kG7dF",
-  "version": 4,
+  "version": 3,
   "weekStart": ""
 }
