@@ -6,5 +6,5 @@ datasources:
     name: graphql
     orgId: 1
     type: yesoreyeram-infinity-datasource
-    url: https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-testnet
+    url: http://query-node-0:8000/subgraphs/id/QmXnGVrg6DvscnvJd86aHAPLGyGrkM17weMrAsFAEMmQLL
     version: 1
