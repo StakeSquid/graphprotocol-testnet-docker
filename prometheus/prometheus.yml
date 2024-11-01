@@ -75,6 +75,8 @@ scrape_configs:
       - targets: ['subgraph-radio:3010']
 
   - job_name: "traefik"
+    metrics_path: /metrics
+    scheme: http
     scrape_interval: 15s
     static_configs:
       - targets: ["traefik:8082"]
