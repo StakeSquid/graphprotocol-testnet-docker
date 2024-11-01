@@ -20,7 +20,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 13,
+  "id": 15,
   "links": [
     {
       "$$hashKey": "object:59",
@@ -31,7 +31,7 @@
       "targetBlank": true,
       "title": "View In Explore",
       "type": "link",
-      "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{service_name=\\\"$app\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
+      "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{service_name=\\\"$source\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
     },
     {
       "$$hashKey": "object:61",
@@ -133,8 +133,8 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=\"$source\"} |= \"$filter\" [$__interval]))",
-          "legendFormat": "Number of logs",
+          "expr": "sum(count_over_time({service_name=\"$source\"} |= \"$search\" [$__interval]))",
+          "legendFormat": "Number of Logs",
           "queryType": "range",
           "refId": "A"
         }
@@ -162,12 +162,12 @@
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": false,
-        "prettifyLogMessage": false,
+        "prettifyLogMessage": true,
         "showCommonLabels": false,
         "showLabels": false,
         "showTime": false,
         "sortOrder": "Descending",
-        "wrapLogMessage": false
+        "wrapLogMessage": true
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -177,7 +177,7 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "{service_name=\"$source\"} |= \"$filter\" | logfmt",
+          "expr": "{service_name=\"$source\"} |= \"$search\" | logfmt",
           "hide": false,
           "legendFormat": "",
           "queryType": "range",
@@ -221,8 +221,8 @@
           "text": "",
           "value": ""
         },
-        "label": "LogQL Filter",
-        "name": "filter",
+        "label": "String Match",
+        "name": "search",
         "options": [
           {
             "selected": true,
@@ -236,7 +236,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
