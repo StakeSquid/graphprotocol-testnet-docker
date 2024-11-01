@@ -24,9 +24,33 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 11,
-  "links": [],
-  "liveNow": false,
+  "id": 12,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Indexing Performance",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/indexing-performance-metrics/indexing-performance-metrics?from=now-24h&to=now&var-deployment=${deployment}&var-network=$__all&var-shard=$__all&var-provider=$__all"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Logs",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/a9T5kG7dF/logs-explorer?from=now-5m&to=now&var-source=%2Findex-node-0&var-filter=${deployment}"
+    }
+  ],
   "panels": [
     {
       "datasource": {
@@ -40,7 +64,9 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
             "filterable": false,
             "inspect": false
           },
@@ -62,7 +88,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 0,
         "y": 0
@@ -80,7 +106,7 @@
         },
         "showHeader": false
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -115,6 +141,7 @@
         }
       ],
       "title": "Summary (primary)",
+      "transparent": true,
       "type": "table"
     },
     {
@@ -129,7 +156,9 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
             "filterable": false,
             "inspect": false
           },
@@ -213,13 +242,12 @@
         ]
       },
       "gridPos": {
-        "h": 12,
+        "h": 14,
         "w": 12,
         "x": 12,
         "y": 0
       },
       "id": 4,
-      "links": [],
       "options": {
         "cellHeight": "sm",
         "footer": {
@@ -238,7 +266,7 @@
           }
         ]
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -301,6 +329,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "table"
     },
     {
@@ -312,7 +341,9 @@
         "defaults": {
           "custom": {
             "align": "left",
-            "displayMode": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
             "filterable": false,
             "inspect": false
           },
@@ -347,10 +378,10 @@
         ]
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 0,
-        "y": 6
+        "y": 7
       },
       "id": 2,
       "maxDataPoints": 1,
@@ -366,7 +397,7 @@
         },
         "showHeader": false
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -417,7 +448,7 @@
         }
       ],
       "title": "Summary (shard)",
-      "transformations": [],
+      "transparent": true,
       "type": "table"
     },
     {
@@ -431,11 +462,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 80,
             "gradientMode": "none",
@@ -444,6 +477,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -482,10 +516,9 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 14
       },
       "id": 19,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
@@ -502,8 +535,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "9.5.2-cloud.2.0cb5a501",
-      "repeatDirection": "v",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -521,55 +553,95 @@
         }
       ],
       "title": "Requests per minute",
+      "transparent": true,
       "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
-      "fill": 8,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 14
       },
-      "hiddenSeries": false,
       "id": 11,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "connected",
       "options": {
-        "alertThreshold": true
+        "alertThreshold": true,
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "9.1.6",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "v",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -585,38 +657,9 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Total request duration per minute",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:185",
-          "format": "ms",
-          "label": "",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:186",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "transparent": true,
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -629,11 +672,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 80,
             "gradientMode": "none",
@@ -642,6 +687,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -680,10 +726,9 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 21
       },
       "id": 20,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
@@ -702,8 +747,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "8.4.4",
-      "repeatDirection": "v",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -723,6 +767,7 @@
         }
       ],
       "title": "Sections over time (process)",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -736,11 +781,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 80,
             "gradientMode": "none",
@@ -749,6 +796,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -787,10 +835,9 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 19
+        "y": 21
       },
       "id": 21,
-      "links": [],
       "options": {
         "legend": {
           "calcs": [
@@ -809,8 +856,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "8.4.4",
-      "repeatDirection": "v",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -830,6 +876,7 @@
         }
       ],
       "title": "Sections over time (writer)",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -843,11 +890,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 70,
             "gradientMode": "none",
@@ -856,6 +905,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -911,7 +961,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 28
       },
       "id": 13,
       "options": {
@@ -929,7 +979,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.4.5-56740",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -945,6 +995,7 @@
         }
       ],
       "title": "Blocks Processed",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -958,11 +1009,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 70,
             "gradientMode": "none",
@@ -971,6 +1024,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1011,7 +1065,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 28
       },
       "id": 14,
       "options": {
@@ -1029,7 +1083,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.4.5-56740",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -1046,106 +1100,18 @@
         }
       ],
       "title": "Block processing time",
+      "transparent": true,
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto",
-            "filterable": false,
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 0,
-        "y": 34
-      },
-      "id": 6,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
-      },
-      "pluginVersion": "9.1.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
-          "exemplar": true,
-          "expr": "sum by (shard) (store_connection_wait_time_ms{pod=~\"index-node-.*\"})",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total time waiting for DB connection (all deployments)",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "wait time (ms)"
-            }
-          }
-        }
-      ],
-      "type": "table"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "revision": 1,
-  "schemaVersion": 37,
-  "style": "dark",
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
           "text": "indexer-agent",
           "value": "indexer-agent"
         },
@@ -1154,69 +1120,50 @@
           "uid": "PA942B37CCFAF5A81"
         },
         "definition": "select distinct split_part(name, '/', 1) from subgraphs.subgraph order by 1;",
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "account",
         "options": [],
         "query": "select distinct split_part(name, '/', 1) from subgraphs.subgraph order by 1;",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {
-          "selected": false,
-          "text": "indexer-agent/8kWbTyhZdy (C)",
-          "value": "QmenqeksEYLXBUAmMSyTq6qw2j1M15Xpu8N48kWbTyhZdy"
+          "text": "indexer-agent/AsFAEMmQLL (C)",
+          "value": "QmXnGVrg6DvscnvJd86aHAPLGyGrkM17weMrAsFAEMmQLL"
         },
         "datasource": {
           "type": "postgres",
           "uid": "PA942B37CCFAF5A81"
         },
         "definition": "select\n  g.name || (case\n        when g.pending_version = v.id then ' (P)'\n        when g.current_version = v.id then ' (C)'\n        else ' (U)' end) as __text,\n  ds.subgraph as __value\nfrom deployment_schemas as ds,\n     subgraphs.subgraph_deployment_assignment as a,\n     subgraphs.subgraph_version as v,\n     subgraphs.subgraph as g\nwhere g.id = v.subgraph\n  and v.id in (g.pending_version, g.current_version)\n  and a.id = ds.id\n  and v.deployment = ds.subgraph\n  and g.name like '[[account]]/%'\n",
-        "hide": 0,
         "includeAll": false,
         "label": "Deployment ID",
-        "multi": false,
         "name": "deployment",
         "options": [],
         "query": "select\n  g.name || (case\n        when g.pending_version = v.id then ' (P)'\n        when g.current_version = v.id then ' (C)'\n        else ' (U)' end) as __text,\n  ds.subgraph as __value\nfrom deployment_schemas as ds,\n     subgraphs.subgraph_deployment_assignment as a,\n     subgraphs.subgraph_version as v,\n     subgraphs.subgraph as g\nwhere g.id = v.subgraph\n  and v.id in (g.pending_version, g.current_version)\n  and a.id = ds.id\n  and v.deployment = ds.subgraph\n  and g.name like '[[account]]/%'\n",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 5,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {
-          "selected": false,
           "text": "postgres",
-          "value": "postgres"
+          "value": "PA942B37CCFAF5A81"
         },
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "shard",
         "options": [],
         "query": "postgres",
-        "queryValue": "",
         "refresh": 1,
         "regex": "/^.*$/",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
-          "selected": false,
           "text": "since deploy",
           "value": "1y"
         },
@@ -1226,21 +1173,14 @@
         },
         "definition": "select 'since deploy' __text, '1y' as __value\nunion all\nselect 'last 24 hours' __text, '1d' as __value\nunion all\nselect 'last 12 hours' __text, '12h' as __value\nunion all\nselect 'last 6 hours' __text, '6h' as __value\nunion all\nselect 'last 3 hours' __text, '3h' as __value\nunion all\nselect 'last 1 hour' __text, '1h' as __value",
         "description": "Timeframe for which to show indexing metrics",
-        "hide": 0,
         "includeAll": false,
         "label": "Indexing metrics horizon",
-        "multi": false,
         "name": "horizon",
         "options": [],
         "query": "select 'since deploy' __text, '1y' as __value\nunion all\nselect 'last 24 hours' __text, '1d' as __value\nunion all\nselect 'last 12 hours' __text, '12h' as __value\nunion all\nselect 'last 6 hours' __text, '6h' as __value\nunion all\nselect 'last 3 hours' __text, '3h' as __value\nunion all\nselect 'last 1 hour' __text, '1h' as __value",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       }
     ]
   },
@@ -1248,23 +1188,10 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {
-    "refresh_intervals": [
-      "5s",
-      "10s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h",
-      "2h",
-      "1d"
-    ]
-  },
+  "timepicker": {},
   "timezone": "",
-  "title": "Deployment details graph",
+  "title": "Deployment details",
   "uid": "SjWDBHSGz",
-  "version": 5,
+  "version": 4,
   "weekStart": ""
 }
