@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 15,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -460,7 +460,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 11,
         "x": 0,
         "y": 27
@@ -600,7 +600,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 4,
         "x": 11,
         "y": 27
@@ -770,7 +770,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 3,
         "w": 9,
         "x": 15,
         "y": 27
@@ -838,6 +838,275 @@
       ],
       "transparent": true,
       "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "PA942B37CCFAF5A81"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "locale"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unused"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 84
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unused_entities"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "new (24h)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 156
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 256
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "recorded"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 165
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "assigned"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 157
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 9,
+        "x": 15,
+        "y": 30
+      },
+      "id": 17,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "PA942B37CCFAF5A81"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "-- grafana ignore\nselect count(*) unused,\n       (select count(*) from unused_deployments where removed_at is null) recorded,\n       (select count(distinct deployment) from subgraphs.subgraph_version where created_at >= extract(epoch from now() - '24h'::interval)) \"new (24h)\",\n       (select count(*) from subgraphs.subgraph_deployment_assignment where node_id like 'index_node_%') as \"assigned\",\n       (select count(*) from deployment_schemas) total\n  from deployment_schemas ds\n where not exists (select 1 from subgraphs.subgraph_deployment_assignment sda where ds.id=sda.id)\n   and not exists (select 1 from subgraphs.subgraph_version v, subgraphs.subgraph s where ds.subgraph = v.deployment and v.id in (s.current_version, s.pending_version))",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Deployment usage",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "PA942B37CCFAF5A81"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 15,
+        "y": 34
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "PA942B37CCFAF5A81"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "select sum(size) as size from pg_ls_waldir();",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Total WAL size",
+      "transparent": true,
+      "type": "stat"
     },
     {
       "datasource": {
@@ -962,7 +1231,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 36
       },
       "id": 4,
       "options": {
@@ -1146,7 +1415,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 45
       },
       "id": 13,
       "options": {
@@ -1347,7 +1616,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 53
       },
       "id": 15,
       "options": {
@@ -1506,7 +1775,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 62
       },
       "id": 7,
       "options": {
@@ -1641,7 +1910,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 70
+        "y": 71
       },
       "id": 5,
       "options": {
@@ -1713,7 +1982,7 @@
         "h": 15,
         "w": 24,
         "x": 0,
-        "y": 78
+        "y": 79
       },
       "id": 27,
       "options": {
