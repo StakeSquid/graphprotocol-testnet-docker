@@ -20,23 +20,10 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     net-tools \
     libsecret-1-dev \
-    python3 \
-    clang \
-    cmake
+    python3
 
 # Create /history directory for bash history persistence
 RUN mkdir -p /history && chmod 777 /history
-
-# Set the RUSTUP_HOME and CARGO_HOME to avoid cross-device linking issues
-ENV RUSTUP_HOME=/usr/local/rustup \
-    CARGO_HOME=/usr/local/cargo
-
-# Install Rust via rustup with --no-modify-path to avoid cross-device link issue
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/rustup.sh && \
-    sh /tmp/rustup.sh -y --no-modify-path
-
-# Add Rust to the PATH manually
-ENV PATH="/usr/local/cargo/bin:$PATH"
 
 # Create necessary directory for graph-cli configuration
 RUN mkdir -p "/root/.config/graph-cli/"
