@@ -72,6 +72,8 @@ services:
       - monitor-net
     volumes:
       - ./cli/scripts:/root/scripts/
+      - ./cli/history:/history
+
 
 ######################################################################################
 #####################        INDEXER AGENT CONTAINER           #######################
